@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager instance = null;
+    //가장 가까운 적을 지정? 저장? 해줄 변수가 필요할지도
+    public float targettingEnemy;
 
+    public Transform charaterPosition;
+    private static GameManager instance = null;
     private void Awake()
     {
         if (null == instance)
@@ -29,5 +32,11 @@ public class GameManager : MonoBehaviour
             }
             return instance;
         }
+    }
+
+    //그걸 찾아주는 함수도 필요할지도
+    public void Seach()
+    {
+
     }
 }

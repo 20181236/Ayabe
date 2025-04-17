@@ -6,5 +6,4 @@ public abstract class CharaterBase
 {
     public int curentHealth;
     public int curHealth;
-
 }
