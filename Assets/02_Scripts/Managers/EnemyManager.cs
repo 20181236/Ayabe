@@ -1,82 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    private List<Enemy> enemies = new List<Enemy>();//에너미 리스트 관리 OK
+    public static EnemyManager instance { get; private set; }
+    public GameObject enemyPrefab;//생성도 여기서 관리해야할거같음
+    //public List<GameObject> enemies = new List<GameObject>();//게임오브젝트에서 불러와야할게 너무 많다네
+    private List<Enemy> enemies = new List<Enemy>();
 
-    public float detectionRange = 10f; // 탐지 거리 OK
-    public string enemyTag = "Enemy"; // 감지할 태그 ????????????? 태그로감지?
-
-    public LayerMask detectionLayer; // 감지할 레이어 레이어감지 OK
-
-    private static EnemyManager instance = null;
     private void Awake()
     {
-        if (null == instance)
+        if (instance != null && instance != this)
         {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    public static EnemyManager Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                return null;
-            }
-            return instance;
-        }
-    }
-
-    public void RegisterEnemy(Enemy enemy)//생성함수 OK
+    // 적 등록
+    public void RegisterEnemy(Enemy enemy)
     {
         if (!enemies.Contains(enemy))
+        {
             enemies.Add(enemy);
+        }
     }
-    public void UnregisterEnemy(Enemy enemy)//죽였을대 제거함수 OK
+
+    // 적 제거
+    public void UnregisterEnemy(Enemy enemy)
     {
         if (enemies.Contains(enemy))
-            enemies.Remove(enemy);
-    }
-
-    //내가 만든 코드가아님 gpt돌림 이상할수있음
-    //distance가 안쓰임
-    //필요없는게 있음, 레이어를 나누냐 안나누냐에따라
-    public Enemy GetClosestEnemy(Vector3 fromCharaterPosition)//이해안됨
-    {
-        Enemy closest = null;//처음 초기화 OK
-        float minDist = detectionRange * detectionRange;//sqrMagnitude로 비교할 거니까 거리 제곱을 저장 OK
-
-        foreach (var enemy in enemies)//여기서부터 탐색하면서 돌린다는 뜻 OK
         {
-            if (enemy == null || )//뒤지면 넘김OK
-                continue;
-
-            if (!enemy.CompareTag(enemyTag))//Enemy태그 아니면 무시 OK
-                continue;
-
-            if (((1 << enemy.gameObject.layer) & detectionLayer) == 0)//이해는 안되지만 레이어 탐지 '공식'???? 비트민거임 고쳐야됨 레이어가 4랑같으면 이걸처리해
-                continue;
-
-            float dist = (enemy.transform.position - fromCharaterPosition).sqrMagnitude;//벡터 뺄셈은 알겠음, 이것보다 distance를 사용하지않은 즉 거리를 저장하는 
-
-            if (dist < minDist)
-            {
-                minDist = dist;
-                closest = enemy;
-            }
+            enemies.Remove(enemy);
         }
-
-        return closest;
     }
+    // 모든 적 가져오기
+    public List<Enemy> GetEnemies()
+    {
+        return enemies;
+    }
+
+    // 적이 하나라도 있는지 체크
+    public bool HasEnemy()
+    {
+        return enemies.Count > 0;
+    }
+
+
 }

@@ -5,38 +5,45 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     //가장 가까운 적을 지정? 저장? 해줄 변수가 필요할지도
-    public float targettingEnemy;
-
     public Transform charaterPosition;
-    private static GameManager instance = null;
+
+    public static GameManager instance { get; private set; }
     private void Awake()
     {
-        if (null == instance)
+        if (instance != null && instance != this)
         {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    public static GameManager Instance
+    public Enemy GetNearestEnemyToPosition(Vector3 fromPosition)
     {
-        get
+        var enemies = EnemyManager.instance.GetEnemies();
+        Debug.Log(enemies);
+        Debug.Log(enemies.Count);
+        if (enemies == null || enemies.Count == 0)
+            return null;
+
+        Enemy nearest = null;//가장 가까운 적을 저장할 변수 선언(초기값은 null)
+        float minDistance = float.MaxValue;
+
+        foreach (var enemy in enemies)
         {
-            if (null == instance)
+            if (enemy == null) continue;
+
+            float dist = Vector3.Distance(fromPosition, enemy.transform.position);
+            
+            if (dist < minDistance)//어떤놈이 나에게 가까운지 없음 거리만 체크하고 1번2번 누가 더 가까운지 가장가까운녀석이누구야
             {
-                return null;
+                minDistance = dist;
+                nearest = enemy;
+                Debug.Log(enemy.name + dist);
             }
-            return instance;
         }
-    }
-
-    //그걸 찾아주는 함수도 필요할지도
-    public void Seach()
-    {
-
+        Debug.Log(nearest);
+        return nearest;
     }
 }
