@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager instance { get; private set; }
     public GameObject enemyPrefab;//생성도 여기서 관리해야할거같음
     //public List<GameObject> enemies = new List<GameObject>();//게임오브젝트에서 불러와야할게 너무 많다네
-    private List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy> enemies = new List<Enemy>();
 
     private void Awake()
     {
@@ -51,6 +51,4 @@ public class EnemyManager : MonoBehaviour
     {
         return enemies.Count > 0;
     }
-
-
 }
