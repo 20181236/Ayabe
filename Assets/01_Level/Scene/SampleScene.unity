@@ -238,10 +238,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 15
-  attackRange: 5
+  attackRange: 15
   isChase: 0
   isAttack: 0
   isDead: 0
+  bullet: {fileID: 589644376409995535, guid: ad81f6d95223d0e44885783cb2c7ee76, type: 3}
   targetTransform: {fileID: 1538066133}
   rigidbody_SoonDoBu: {fileID: 0}
   navMeshAgent: {fileID: 25424360}
@@ -299,6 +300,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &90651346 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5749865478261324880, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
+  m_PrefabInstance: {fileID: 1443207643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &90651348
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90651346}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 96b05a7e7c1fa7f4fb6a9d485b3e176f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &231653081 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 328409505970683906, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
@@ -334,6 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 0}
+  enemies: []
 --- !u!4 &430602182
 Transform:
   m_ObjectHideFlags: 0
@@ -535,7 +563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf6137b03f0650438710244fd1654a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charaterPosition: {fileID: 0}
 --- !u!4 &815386342
 Transform:
   m_ObjectHideFlags: 0
@@ -757,7 +784,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.6, y: -0.5, z: 0}
-  m_LocalScale: {x: 30.934862, y: 1, z: 185.1}
+  m_LocalScale: {x: 30.934862, y: 1, z: 321.11148}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1793903259}
@@ -988,6 +1015,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 328409505970683906, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1443207648}
+    - targetCorrespondingSourceObject: {fileID: 5749865478261324880, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 90651348}
   m_SourcePrefab: {fileID: 100100000, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
 --- !u!195 &1443207645
 NavMeshAgent:
@@ -1057,7 +1087,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 3, y: 6, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1443207648
 MonoBehaviour:
@@ -1071,6 +1101,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4151a1fcb51254abf19a0008fcb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  isChase: 0
+  isAttack: 0
+  isDead: 0
+  rigidbodyEnemy: {fileID: 1443207646}
+  boxCollider: {fileID: 1443207647}
+  meshs: []
+  navMeshAgent: {fileID: 0}
+  animator: {fileID: 90651348}
 --- !u!1 &1538066132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1119,6 +1159,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4151a1fcb51254abf19a0008fcb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  isChase: 0
+  isAttack: 0
+  isDead: 0
+  rigidbodyEnemy: {fileID: 0}
+  boxCollider: {fileID: 0}
+  meshs: []
+  navMeshAgent: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!195 &1551074083
 NavMeshAgent:
   m_ObjectHideFlags: 0

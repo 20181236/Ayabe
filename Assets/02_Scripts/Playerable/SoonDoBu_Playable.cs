@@ -9,11 +9,13 @@ public class SoonDoBu_Playable : MonoBehaviour
     Enemy currentTarget;
 
     public float moveSpeed;
-    public float attackRange = 5.0f;//이건 프리팹 저장해서 하자
+    public float attackRange = 15.0f;//이건 프리팹 저장해서 하자
 
     public bool isChase;
     public bool isAttack;
     public bool isDead;
+
+    public GameObject bullet;
 
     public Transform targetTransform;
     public Rigidbody rigidbody_SoonDoBu;
@@ -51,8 +53,8 @@ public class SoonDoBu_Playable : MonoBehaviour
             }
             else
             {
-                // 오른쪽 방향으로 계속 이동 (Fallback)
-                Vector3 rightDestination = transform.position + Vector3.right * 5f;//상수 좋지않음 이거 고정된 길이임...
+                // 이거 수정해야됨...
+                Vector3 rightDestination = transform.position + Vector3.right * 15f;//상수 좋지않음 이거 고정된 길이임...
                 navMeshAgent.SetDestination(rightDestination);
             }
             navMeshAgent.isStopped = !isChase;
@@ -86,20 +88,20 @@ public class SoonDoBu_Playable : MonoBehaviour
         if (isDead)
             return;
 
-        // 타겟이 없으면 가장 가까운 적을 찾는다
-        if (currentTarget == null)
+        // 타겟이 null이거나 죽었으면 다시 찾기
+        if (currentTarget == null || currentTarget.isDead)
         {
             currentTarget = GetNearestEnemyToPosition(transform.position);
         }
-        // 타겟이 있으면 거리 체크
-        if (currentTarget != null)
-        {
-            float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
 
-            if (distance <= attackRange && !isAttack)
-            {
-                StartCoroutine(Attack());
-            }
+        if (currentTarget == null)
+            return; // 살아있는 적이 아예 없을 때
+
+        float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
+
+        if (distance <= attackRange && !isAttack)
+        {
+            StartCoroutine(Attack());
         }
     }
 
@@ -107,20 +109,39 @@ public class SoonDoBu_Playable : MonoBehaviour
     {
         isChase = false;
         isAttack = true;
-        animator.SetBool(eAnimatorType.isAttack.ToString(), true);
-        yield return new WaitForSeconds(0.5f);
-        //공격에 대한 로직필요
+        animator.SetBool("isAttack", true);
 
-        isChase = true;
-        isAttack = false;
-        animator.SetBool(eAnimatorType.isAttack.ToString(), false);
+        yield return new WaitForSeconds(0.5f);
+
+        if (currentTarget == null || currentTarget.isDead)
+        {
+            isAttack = false;
+            isChase = true;
+            animator.SetBool("isAttack", false);
+            yield break;
+        }
+
+        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
+
+        GameObject instantBullet = Instantiate(
+            bullet,
+            transform.position + Vector3.up * 1f,
+            Quaternion.LookRotation(directionToTarget)
+            );
+        Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
+        rigidBullet.velocity = directionToTarget * 20;
 
         yield return new WaitForSeconds(2f);
+
+        isAttack = false;
+        isChase = true;
+        animator.SetBool("isAttack", false);
     }
 
     public Enemy GetNearestEnemyToPosition(Vector3 position)
     {
-        Enemy nearest = null;
+        Enemy nearestEnemy = null;
         float minDist = Mathf.Infinity;
 
         foreach (Enemy enemy in EnemyManager.instance.enemies)
@@ -132,9 +153,9 @@ public class SoonDoBu_Playable : MonoBehaviour
             if (dist < minDist)
             {
                 minDist = dist;
-                nearest = enemy;
+                nearestEnemy = enemy;
             }
         }
-        return nearest;
+        return nearestEnemy;
     }
 }
