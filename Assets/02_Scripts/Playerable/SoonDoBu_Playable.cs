@@ -6,8 +6,8 @@ using UnityEngine.AI;
 
 public class SoonDoBu_Playable : MonoBehaviour
 {
-    Enemy currentTarget;
-
+    public float maxHealth = 100f;
+    public float currentHealth = 0f;
     public float moveSpeed;
     public float attackRange = 15.0f;//이건 프리팹 저장해서 하자
 
@@ -17,21 +17,29 @@ public class SoonDoBu_Playable : MonoBehaviour
 
     public GameObject bullet;
 
-    public Transform targetTransform;
+    public Transform excapeSpotTransform;
     public Rigidbody rigidbody_SoonDoBu;
+    public BoxCollider boxCollider;
+    public MeshRenderer[] meshs;
     public NavMeshAgent navMeshAgent;
     public Animator animator;
 
+    Enemy currentTarget;
+
     private void Start()
     {
-        
+        PlayableMnager.instance.RegisterPlayable(this);
     }
 
     private void Awake()
     {
         rigidbody_SoonDoBu = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        boxCollider = GetComponent<BoxCollider>();
         animator = GetComponentInChildren<Animator>();
+        meshs = GetComponentsInChildren<MeshRenderer>();
+
+        currentHealth = maxHealth;
 
         Invoke("ChaseStart", 2f);
     }
@@ -47,9 +55,9 @@ public class SoonDoBu_Playable : MonoBehaviour
 
         if (navMeshAgent.enabled)
         {
-            if (targetTransform != null)
+            if (excapeSpotTransform != null)
             {
-                navMeshAgent.SetDestination(targetTransform.position);
+                navMeshAgent.SetDestination(excapeSpotTransform.position);
             }
             else
             {
@@ -111,7 +119,7 @@ public class SoonDoBu_Playable : MonoBehaviour
         isAttack = true;
         animator.SetBool("isAttack", true);
 
-        yield return new WaitForSeconds(0.5f);
+       yield return new WaitForSeconds(0.3f);
 
         if (currentTarget == null || currentTarget.isDead)
         {
@@ -126,13 +134,13 @@ public class SoonDoBu_Playable : MonoBehaviour
 
         GameObject instantBullet = Instantiate(
             bullet,
-            transform.position + Vector3.up * 1f,
+            transform.position + Vector3.up * 3f,
             Quaternion.LookRotation(directionToTarget)
             );
         Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
         rigidBullet.velocity = directionToTarget * 20;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.2f);
 
         isAttack = false;
         isChase = true;
@@ -158,4 +166,48 @@ public class SoonDoBu_Playable : MonoBehaviour
         }
         return nearestEnemy;
     }
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Enemy Trigger: " + other.name);
+        if (other.tag == "EnemyBullet")
+        {
+            Debug.Log("Bullet hit!");
+            Bullet bullet = other.GetComponent<Bullet>();
+            currentHealth -= bullet.damage;
+            Vector3 reactVec = transform.position - other.transform.position;
+            Destroy(other.gameObject);
+
+            Debug.Log("Range : " + currentHealth);
+
+            StartCoroutine(OnDamage(reactVec, false));
+        }
+    }
+
+    IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
+    {
+        foreach (MeshRenderer mesh in meshs)
+        {
+            mesh.material.color = Color.red;
+        }
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (currentHealth > 0)
+        {
+            foreach (MeshRenderer mesh in meshs)
+            {
+                mesh.material.color = Color.white;
+            }
+        }
+        else
+        {
+            foreach (MeshRenderer mesh in meshs)
+            {
+                mesh.material.color = Color.gray;
+            }
+            isDead = true;
+            isChase = false;
+        }
+    }
+
 }

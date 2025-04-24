@@ -7,9 +7,10 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
-    public GameObject enemyPrefab;//생성도 여기서 관리해야할거같음
+    public GameObject enemyPrefab;//어떤 애를 생성할건지 필요할듯
     //public List<GameObject> enemies = new List<GameObject>();//게임오브젝트에서 불러와야할게 너무 많다네
     public List<Enemy> enemies = new List<Enemy>();
+    public Transform[] EnemySpawnPoints;
 
     private void Awake()
     {

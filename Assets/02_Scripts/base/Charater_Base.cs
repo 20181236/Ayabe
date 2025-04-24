@@ -4,7 +4,10 @@ using UnityEngine;
 
 public abstract class Charater_Base : MonoBehaviour 
 {
-    public float attackRange = 2.0f;
-    public float moveSpeed = 3.0f;
+    public int maxHealthf;
+    public int currentHealthf;
+    public float attackRange;
+
+
 
 }
