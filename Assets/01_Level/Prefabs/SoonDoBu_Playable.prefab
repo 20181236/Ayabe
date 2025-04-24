@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 397983305347310345}
   - component: {fileID: 7187312169412409887}
   m_Layer: 0
-  m_Name: Player
+  m_Name: SoonDoBu_Playable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

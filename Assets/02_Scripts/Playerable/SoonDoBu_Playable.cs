@@ -209,5 +209,4 @@ public class SoonDoBu_Playable : MonoBehaviour
             isChase = false;
         }
     }
-
 }

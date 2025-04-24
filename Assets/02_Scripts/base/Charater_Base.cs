@@ -1,13 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public abstract class Charater_Base : MonoBehaviour 
+public abstract class Character_Base : MonoBehaviour
 {
-    public int maxHealthf;
-    public int currentHealthf;
-    public float attackRange;
-
-
 
 }

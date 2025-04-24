@@ -24,7 +24,6 @@ public class EnemyManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // 적 등록
     public void RegisterEnemy(Enemy enemy)
     {
         if (!enemies.Contains(enemy))
@@ -33,7 +32,6 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    // 적 제거
     public void UnregisterEnemy(Enemy enemy)
     {
         if (enemies.Contains(enemy))
