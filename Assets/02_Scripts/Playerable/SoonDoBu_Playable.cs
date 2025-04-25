@@ -43,15 +43,15 @@ public class SoonDoBu_Playable : MonoBehaviour
     public Animator animator;
 
     // -------------------- Targeting --------------------
-    private Enemy currentTarget;
+    protected Enemy currentTarget;
 
-    private void Start()
+    void Start()
     {
         PlayableMnager.instance.RegisterPlayable(this);
         StartCoroutine(SkillCooldownRoutine());
     }
 
-    private void Awake()
+    void Awake()
     {
         rigidbody_SoonDoBu = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -74,13 +74,13 @@ public class SoonDoBu_Playable : MonoBehaviour
     }
 
     // -------------------- State Management --------------------
-    private void ChaseStart()
+    void ChaseStart()
     {
         isChase = true;
         animator.SetBool(eAnimatorType.isWalk.ToString(), true);
     }
 
-    private void HandleState()
+    void HandleState()
     {
         if (isDead) return;  // 죽으면 상태 갱신 안함
 
@@ -106,7 +106,7 @@ public class SoonDoBu_Playable : MonoBehaviour
     }
 
     // -------------------- Movement --------------------
-    private void HandleMovement()
+    void HandleMovement()
     {
         if (navMeshAgent.enabled)
         {
@@ -118,7 +118,7 @@ public class SoonDoBu_Playable : MonoBehaviour
             navMeshAgent.isStopped = !isChase || isAttack;
         }
     }
-    private void FreezeVelocity()
+    void FreezeVelocity()
     {
         if (isChase)
         {
@@ -128,7 +128,7 @@ public class SoonDoBu_Playable : MonoBehaviour
     }
 
     // -------------------- Targeting & Attacking --------------------
-    private void Targeting()
+    void Targeting()
     {
         if (isDead)
             return;
@@ -149,7 +149,7 @@ public class SoonDoBu_Playable : MonoBehaviour
         }
     }
 
-    private IEnumerator Attack()
+    IEnumerator Attack()
     {
         isChase = false;
         isAttack = true;
@@ -193,7 +193,7 @@ public class SoonDoBu_Playable : MonoBehaviour
     }
 
     // -------------------- BasicSkill & Cooldown --------------------
-    private IEnumerator SkillCooldownRoutine()
+    IEnumerator SkillCooldownRoutine()
     {
         while (!isDead)
         {
@@ -209,7 +209,7 @@ public class SoonDoBu_Playable : MonoBehaviour
         }
     }
 
-    private IEnumerator BasicSkill()
+    protected virtual IEnumerator BasicSkill()
     {
         yield return new WaitForSeconds(1f);
 
