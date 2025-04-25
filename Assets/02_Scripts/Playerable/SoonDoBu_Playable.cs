@@ -1,34 +1,54 @@
+Ôªøusing System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class SoonDoBu_Playable : MonoBehaviour
 {
+    // -------------------- Player Stats --------------------
+    [Header("Player Stats")]
     public float maxHealth = 100f;
     public float currentHealth = 0f;
-    public float moveSpeed;
-    public float attackRange = 15.0f;//¿Ã∞« «¡∏Æ∆’ ¿˙¿Â«ÿº≠ «œ¿⁄
+    public float attackRange = (float)ePlayableAttackRenge.SoonDobu;
 
+    // -------------------- Skill and Cooldown --------------------
+    [Header("Skills and Cooldowns")]
+    public float basicSkillCooldown = 10f;
+    public float basicSkillTimer = 0f;
+    public bool readyBasicSkill = false;
+
+    // -------------------- State Flags --------------------
+    [Header("State Flags")]
+    public ePlayableState currentState;
     public bool isChase;
     public bool isAttack;
     public bool isDead;
 
+    // -------------------- Game Objects --------------------
+    [Header("Game Objects")]
     public GameObject bullet;
-
+    public GameObject missile;
     public Transform excapeSpotTransform;
+
+    // -------------------- Components --------------------
+    [Header("Components")]
     public Rigidbody rigidbody_SoonDoBu;
     public BoxCollider boxCollider;
     public MeshRenderer[] meshs;
     public NavMeshAgent navMeshAgent;
     public Animator animator;
 
-    Enemy currentTarget;
+    // -------------------- Targeting --------------------
+    private Enemy currentTarget;
 
     private void Start()
     {
         PlayableMnager.instance.RegisterPlayable(this);
+        StartCoroutine(SkillCooldownRoutine());
     }
 
     private void Awake()
@@ -38,72 +58,88 @@ public class SoonDoBu_Playable : MonoBehaviour
         boxCollider = GetComponent<BoxCollider>();
         animator = GetComponentInChildren<Animator>();
         meshs = GetComponentsInChildren<MeshRenderer>();
-
         currentHealth = maxHealth;
 
         Invoke("ChaseStart", 2f);
     }
-    void ChaseStart()
+
+    void Update()
+    {
+        HandleState();
+    }
+
+    void FixedUpdate()
+    {
+        FreezeVelocity();
+    }
+
+    // -------------------- State Management --------------------
+    private void ChaseStart()
     {
         isChase = true;
         animator.SetBool(eAnimatorType.isWalk.ToString(), true);
     }
 
-    void Update()
+    private void HandleState()
     {
+        if (isDead) return;  // Ï£ΩÏúºÎ©¥ ÏÉÅÌÉú Í∞±Ïã† ÏïàÌï®
+
         Targeting();
 
-        if (navMeshAgent.enabled)
+        if (isChase)
+            HandleMovement();
+
+        if (isAttack)
         {
-            if (excapeSpotTransform != null)
+            // Í≥µÍ≤© Ïï†ÎãàÎ©îÏù¥ÏÖòÏù¥ ÎÅùÎÇòÎ©¥ ÏûêÎèôÏúºÎ°ú Attack ÏÉÅÌÉú Ìï¥Ï†ú
+            if (!animator.GetBool("isAttack"))
             {
-                navMeshAgent.SetDestination(excapeSpotTransform.position);
+                isAttack = false;
+                isChase = true;  // Í≥µÍ≤© ÎÅùÎÇòÎ©¥ Ï∂îÏ†Å ÏÉÅÌÉúÎ°ú Ï†ÑÌôò
             }
-            else
-            {
-                // ¿Ã∞≈ ºˆ¡§«ÿæﬂµ ...
-                Vector3 rightDestination = transform.position + Vector3.right * 15f;//ªÛºˆ ¡¡¡ˆæ ¿Ω ¿Ã∞≈ ∞Ì¡§µ» ±Ê¿Ã¿”...
-                navMeshAgent.SetDestination(rightDestination);
-            }
-            navMeshAgent.isStopped = !isChase;
+        }
+
+        if (isDead)
+        {
+            animator.SetBool("isDead", true);  // Ï£ΩÏùå Ïï†ÎãàÎ©îÏù¥ÏÖò
         }
     }
 
-    void FixedUpdate()
+    // -------------------- Movement --------------------
+    private void HandleMovement()
     {
-        Moving();
-        FreezeVelocity();
+        if (navMeshAgent.enabled)
+        {
+            if (isChase || !isAttack)
+            {
+                Vector3 rightDestination = transform.position + Vector3.forward * 100f; //  ÏÉÅÏàòÎäî ÎÇòÏ§ëÏóê Ï°∞Ï†ï
+                navMeshAgent.SetDestination(rightDestination);
+            }
+            navMeshAgent.isStopped = !isChase || isAttack;
+        }
     }
-    void FreezeVelocity()
+    private void FreezeVelocity()
     {
         if (isChase)
         {
             rigidbody_SoonDoBu.velocity = Vector3.zero;
-            //angularVelocity = PhysicsRotationVelocity
             rigidbody_SoonDoBu.angularVelocity = Vector3.zero;
         }
     }
 
-    public void Moving()
-    {
-    }
-    void MoveToMap_End_Object()
-    {
-    }
-
-    void Targeting()
+    // -------------------- Targeting & Attacking --------------------
+    private void Targeting()
     {
         if (isDead)
             return;
 
-        // ≈∏∞Ÿ¿Ã null¿Ã∞≈≥™ ¡◊æ˙¿∏∏È ¥ŸΩ√ √£±‚
         if (currentTarget == null || currentTarget.isDead)
         {
             currentTarget = GetNearestEnemyToPosition(transform.position);
         }
 
         if (currentTarget == null)
-            return; // ªÏæ∆¿÷¥¬ ¿˚¿Ã æ∆øπ æ¯¿ª ∂ß
+            return;
 
         float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
 
@@ -113,18 +149,20 @@ public class SoonDoBu_Playable : MonoBehaviour
         }
     }
 
-    IEnumerator Attack()
+    private IEnumerator Attack()
     {
         isChase = false;
         isAttack = true;
+        navMeshAgent.isStopped = true;
         animator.SetBool("isAttack", true);
 
-       yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.3f);
 
         if (currentTarget == null || currentTarget.isDead)
         {
             isAttack = false;
             isChase = true;
+            navMeshAgent.isStopped = false;
             animator.SetBool("isAttack", false);
             yield break;
         }
@@ -132,21 +170,68 @@ public class SoonDoBu_Playable : MonoBehaviour
         Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
 
+        // Í∏∞Î≥∏ Í≥µÍ≤©
         GameObject instantBullet = Instantiate(
             bullet,
             transform.position + Vector3.up * 3f,
             Quaternion.LookRotation(directionToTarget)
-            );
-        Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
-        rigidBullet.velocity = directionToTarget * 20;
+        );
+        instantBullet.GetComponent<Rigidbody>().velocity = directionToTarget * 20f;
+
+        if (readyBasicSkill)
+        {
+            StartCoroutine(BasicSkill());
+            readyBasicSkill = false;
+        }
 
         yield return new WaitForSeconds(0.2f);
 
         isAttack = false;
         isChase = true;
+        navMeshAgent.isStopped = false;
         animator.SetBool("isAttack", false);
     }
 
+    // -------------------- BasicSkill & Cooldown --------------------
+    private IEnumerator SkillCooldownRoutine()
+    {
+        while (!isDead)
+        {
+            if (!readyBasicSkill)
+            {
+                yield return new WaitForSeconds(basicSkillCooldown);
+                readyBasicSkill = true;
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+    }
+
+    private IEnumerator BasicSkill()
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (currentTarget == null)
+            yield break;
+
+        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, -90));
+
+        GameObject instantMissile = Instantiate(
+            missile,
+            transform.position + Vector3.up * 7f,
+            Quaternion.LookRotation(directionToTarget)
+        );
+
+        Missile missileScript = instantMissile.GetComponent<Missile>();
+        missileScript.target = currentTarget.transform;
+
+        yield return new WaitForSeconds(0.2f);
+    }
+
+    // -------------------- Enemy Detection --------------------
     public Enemy GetNearestEnemyToPosition(Vector3 position)
     {
         Enemy nearestEnemy = null;
@@ -157,7 +242,6 @@ public class SoonDoBu_Playable : MonoBehaviour
             if (enemy == null) continue;
 
             float dist = Vector3.Distance(position, enemy.transform.position);
-            Debug.Log(enemy);
             if (dist < minDist)
             {
                 minDist = dist;
@@ -166,24 +250,22 @@ public class SoonDoBu_Playable : MonoBehaviour
         }
         return nearestEnemy;
     }
+
+    // -------------------- Damage Handling --------------------
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Enemy Trigger: " + other.name);
         if (other.tag == "EnemyBullet")
         {
-            Debug.Log("Bullet hit!");
             Bullet bullet = other.GetComponent<Bullet>();
             currentHealth -= bullet.damage;
             Vector3 reactVec = transform.position - other.transform.position;
             Destroy(other.gameObject);
 
-            Debug.Log("Range : " + currentHealth);
-
             StartCoroutine(OnDamage(reactVec, false));
         }
     }
 
-    IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
+    private IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
     {
         foreach (MeshRenderer mesh in meshs)
         {

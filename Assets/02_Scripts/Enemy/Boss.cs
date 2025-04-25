@@ -1,20 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Boss : MonoBehaviour
+public class Boss : Enemy
 {
-    public float maxHealth = 100f;
-    public float currentHealth = 0f;
-    public float attackRange = 10.0f;
+    public GameObject missile;
+    public Transform missilePort;
 
-    void Start()
-    {
-        
-    }
+    public bool isLook;
 
-    // Update is called once per frame
-    void Update()
+    Vector3 lookVec;
+    Vector3 tauntVec;
+
+    private void Awake()
     {
         
     }

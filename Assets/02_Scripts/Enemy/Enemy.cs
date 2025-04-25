@@ -7,6 +7,8 @@ using UnityEngine.Playables;
 
 public class Enemy : MonoBehaviour
 {
+    public eEnemyType enemyType;
+
     public float maxHealth = 100f;
     public float currentHealth = 0f;
     public float attackRange = 10.0f;
@@ -100,7 +102,6 @@ public class Enemy : MonoBehaviour
 
         isAttack = false;
         isChase = true;
-        animator.SetBool("isAttack", false);
     }
 
     public SoonDoBu_Playable GetNearestEnemyToPosition(Vector3 position)
@@ -189,7 +190,7 @@ public class Enemy : MonoBehaviour
             //    rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
             //}
 
-            Destroy(gameObject, 2f);
+            Destroy(gameObject, 1.8f);
         }
     }
 }
