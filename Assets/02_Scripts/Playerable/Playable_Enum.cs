@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ePlayableState
+public enum PlayableState
 {
     Create,
     Idle,
@@ -12,22 +12,29 @@ public enum ePlayableState
     Attack,
     Death
 }
-public enum ePlayableType
+public enum PlayableType
 {
     forward,
     middle,
     back
 }
 
-public enum ePlayableHelath
+public enum PlayableHelath
 {
     SoonDobu = 200,
     Luna = 150,
     Ludo = 100,
 }
-public enum ePlayableAttackRenge
+public enum PlayableAttackRenge
 {
     SoonDobu = 15,
     Luna = 20,
     Ludo = 25,
+}
+
+public enum PlayalbeBaiscSkillCoolTime
+{
+    SoonDobu = 10,
+    Luna = 5,
+    Ludo = 5,
 }

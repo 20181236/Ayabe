@@ -9,34 +9,30 @@ using static UnityEngine.GraphicsBuffer;
 
 public class SoonDoBu_Playable : MonoBehaviour
 {
-    // -------------------- Player Stats --------------------
     [Header("Player Stats")]
-    public float maxHealth = 100f;
-    public float currentHealth = 0f;
-    public float attackRange = (float)ePlayableAttackRenge.SoonDobu;
+    public float maxHealth;
+    public float currentHealth;
+    public float attackRange;
 
-    // -------------------- Skill and Cooldown --------------------
     [Header("Skills and Cooldowns")]
-    public float basicSkillCooldown = 10f;
-    public float basicSkillTimer = 0f;
-    public bool readyBasicSkill = false;
+    public float basicSkillCooldown;
+    public float basicSkillTimer;
+    public bool readyBasicSkill;
 
-    // -------------------- State Flags --------------------
     [Header("State Flags")]
-    public ePlayableState currentState;
+    public PlayableState currentState;
     public bool isChase;
     public bool isAttack;
     public bool isDead;
 
-    // -------------------- Game Objects --------------------
+    //이것도 뺄 수 있을 거 같음
     [Header("Game Objects")]
     public GameObject bullet;
     public GameObject missile;
     public Transform excapeSpotTransform;
 
-    // -------------------- Components --------------------
     [Header("Components")]
-    public Rigidbody rigidbody_SoonDoBu;
+    public Rigidbody rigidbody_Playable;
     public BoxCollider boxCollider;
     public MeshRenderer[] meshs;
     public NavMeshAgent navMeshAgent;
@@ -53,7 +49,9 @@ public class SoonDoBu_Playable : MonoBehaviour
 
     void Awake()
     {
-        rigidbody_SoonDoBu = GetComponent<Rigidbody>();
+        SetStats();
+
+        rigidbody_Playable = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         boxCollider = GetComponent<BoxCollider>();
         animator = GetComponentInChildren<Animator>();
@@ -74,6 +72,17 @@ public class SoonDoBu_Playable : MonoBehaviour
     }
 
     // -------------------- State Management --------------------
+    protected virtual void SetStats()
+    {
+        maxHealth = (float)PlayableHelath.SoonDobu;
+        currentHealth = 0f;
+        attackRange = (float)PlayableAttackRenge.SoonDobu;
+
+        basicSkillCooldown = (float)PlayalbeBaiscSkillCoolTime.SoonDobu;
+        basicSkillTimer = 0f;
+        readyBasicSkill = false;
+    }
+
     void ChaseStart()
     {
         isChase = true;
@@ -122,8 +131,8 @@ public class SoonDoBu_Playable : MonoBehaviour
     {
         if (isChase)
         {
-            rigidbody_SoonDoBu.velocity = Vector3.zero;
-            rigidbody_SoonDoBu.angularVelocity = Vector3.zero;
+            rigidbody_Playable.velocity = Vector3.zero;
+            rigidbody_Playable.angularVelocity = Vector3.zero;
         }
     }
 
@@ -138,8 +147,8 @@ public class SoonDoBu_Playable : MonoBehaviour
             currentTarget = GetNearestEnemyToPosition(transform.position);
         }
 
-        if (currentTarget == null)
-            return;
+        //if (currentTarget == null)
+        //    return; ai가 중복체크래
 
         float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
 
@@ -211,22 +220,32 @@ public class SoonDoBu_Playable : MonoBehaviour
 
     protected virtual IEnumerator BasicSkill()
     {
-        yield return new WaitForSeconds(1f);
+        // 기본 스킬 구현
+        yield return new WaitForSeconds(0.5f);  // 딜레이 수정
 
         if (currentTarget == null)
             yield break;
 
+        // 목표 방향 계산
         Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, -90));
+        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, 90)); // 회전 수정
 
+        // 미사일 인스턴스 생성
         GameObject instantMissile = Instantiate(
             missile,
-            transform.position + Vector3.up * 7f,
+            transform.position + Vector3.up * 10f,  // 미사일의 생성 위치
             Quaternion.LookRotation(directionToTarget)
         );
 
         Missile missileScript = instantMissile.GetComponent<Missile>();
         missileScript.target = currentTarget.transform;
+
+        // 미사일에 속도 적용 (Rigidbody가 필요)
+        Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
+        if (missileRigidbody != null)
+        {
+            missileRigidbody.velocity = directionToTarget * 10f;  // missileSpeed는 미사일의 속도
+        }
 
         yield return new WaitForSeconds(0.2f);
     }

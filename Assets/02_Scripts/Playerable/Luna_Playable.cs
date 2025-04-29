@@ -5,29 +5,38 @@ using UnityEngine;
 public class Luna_Playable : SoonDoBu_Playable
 {
 
+    protected override void SetStats()
+    {
+        maxHealth = (float)PlayableHelath.Luna;
+        attackRange = (float)PlayableAttackRenge.Luna;
+        basicSkillCooldown = (float)PlayalbeBaiscSkillCoolTime.Luna;
+    }
     protected override IEnumerator BasicSkill()
     {
-        // Custom implementation of BasicSkill
-        yield return new WaitForSeconds(0.5f);  // Example of modifying the delay
+        yield return new WaitForSeconds(0.5f);  // 딜레이 수정
 
         if (currentTarget == null)
             yield break;
 
-        // Custom logic for the advanced skill
         Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, 90)); // Adjusted rotation
 
-        // Example of changing the missile behavior
+        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z)); 
+
         GameObject instantMissile = Instantiate(
             missile,
-            transform.position + Vector3.up * 10f,  // Custom position
+            transform.position + Vector3.up * 3f,
             Quaternion.LookRotation(directionToTarget)
         );
 
         Missile missileScript = instantMissile.GetComponent<Missile>();
         missileScript.target = currentTarget.transform;
 
-        // More advanced logic or effects can go here
+        // 미사일에 속도 적용 (Rigidbody가 필요)
+        Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
+        if (missileRigidbody != null)
+        {
+            missileRigidbody.velocity = directionToTarget * 20f;
+        }
 
         yield return new WaitForSeconds(0.2f);
     }

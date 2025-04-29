@@ -7,7 +7,7 @@ using UnityEngine.Playables;
 
 public class Enemy : MonoBehaviour
 {
-    public eEnemyType enemyType;
+    public EnemyType enemyType;
 
     public float maxHealth = 100f;
     public float currentHealth = 0f;
@@ -146,6 +146,13 @@ public class Enemy : MonoBehaviour
             StartCoroutine(OnDamage(reactVec, false));
         }
     }
+    public void HitByGrenade(Vector3 explositonPos)
+    {
+        currentHealth -= 100;
+        Vector3 reactVec = transform.position - explositonPos;
+        StartCoroutine(OnDamage(reactVec, true));
+    }
+
 
     IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
     {
@@ -174,21 +181,21 @@ public class Enemy : MonoBehaviour
             //rigidbodyEnemy.enabled = false;
             animator.SetTrigger("doDie");
 
-            //if (isGrenade)
-            //{
-            //    reactVec = reactVec.normalized;
-            //    reactVec += Vector3.up * 3;
+            if (isGrenade)
+            {
+                reactVec = reactVec.normalized;
+                reactVec += Vector3.up * 3;
 
-            //    rigidbodyEnemy.freezeRotation = false;
-            //    rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
-            //    rigidbodyEnemy.AddTorque(reactVec * 15, ForceMode.Impulse);
-            //}
-            //else
-            //{
-            //    reactVec = reactVec.normalized;
-            //    reactVec += Vector3.up;
-            //    rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
-            //}
+                rigidbodyEnemy.freezeRotation = false;
+                rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
+                rigidbodyEnemy.AddTorque(reactVec * 15, ForceMode.Impulse);
+            }
+            else
+            {
+                reactVec = reactVec.normalized;
+                reactVec += Vector3.up;
+                rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
+            }
 
             Destroy(gameObject, 1.8f);
         }
