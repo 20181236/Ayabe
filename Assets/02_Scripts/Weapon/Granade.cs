@@ -6,10 +6,10 @@ public class Granade : MonoBehaviour
 {
     //코드 백업
 
-    public float explosionDelay = 2f;
+    public float explosionDelay = 0.3f;
     public float explosionRadius = 5f;
     public float explosionDamage = 100f;
-    public float throwingSpeed = 10f;
+    public float throwingSpeed = 30f;
 
     private bool hasExploded = false;
 
@@ -28,7 +28,7 @@ public class Granade : MonoBehaviour
         Vector3 endPoint = targetPosition;//가야할위치
 
         // 궤적을 만들기위해서 중간의 최대 높이점을 주는것
-        Vector3 centerPoint = (startPoint + endPoint) / 2 + Vector3.up * 30f;
+        Vector3 centerPoint = (startPoint + endPoint) / 2 + Vector3.up * 20f;
 
         //이동진행률?
         float progress = 0f;
@@ -38,6 +38,8 @@ public class Granade : MonoBehaviour
         while (progress < 1f)
         {
             progress += Time.deltaTime / duration;
+
+            float curvedProgress = Mathf.Pow(progress, 0.2f);
 
             Vector3 m1 = Vector3.Slerp(startPoint, centerPoint, progress);
             Vector3 m2 = Vector3.Slerp(centerPoint, endPoint, progress);

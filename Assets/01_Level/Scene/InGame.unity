@@ -128,6 +128,32 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 2632422830809904678, guid: 7a102dcde8fc34547a4d9448f5dc26c7, type: 3}
   m_PrefabInstance: {fileID: 848820204382457203}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &225528947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1447104275903941039, guid: cd8e3c00b0f28f0419943b46a579c6fc, type: 3}
+  m_PrefabInstance: {fileID: 282390936}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &225528949
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225528947}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c65d676678eec5429569b40e769dd79, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &282390936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -146,7 +172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2440095803248850997, guid: cd8e3c00b0f28f0419943b46a579c6fc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -17.4
       objectReference: {fileID: 0}
     - target: {fileID: 2440095803248850997, guid: cd8e3c00b0f28f0419943b46a579c6fc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -196,6 +222,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6470357823029104312, guid: cd8e3c00b0f28f0419943b46a579c6fc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 741086971}
+    - targetCorrespondingSourceObject: {fileID: 1447104275903941039, guid: cd8e3c00b0f28f0419943b46a579c6fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 225528949}
   m_SourcePrefab: {fileID: 100100000, guid: cd8e3c00b0f28f0419943b46a579c6fc, type: 3}
 --- !u!1 &430602180
 GameObject:
@@ -1428,7 +1457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8393298177302427086, guid: 18530a8ecaf9391489b39db933de18ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.1
+      value: -10.3
       objectReference: {fileID: 0}
     - target: {fileID: 8393298177302427086, guid: 18530a8ecaf9391489b39db933de18ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1475,6 +1504,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Luna_Playable
       objectReference: {fileID: 0}
+    - target: {fileID: 2175214197470128850, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3497296476513939937, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.3
@@ -1485,7 +1518,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3497296476513939937, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -17.4
       objectReference: {fileID: 0}
     - target: {fileID: 3497296476513939937, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
       propertyPath: m_LocalRotation.w

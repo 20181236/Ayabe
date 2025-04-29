@@ -25,7 +25,7 @@ public class Ludo_Playable : SoonDoBu_Playable
         GameObject grenadeObject = Instantiate(grenadePrefab, transform.position + Vector3.up * 2f, Quaternion.identity);//수류탄만들어주고
         Rigidbody grenadeRigidbody = grenadeObject.GetComponent<Rigidbody>();
         Vector3 toTarget = (currentTarget.transform.position - transform.position).normalized;//방향주고
-        Vector3 force = toTarget * 5f + Vector3.up * 7f;
+        Vector3 force = toTarget * 8f + Vector3.up * 7f;
         grenadeRigidbody.AddForce(force, ForceMode.Impulse);
         Granade grenadeScript = grenadeObject.GetComponent<Granade>();
         if (grenadeScript != null)

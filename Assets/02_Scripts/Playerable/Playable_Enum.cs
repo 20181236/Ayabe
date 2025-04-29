@@ -27,9 +27,9 @@ public enum PlayableHelath
 }
 public enum PlayableAttackRenge
 {
-    SoonDobu = 15,
-    Luna = 20,
-    Ludo = 25,
+    SoonDobu = 30,
+    Luna = 30,
+    Ludo = 40,
 }
 
 public enum PlayalbeBaiscSkillCoolTime
