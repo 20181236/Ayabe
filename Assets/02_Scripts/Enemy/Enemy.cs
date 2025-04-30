@@ -9,9 +9,16 @@ public class Enemy : MonoBehaviour
 {
     public EnemyType enemyType;
 
-    public float maxHealth = 100f;
-    public float currentHealth = 0f;
-    public float attackRange = 10.0f;
+    public float maxHealth;
+    public float currentHealth;
+    public float attackRange;
+
+    public int attackCount;
+    public float attackInterval = 2f;//2초에 한번씩쏘고
+    public float attackTimer = 0f;//인터벌비교변수이고
+
+    public float skillCooldown = 15f;//스킬 쿨타임이고
+    public float skillTimer = 0f;//스킬 쿨타임을 비교할 변수
 
     public bool isChase;
     public bool isAttack;
@@ -32,6 +39,7 @@ public class Enemy : MonoBehaviour
     }
     void Awake()
     {
+        SetStats();
         rigidbodyEnemy = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         meshs = GetComponentsInChildren<MeshRenderer>();
@@ -44,15 +52,23 @@ public class Enemy : MonoBehaviour
 
     }
 
-    private void Update()
+    void Update()
     {
         Targeting();
+        attackTimer += Time.deltaTime;
     }
 
-    void Targeting()
+    protected virtual void SetStats()
     {
-        //if (isDead)
-        //    return;
+        maxHealth = (float)EnemyHelath.Thanker;
+        currentHealth = 0f;
+        attackRange = 10.0f;
+    }
+
+    public void Targeting()
+    {
+        if (isDead)
+            return;
 
         // 타겟이 null이거나 죽었으면 다시 찾기
         if (currentTarget == null || currentTarget.isDead)
@@ -65,19 +81,19 @@ public class Enemy : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
 
-        if (distance <= attackRange && !isAttack)
+        // 공격 범위 내에 있고, 충분한 시간이 지나면 공격 시작
+        if (distance <= attackRange && !isAttack && attackTimer >= attackInterval)
         {
             StartCoroutine(Attack());
+            attackTimer = 0f; // 공격 후 타이머 초기화
         }
     }
 
-    IEnumerator Attack()
+    public IEnumerator Attack()
     {
         isChase = false;
         isAttack = true;
         animator.SetBool("isAttack", true);
-
-        yield return new WaitForSeconds(0.3f);
 
         if (currentTarget == null || currentTarget.isDead)
         {
@@ -94,14 +110,15 @@ public class Enemy : MonoBehaviour
             enemyBullet,
             transform.position + Vector3.up * 3f,
             Quaternion.LookRotation(directionToTarget)
-            );
+        );
         Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
         rigidBullet.velocity = directionToTarget * 20;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.2f); 
 
         isAttack = false;
         isChase = true;
+        attackCount++;
     }
 
     public SoonDoBu_Playable GetNearestEnemyToPosition(Vector3 position)
@@ -132,10 +149,10 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Enemy Trigger: " + other.name); 
+        Debug.Log("Enemy Trigger: " + other.name);
         if (other.tag == "Bullet")
         {
-            Debug.Log("Bullet hit!"); 
+            Debug.Log("Bullet hit!");
             Bullet bullet = other.GetComponent<Bullet>();
             currentHealth -= bullet.damage;
             Vector3 reactVec = transform.position - other.transform.position;

@@ -63,6 +63,8 @@ public class SoonDoBu_Playable : MonoBehaviour
 
     void Update()
     {
+        if (isDead)
+            return;
         HandleState();
     }
 
@@ -91,7 +93,8 @@ public class SoonDoBu_Playable : MonoBehaviour
 
     void HandleState()
     {
-        if (isDead) return;  // 죽으면 상태 갱신 안함
+        if (isDead)
+            return;
 
         Targeting();
 
@@ -228,12 +231,12 @@ public class SoonDoBu_Playable : MonoBehaviour
 
         // 목표 방향 계산
         Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, 90)); // 회전 수정
+        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
 
         // 미사일 인스턴스 생성
         GameObject instantMissile = Instantiate(
             missile,
-            transform.position + Vector3.up * 10f,  // 미사일의 생성 위치
+            transform.position + Vector3.up * 5f,  // 미사일의 생성 위치
             Quaternion.LookRotation(directionToTarget)
         );
 
@@ -244,7 +247,7 @@ public class SoonDoBu_Playable : MonoBehaviour
         Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
         if (missileRigidbody != null)
         {
-            missileRigidbody.velocity = directionToTarget * 10f;  // missileSpeed는 미사일의 속도
+            missileRigidbody.velocity = directionToTarget * 20f;  // missileSpeed는 미사일의 속도
         }
 
         yield return new WaitForSeconds(0.2f);
@@ -309,5 +312,6 @@ public class SoonDoBu_Playable : MonoBehaviour
             isDead = true;
             isChase = false;
         }
+        Destroy(gameObject, 1.8f);
     }
 }
