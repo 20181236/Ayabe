@@ -86,7 +86,12 @@ public class Enemy_base : MonoBehaviour
 
             case EnemyState.Chasing:
                 Debug.Log("Chasing");
-                MoveToTarget(currentTarget.transform.position);
+                currentTarget = GetNearestEnemyToPosition(transform.position);
+
+                if (currentTarget != null)
+                {
+                    MoveToTarget(currentTarget.transform.position);
+                }
                 break;
 
             case EnemyState.Attack:
@@ -115,23 +120,17 @@ public class Enemy_base : MonoBehaviour
         if (isDead)
             return;
 
-        // 타겟이 null이거나 죽었으면 다시 찾기
-        if (currentTarget == null || currentTarget.isDead)
-        {
-            currentTarget = GetNearestEnemyToPosition(transform.position);
-        }
+        currentTarget = GetNearestEnemyToPosition(transform.position);
 
         if (currentTarget == null)
-            return; // 살아있는 적이 아예 없을 때
+            return;
 
         float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
 
-        // 공격 사거리 밖이면 추적 상태로 전환
         if (distance > attackRange)
         {
             currentState = EnemyState.Chasing;
         }
-        // 공격 사거리 안이면 공격 상태로 전환
         else if (distance <= attackRange && attackTimer >= attackInterval)
         {
             currentState = EnemyState.Attack;
@@ -142,20 +141,17 @@ public class Enemy_base : MonoBehaviour
     {
         if (navMeshAgent != null)
         {
-            navMeshAgent.SetDestination(targetPosition);  // NavMesh를 활용해 목표로 이동
+            navMeshAgent.SetDestination(targetPosition);
 
-            // 공격 사거리 내로 들어오면 멈추고 공격 상태로 전환
             float distance = Vector3.Distance(transform.position, targetPosition);
 
             if (distance <= attackRange && attackTimer >= attackInterval)
             {
-                // 공격 범위에 들어오면 멈추기
-                navMeshAgent.isStopped = true;  // 이동을 멈춤
-                currentState = EnemyState.Attack;  // 공격 상태로 전환
+                navMeshAgent.isStopped = true;
+                currentState = EnemyState.Attack;
             }
             else
             {
-                // 공격 범위 밖이면 이동 재개
                 navMeshAgent.isStopped = false;
             }
         }
@@ -191,6 +187,7 @@ public class Enemy_base : MonoBehaviour
         isAttack = false;
         isChase = true;
         attackTimer = 0f;
+        animator.SetBool("isAttack", false);
         currentState = EnemyState.Idle;
     }
 
