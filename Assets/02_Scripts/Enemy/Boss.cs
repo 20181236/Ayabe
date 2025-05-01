@@ -6,10 +6,13 @@ using UnityEngine.AI;
 
 public class Boss : Enemy_base
 {
+    public int maxTargetCount = 3;
     public float exSkillCoolTime = 30f;
     public float exSkillTimer = 0f;
 
+    private bool skillActivated = false;
     private bool isExSkillActive = false;
+
 
     public GameObject missile;
     public Transform missilePort;
@@ -38,7 +41,6 @@ public class Boss : Enemy_base
         switch (currentState)
         {
             case EnemyState.Skill:
-                Skill();
                 break;
             case EnemyState.ExSkill:
                 break;
@@ -61,19 +63,34 @@ public class Boss : Enemy_base
     {
         List<SoonDoBu_Playable> targets = new List<SoonDoBu_Playable>(PlayableMnager.instance.playables);
 
+        // 유효한 타겟만 필터링
+        List<SoonDoBu_Playable> validTargets = new List<SoonDoBu_Playable>();
+
         foreach (SoonDoBu_Playable target in targets)
         {
-            if (target == null || target.isDead)
-                continue;
+            if (target != null && !target.isDead)
+            {
+                validTargets.Add(target);
+            }
+        }
 
+        // 가까운 순으로 정렬
+        validTargets.Sort((a, b) =>
+            Vector3.Distance(transform.position, a.transform.position)
+            .CompareTo(Vector3.Distance(transform.position, b.transform.position))
+        );
+
+        // 최대 타겟 수만큼 미사일 발사
+        for (int i = 0; i < Mathf.Min(maxTargetCount, validTargets.Count); i++)
+        {
+            SoonDoBu_Playable target = validTargets[i];
             Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
-
             Vector3 lookDirection = new Vector3(directionToTarget.x, 0, directionToTarget.z);
             transform.rotation = Quaternion.LookRotation(lookDirection);
 
             GameObject instantMissile = Instantiate(
                 missile,
-                transform.position + Vector3.up * 1.0f,
+                transform.position + Vector3.up * 1.0f + lookDirection * 1.5f, // 캐릭터보다 앞에서 발사
                 Quaternion.LookRotation(lookDirection)
             );
 
@@ -83,9 +100,11 @@ public class Boss : Enemy_base
             Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
             if (missileRigidbody != null)
             {
-                missileRigidbody.velocity = lookDirection.normalized * 10f;
+                missileRigidbody.velocity = lookDirection * 50f;  // 미사일 초기 속도
             }
         }
+
+        currentState = EnemyState.Attack;  // 스킬 발사 후 상태 변경
     }
 
     // 특수 스킬 실행 메서드
@@ -107,20 +126,6 @@ public class Boss : Enemy_base
             exSkillTimer = 0f;
             currentState = EnemyState.ExSkill;
 
-            // 특수 스킬을 일정 시간 후에 실행
-            //InvokeAction(EXSkill(), 1.0f);  // 예: 1초 후 특수 스킬 실행
         }
-    }
-
-    // Action을 통해 특수 스킬을 실행하는 메서드
-    public void InvokeAction(Action action, float delay)
-    {
-        StartCoroutine(InvokeWithDelay(action, delay));
-    }
-
-    private IEnumerator InvokeWithDelay(Action action, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        action?.Invoke();
     }
 }

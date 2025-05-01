@@ -312,6 +312,5 @@ public class SoonDoBu_Playable : MonoBehaviour
             isDead = true;
             isChase = false;
         }
-        Destroy(gameObject, 1.8f);
     }
 }
