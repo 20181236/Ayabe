@@ -9,21 +9,24 @@ public enum EnemyType
 public enum EnemyState
 {
     Create,
+    Idle,
     Chasing,
-    Attaking,
+    Attack,
+    Skill,
+    ExSkill,
     Dead
 }
 
-public enum EnemyHelath
+public enum EnemyHealth
 {
     Middler = 1000,
     Thanker=3000,
     Boss = 5000,
 }
 
-public enum EnemyAttackRenge
+public enum EnemyAttackRange
 {
-    Thanker =  25,
+    Thanker =  30,
     Middler = 30,
     Boss = 100,
 }

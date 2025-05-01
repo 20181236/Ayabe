@@ -1119,6 +1119,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 7988094277207216310, guid: 83dab506297948d4d8d34c4fe12431ee, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 8698377833898316602, guid: 83dab506297948d4d8d34c4fe12431ee, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1200,26 +1204,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3485c7ab47f3ea47ba34db0e007a071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 3
   maxHealth: 300000
   currentHealth: 0
   attackRange: 80
-  attackCount: 0
   attackInterval: 0
   attackTimer: 0
-  skillCooldown: 15
-  skillTimer: 0
+  attackCount: 0
+  moveSpeed: 0
+  isCreate: 0
   isChase: 0
   isAttack: 0
+  readyAttack: 0
   isDead: 0
   rigidbodyEnemy: {fileID: 1362554290}
   boxCollider: {fileID: 1362554289}
   meshs: []
-  navMeshAgent: {fileID: 0}
-  animator: {fileID: 0}
+  navMeshAgent: {fileID: 1362554292}
+  animator: {fileID: 1009405969}
   enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
-  missilePort: {fileID: 0}
+  currentState: 0
+  exSkillCoolTime: 30
+  exSkillTimer: 0
   missile: {fileID: 7664551313295523910, guid: 95a965c89dc932e4387d19860fb5a301, type: 3}
+  missilePort: {fileID: 0}
 --- !u!65 &1362554289
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1427,17 +1434,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4151a1fcb51254abf19a0008fcb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 1
   maxHealth: 100
   currentHealth: 0
   attackRange: 30
-  attackCount: 0
   attackInterval: 0
   attackTimer: 0
-  skillCooldown: 15
-  skillTimer: 0
+  attackCount: 0
+  moveSpeed: 0
+  isCreate: 0
   isChase: 0
   isAttack: 0
+  readyAttack: 0
   isDead: 0
   rigidbodyEnemy: {fileID: 1879446563}
   boxCollider: {fileID: 1879446562}
@@ -1445,6 +1452,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 1879446561}
   animator: {fileID: 781751665}
   enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
+  currentState: 0
 --- !u!195 &1879446561
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1529,7 +1537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4931071578747650822, guid: 45b0e42629722d641a87bcebbe80c043, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6426030816069884123, guid: 45b0e42629722d641a87bcebbe80c043, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1596,6 +1604,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2934906372645605823, guid: 7a102dcde8fc34547a4d9448f5dc26c7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6459665552775501386, guid: 7a102dcde8fc34547a4d9448f5dc26c7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.6549034

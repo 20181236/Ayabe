@@ -39,7 +39,7 @@ public class SoonDoBu_Playable : MonoBehaviour
     public Animator animator;
 
     // -------------------- Targeting --------------------
-    protected Enemy currentTarget;
+    protected Enemy_base currentTarget;
 
     void Start()
     {
@@ -254,12 +254,12 @@ public class SoonDoBu_Playable : MonoBehaviour
     }
 
     // -------------------- Enemy Detection --------------------
-    public Enemy GetNearestEnemyToPosition(Vector3 position)
+    public Enemy_base GetNearestEnemyToPosition(Vector3 position)
     {
-        Enemy nearestEnemy = null;
+        Enemy_base nearestEnemy = null;
         float minDist = Mathf.Infinity;
 
-        foreach (Enemy enemy in EnemyManager.instance.enemies)
+        foreach (Enemy_base enemy in EnemyManager.instance.enemies)
         {
             if (enemy == null) continue;
 

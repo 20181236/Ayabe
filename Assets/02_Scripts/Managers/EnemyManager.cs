@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager instance { get; private set; }
     public GameObject enemyPrefab;//어떤 애를 생성할건지 필요할듯
     //public List<GameObject> enemies = new List<GameObject>();//게임오브젝트에서 불러와야할게 너무 많다네
-    public List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy_base> enemies = new List<Enemy_base>();
     public Transform[] EnemySpawnPoints;
 
     private void Awake()
@@ -24,23 +24,19 @@ public class EnemyManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void RegisterEnemy(Enemy enemy)
+    public void RegisterEnemy(Enemy_base enemy)
     {
         if (!enemies.Contains(enemy))
-        {
             enemies.Add(enemy);
-        }
     }
 
-    public void UnregisterEnemy(Enemy enemy)
+    public void UnregisterEnemy(Enemy_base enemy)
     {
         if (enemies.Contains(enemy))
-        {
             enemies.Remove(enemy);
-        }
     }
-    // 모든 적 가져오기
-    public List<Enemy> GetEnemies()
+
+    public List<Enemy_base> GetEnemies()
     {
         return enemies;
     }

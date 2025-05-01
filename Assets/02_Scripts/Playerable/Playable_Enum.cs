@@ -21,9 +21,9 @@ public enum PlayableType
 
 public enum PlayableHelath
 {
-    SoonDobu = 200,
-    Luna = 150,
-    Ludo = 100,
+    SoonDobu = 5000,
+    Luna = 5000,
+    Ludo = 5000,
 }
 public enum PlayableAttackRenge
 {

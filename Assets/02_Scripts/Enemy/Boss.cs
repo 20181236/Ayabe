@@ -1,142 +1,64 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Boss : Enemy
+public class Boss : Enemy_base
 {
-    public enum BossStateType
-    {
-        Create,
-        Idle,
-        Attack,
-        Skill,
-        ExSkill
-    }
-
-    BossStateType currentState;
-    public Transform missilePort;
+    public float exSkillCoolTime = 30f;
+    public float exSkillTimer = 0f;
 
     private bool isExSkillActive = false;
 
     public GameObject missile;
-    //public GameObject bossMissile;
+    public Transform missilePort;
 
-    SoonDoBu_Playable currentTarget;
-    private void Awake()
+    protected override void Update()
     {
-        SetStats();
-        rigidbodyEnemy = GetComponent<Rigidbody>();
-        boxCollider = GetComponent<BoxCollider>();
-        meshs = GetComponentsInChildren<MeshRenderer>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
+        base.Update();
 
-        currentHealth = maxHealth;
-
-        StartCoroutine(StateMachine());
-    }
-
-    void Update()
-    {
         if (isDead)
-        {
-            StopAllCoroutines();
             return;
-        }
-        skillTimer += Time.deltaTime;
-        attackTimer += Time.deltaTime;
 
-        Targeting();
+        ExSkillCooldown();
     }
+
     protected override void SetStats()
     {
-        maxHealth = (float)EnemyHelath.Boss;
-        attackRange = (float)EnemyAttackRenge.Boss;
-        attackInterval = 1.5f;
-        attackCount = 0;
-
-        isAttack = false;
+        maxHealth = (float)EnemyHealth.Boss;
+        attackRange = (float)EnemyAttackRange.Boss;
+        attackInterval = 2f;
     }
-    IEnumerator StateMachine()
+
+    protected override void HandleState()
     {
-        while (!isDead)
+        base.HandleState();
+
+        switch (currentState)
         {
-            Debug.Log("Current State: " + currentState);  // 상태를 출력하여 확인
-
-            switch (currentState)
-            {
-                case BossStateType.Create:
-                    // Create 상태에서 일정 시간이 지나거나 조건이 만족되면 Idle로 전환
-                    currentState = BossStateType.Idle;  // Create 후 Idle로 전환
-                    Debug.Log("Transition to Idle from Create");
-                    break;
-
-                case BossStateType.Idle:
-                    Debug.Log("In Idle State");
-                    if (isExSkillActive)
-                    {
-                        currentState = BossStateType.ExSkill;
-                        Debug.Log("Transition to ExSkill");
-                    }
-                    else if (!isAttack && attackTimer >= attackInterval)
-                    {
-                        if (attackCount < 5)
-                        {
-                            currentState = BossStateType.Attack;
-                            Debug.Log("Transition to Attack");
-                        }
-                        else
-                        {
-                            currentState = BossStateType.Skill;
-                            Debug.Log("Transition to Skill");
-                        }
-                    }
-                    break;
-
-                case BossStateType.Attack:
-                    Debug.Log("In Attack State");
-                    if (!isAttack) // 공격 중이 아니면 공격 시작
-                    {
-                        StartCoroutine(Attack());
-                        Debug.Log("Attack");
-                        currentState = BossStateType.Idle;  // 공격이 끝난 후 상태를 Idle로 전환
-                        Debug.Log("Transition to Idle");
-                    }
-                    break;
-
-                case BossStateType.Skill:
-                    Debug.Log("In Skill State");
-                    if (skillTimer >= skillCooldown && !isExSkillActive)
-                    {
-                        StartCoroutine(Skill());
-                        attackCount = 0;
-                        currentState = BossStateType.Idle;
-                        Debug.Log("Transition to Idle");
-                    }
-                    break;
-
-                case BossStateType.ExSkill:
-                    Debug.Log("In ExSkill State");
-                    StartCoroutine(ExSkill());
-                    skillTimer = 0f;
-                    currentState = BossStateType.Idle;
-                    Debug.Log("Transition to Idle");
-                    break;
-            }
-
-            yield return new WaitForSeconds(0.1f);
+            case EnemyState.Skill:
+                Skill();
+                break;
+            case EnemyState.ExSkill:
+                break;
         }
     }
 
-
-    IEnumerator Skill()
+    protected override void Attack()
     {
-        yield return new WaitForSeconds(0.5f);
+        base.Attack();
 
+        if (attackCount > 5)
+        {
+            currentState = EnemyState.Skill;
+            Skill();
+            attackCount = 0;
+        }
+    }
+
+    public void Skill()
+    {
         List<SoonDoBu_Playable> targets = new List<SoonDoBu_Playable>(PlayableMnager.instance.playables);
 
         foreach (SoonDoBu_Playable target in targets)
@@ -163,13 +85,42 @@ public class Boss : Enemy
             {
                 missileRigidbody.velocity = lookDirection.normalized * 10f;
             }
-
-            yield return new WaitForSeconds(0.2f);
         }
     }
 
-    IEnumerator ExSkill()
+    // 특수 스킬 실행 메서드
+    void ExSkill()
     {
-        yield return null;
+        // 특수 스킬 로직
+        Debug.Log("Executing extra skill");
+        // 예: 보스의 범위 공격, 미사일 발사 등
+    }
+
+    // 특수 스킬 쿨타임 체크를 처리하는 함수
+    private void ExSkillCooldown()
+    {
+        exSkillTimer += Time.deltaTime;
+
+        if (exSkillTimer >= exSkillCoolTime && !isExSkillActive)
+        {
+            isExSkillActive = true;
+            exSkillTimer = 0f;
+            currentState = EnemyState.ExSkill;
+
+            // 특수 스킬을 일정 시간 후에 실행
+            //InvokeAction(EXSkill(), 1.0f);  // 예: 1초 후 특수 스킬 실행
+        }
+    }
+
+    // Action을 통해 특수 스킬을 실행하는 메서드
+    public void InvokeAction(Action action, float delay)
+    {
+        StartCoroutine(InvokeWithDelay(action, delay));
+    }
+
+    private IEnumerator InvokeWithDelay(Action action, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        action?.Invoke();
     }
 }
