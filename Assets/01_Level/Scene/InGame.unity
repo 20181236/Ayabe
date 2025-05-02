@@ -850,13 +850,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.35952783, y: -0.6088841, z: 0.2355639, w: 0.66671556}
-  m_LocalPosition: {x: 19.56, y: 17.03, z: 0.77}
+  m_LocalRotation: {x: 0.23767403, y: -0.6706918, z: 0.23452309, w: 0.6623312}
+  m_LocalPosition: {x: 40.3, y: 37.9, z: 51.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50.02, y: -90, z: -11.101}
+  m_LocalEulerAnglesHint: {x: 39.008, y: -90.931, z: -0.601}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,13 +864,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cf9d91c081e59b4783fde7f29b0f845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1305989452}
-  offset: {x: 22, y: 19, z: 1}
+  offset: {x: -5.15, y: 13.8, z: 1}
   smoothSpeed: 0.125
 --- !u!1 &971914328
 GameObject:
@@ -1221,6 +1221,7 @@ MonoBehaviour:
   isAttack: 0
   readyAttack: 0
   isDead: 0
+  readyExSkillActive: 1
   rigidbodyEnemy: {fileID: 1362554290}
   boxCollider: {fileID: 1362554289}
   meshs: []
@@ -1228,9 +1229,11 @@ MonoBehaviour:
   animator: {fileID: 1009405969}
   enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
   currentState: 0
+  isStateChanging: 0
   maxTargetCount: 3
   exSkillCoolTime: 10
   exSkillTimer: 0
+  readyExSkillActive: 0
   missile: {fileID: 7664551313295523910, guid: 259f52ed5c3075442b9f459196759ae8, type: 3}
   exMissile: {fileID: 4583922287561585601, guid: eaabaddc6bd5be64691daede3c51f8f8, type: 3}
 --- !u!65 &1362554289
@@ -1452,6 +1455,7 @@ MonoBehaviour:
   isAttack: 0
   readyAttack: 0
   isDead: 0
+  readyExSkillActive: 1
   rigidbodyEnemy: {fileID: 1879446563}
   boxCollider: {fileID: 1879446562}
   meshs: []
@@ -1459,6 +1463,7 @@ MonoBehaviour:
   animator: {fileID: 781751665}
   enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
   currentState: 0
+  isStateChanging: 0
 --- !u!195 &1879446561
 NavMeshAgent:
   m_ObjectHideFlags: 0

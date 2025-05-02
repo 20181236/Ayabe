@@ -11,7 +11,7 @@ public class Boss : Enemy_base
     public float exSkillTimer = 0f;
 
     private bool skillActivated = false;
-    public bool readyExSkillActive = false;
+    //public bool readyExSkillActive = false;
 
     public GameObject missile;
     public GameObject exMissile;
@@ -23,6 +23,7 @@ public class Boss : Enemy_base
         if (isDead)
             return;
 
+        // ExSkill 쿨타임 관리
         ExSkillCooldown();
     }
 
@@ -54,6 +55,7 @@ public class Boss : Enemy_base
     {
         base.Attack();
 
+        // 공격 횟수가 5회 이상일 때 스킬 발동
         if (attackCount > 5)
         {
             currentState = EnemyState.Skill;
@@ -62,13 +64,14 @@ public class Boss : Enemy_base
         }
 
         // ExSkill이 준비되었으면 ExSkill 상태로 전환
-        if (readyExSkillActive)
+        if (readyExSkillActive && currentState != EnemyState.ExSkill)
         {
             currentState = EnemyState.ExSkill;  // ExSkill 상태로 변경
+            readyExSkillActive = false;  // ExSkill 준비 상태를 false로 설정
         }
     }
 
-    public void Skill()
+    protected override void Skill()
     {
         List<SoonDoBu_Playable> targets = new List<SoonDoBu_Playable>(PlayableMnager.instance.playables);
 
@@ -113,34 +116,47 @@ public class Boss : Enemy_base
             }
         }
 
-        currentState = EnemyState.Attack;
+        currentState = EnemyState.Attack;  // 공격 상태로 돌아가도록 설정
     }
 
-    public void ExSkill()
+    protected override void ExSkill()
     {
-        if (!readyExSkillActive)
-            return;
-
         // 유효한 타겟 랜덤 선택
         var targets = PlayableMnager.instance.playables.FindAll(t => t != null && !t.isDead);
         if (targets.Count == 0)
+        {
             return;
+        }
 
         var selectedTarget = targets[UnityEngine.Random.Range(0, targets.Count)];
+
+        if (selectedTarget == null)
+        {
+            return;
+        }
 
         // 방향 설정
         Vector3 direction = (selectedTarget.transform.position - transform.position).normalized;
         Vector3 spawnPos = transform.position + Vector3.up * 10f + direction * 5f;
 
+        if (exMissile == null)
+        {
+            return;
+        }
+
         // Instantiate BossExMissile
         GameObject missileObj = Instantiate(exMissile, spawnPos, Quaternion.LookRotation(direction));
         var exMissileScript = missileObj.GetComponent<BossExMissile>();
+        if (exMissileScript == null)
+        {
+            return;
+        }
         exMissileScript.Init(selectedTarget.transform.position);
 
         // ExSkill을 사용한 후 상태 변경
         currentState = EnemyState.Attack;  // 상태를 다시 Attack으로 변경
-        readyExSkillActive = false;  // ExSkill 준비 상태 리셋
     }
+
     private void ExSkillCooldown()
     {
         if (!readyExSkillActive)
@@ -154,5 +170,4 @@ public class Boss : Enemy_base
             }
         }
     }
-
 }

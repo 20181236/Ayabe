@@ -20,6 +20,8 @@ public class Enemy_base : MonoBehaviour
     public bool readyAttack;
     public bool isDead;
 
+    public bool readyExSkillActive = true; 
+
     public Rigidbody rigidbodyEnemy;
     public BoxCollider boxCollider;
     public MeshRenderer[] meshs;
@@ -32,6 +34,9 @@ public class Enemy_base : MonoBehaviour
 
     protected SoonDoBu_Playable currentTarget;
 
+    // 상태 변경 중첩 방지용 플래그
+    public bool isStateChanging = false;
+
     protected virtual void Awake()
     {
         SetStats();
@@ -41,6 +46,7 @@ public class Enemy_base : MonoBehaviour
         currentHealth = maxHealth;
         currentState = EnemyState.Create;
     }
+
     protected virtual void Start()
     {
         if (EnemyManager.instance != null)
@@ -51,20 +57,25 @@ public class Enemy_base : MonoBehaviour
     {
         if (isDead)
             return;
+
+        if (currentState == EnemyState.Chasing)
+        {
+            Targeting();
+        }
+
         HandleState();
+
         AttackCoolTime();
     }
 
     protected virtual void FixedUpdate()
     {
-        // 예시: 추적 상태에서 타겟을 향해 계속 이동
         if (currentState == EnemyState.Chasing)
         {
             MoveToTarget(currentTarget.transform.position);
         }
         else if (currentState == EnemyState.Dead)
         {
-            // 죽었을 때 더 이상 이동하지 않음
             rigidbodyEnemy.velocity = Vector3.zero;
         }
     }
@@ -73,6 +84,8 @@ public class Enemy_base : MonoBehaviour
 
     protected virtual void HandleState()
     {
+        if (isStateChanging) return;  // 상태 변경 중에는 다른 상태로 변경하지 않음
+
         switch (currentState)
         {
             case EnemyState.Create:
@@ -85,7 +98,6 @@ public class Enemy_base : MonoBehaviour
 
             case EnemyState.Chasing:
                 currentTarget = GetNearestEnemyToPosition(transform.position);
-
                 if (currentTarget != null)
                 {
                     MoveToTarget(currentTarget.transform.position);
@@ -101,11 +113,29 @@ public class Enemy_base : MonoBehaviour
                 break;
 
             case EnemyState.Skill:
+                Skill();
+                break;
+
             case EnemyState.ExSkill:
-                // 스킬 처리
+                ExSkill();
                 break;
         }
     }
+
+    protected virtual void Skill()
+    {
+    }
+
+    protected virtual void ExSkill()
+    {
+        // ExSkill 로직
+        // ...
+
+        // ExSkill이 끝난 후 상태 변경
+        currentState = EnemyState.Attack;  // 상태를 다시 Attack으로 변경
+        isStateChanging = false;  // 상태 변경 완료
+    }
+
     protected virtual void Initialize()
     {
         isCreate = false;
@@ -159,34 +189,49 @@ public class Enemy_base : MonoBehaviour
     {
         attackTimer += Time.deltaTime;
         if (attackTimer >= attackInterval)
+        {
             readyAttack = true;
+        }
     }
 
     protected virtual void Attack()
     {
+        if (!readyAttack || currentTarget == null || currentTarget.isDead)
+        {
+            return;
+        }
+
         isChase = false;
         isAttack = true;
         animator.SetBool("isAttack", true);
         attackCount++;
 
-        if (currentTarget == null || currentTarget.isDead)
-        {
-            isAttack = false;
-            isChase = true;
-            animator.SetBool("isAttack", false);
-
-            currentTarget = null;
-            currentState = EnemyState.Idle;
-            attackTimer = 0f;
-            return;
-        }
+        // 공격 실행
         ShootBulletAtTarget();
 
+        // 공격 후 상태 리셋
+        readyAttack = false;
+        attackTimer = 0f;
         isAttack = false;
         isChase = true;
-        attackTimer = 0f;
         animator.SetBool("isAttack", false);
         currentState = EnemyState.Idle;
+
+        // 공격 횟수가 5회 이상일 때 스킬 발동
+        if (attackCount > 5)
+        {
+            currentState = EnemyState.Skill;
+            Skill();
+            attackCount = 0;
+        }
+
+        // ExSkill이 준비되었으면 ExSkill 상태로 전환
+        if (readyExSkillActive && currentState != EnemyState.ExSkill)
+        {
+            currentState = EnemyState.ExSkill;  // ExSkill 상태로 변경
+            readyExSkillActive = false;  // ExSkill 준비 상태를 false로 설정
+            isStateChanging = true;  // 상태 변경 중임을 설정
+        }
     }
 
     protected void ShootBulletAtTarget()
@@ -202,7 +247,6 @@ public class Enemy_base : MonoBehaviour
             Quaternion.LookRotation(direction));
         bullet.GetComponent<Rigidbody>().velocity = direction * 20;
     }
-
 
     public SoonDoBu_Playable GetNearestEnemyToPosition(Vector3 position)
     {
@@ -239,7 +283,7 @@ public class Enemy_base : MonoBehaviour
         OnDestroy();
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
         if (EnemyManager.instance != null)
             EnemyManager.instance.UnregisterEnemy(this);
@@ -300,3 +344,4 @@ public class Enemy_base : MonoBehaviour
         }
     }
 }
+
