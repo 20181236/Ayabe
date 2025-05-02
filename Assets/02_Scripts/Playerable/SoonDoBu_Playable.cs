@@ -274,6 +274,25 @@ public class SoonDoBu_Playable : MonoBehaviour
     }
 
     // -------------------- Damage Handling --------------------
+    public void TakeDamage(int damage)
+    {
+        if (isDead) return;
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            isDead = true;
+            isChase = false;
+            animator.SetBool("isDead", true);
+        }
+        else
+        {
+            StartCoroutine(OnDamage(Vector3.zero, false));  // 맞은 반응
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "EnemyBullet")

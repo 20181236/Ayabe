@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
-public class Enemy_base : MonoBehaviour
+public class Playable_base : MonoBehaviour
 {
     public float maxHealth;
     public float currentHealth;
@@ -20,31 +18,31 @@ public class Enemy_base : MonoBehaviour
     public bool readyAttack;
     public bool isDead;
 
-    public Rigidbody rigidbodyEnemy;
+    public Rigidbody rigidbodyPlayable;
     public BoxCollider boxCollider;
     public MeshRenderer[] meshs;
     public NavMeshAgent navMeshAgent;
     public Animator animator;
 
-    public GameObject enemyBullet;
+    public GameObject playableBullet;
 
-    [HideInInspector] public EnemyState currentState;
+    [HideInInspector] public PlayableState currentState;
 
     protected SoonDoBu_Playable currentTarget;
 
     protected virtual void Awake()
     {
         SetStats();
-        rigidbodyEnemy = GetComponent<Rigidbody>();
+        rigidbodyPlayable = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         currentHealth = maxHealth;
-        currentState = EnemyState.Create;
+        currentState = PlayableState.Create;
     }
     protected virtual void Start()
     {
-        if (EnemyManager.instance != null)
-            EnemyManager.instance.RegisterEnemy(this);
+        if (PlayableMnager.instance != null)
+            PlayableMnager.instance.RegisterPlayable_imsi(this);
     }
 
     protected virtual void Update()
@@ -58,14 +56,14 @@ public class Enemy_base : MonoBehaviour
     protected virtual void FixedUpdate()
     {
         // 예시: 추적 상태에서 타겟을 향해 계속 이동
-        if (currentState == EnemyState.Chasing)
+        if (currentState == PlayableState.Chasing)
         {
             MoveToTarget(currentTarget.transform.position);
         }
-        else if (currentState == EnemyState.Dead)
+        else if (currentState == PlayableState.Dead)
         {
             // 죽었을 때 더 이상 이동하지 않음
-            rigidbodyEnemy.velocity = Vector3.zero;
+            rigidbodyPlayable.velocity = Vector3.zero;
         }
     }
 
@@ -75,15 +73,17 @@ public class Enemy_base : MonoBehaviour
     {
         switch (currentState)
         {
-            case EnemyState.Create:
+            case PlayableState.Create:
                 Initialize();
                 break;
 
-            case EnemyState.Idle:
+            case PlayableState.Idle:
+                Debug.Log("idle");
                 Targeting();
                 break;
 
-            case EnemyState.Chasing:
+            case PlayableState.Chasing:
+                Debug.Log("Chasing");
                 currentTarget = GetNearestEnemyToPosition(transform.position);
 
                 if (currentTarget != null)
@@ -92,16 +92,16 @@ public class Enemy_base : MonoBehaviour
                 }
                 break;
 
-            case EnemyState.Attack:
+            case PlayableState.Attack:
                 Attack();
                 break;
 
-            case EnemyState.Dead:
+            case PlayableState.Dead:
                 Die();
                 break;
 
-            case EnemyState.Skill:
-            case EnemyState.ExSkill:
+            case PlayableState.Skill:
+            case PlayableState.ExSkill:
                 // 스킬 처리
                 break;
         }
@@ -110,7 +110,7 @@ public class Enemy_base : MonoBehaviour
     {
         isCreate = false;
         isChase = true;
-        currentState = EnemyState.Idle;
+        currentState = PlayableState.Idle;
     }
 
     public virtual void Targeting()
@@ -127,11 +127,11 @@ public class Enemy_base : MonoBehaviour
 
         if (distance > attackRange)
         {
-            currentState = EnemyState.Chasing;
+            currentState = PlayableState.Chasing;
         }
         else if (distance <= attackRange && attackTimer >= attackInterval)
         {
-            currentState = EnemyState.Attack;
+            currentState = PlayableState.Attack;
         }
     }
 
@@ -146,7 +146,7 @@ public class Enemy_base : MonoBehaviour
             if (distance <= attackRange && attackTimer >= attackInterval)
             {
                 navMeshAgent.isStopped = true;
-                currentState = EnemyState.Attack;
+                currentState = PlayableState.Attack;
             }
             else
             {
@@ -176,7 +176,7 @@ public class Enemy_base : MonoBehaviour
             animator.SetBool("isAttack", false);
 
             currentTarget = null;
-            currentState = EnemyState.Idle;
+            currentState = PlayableState.Idle;
             attackTimer = 0f;
             return;
         }
@@ -186,7 +186,7 @@ public class Enemy_base : MonoBehaviour
         isChase = true;
         attackTimer = 0f;
         animator.SetBool("isAttack", false);
-        currentState = EnemyState.Idle;
+        currentState = PlayableState.Idle;
     }
 
     protected void ShootBulletAtTarget()
@@ -197,7 +197,7 @@ public class Enemy_base : MonoBehaviour
         Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
-        GameObject bullet = Instantiate(enemyBullet,
+        GameObject bullet = Instantiate(playableBullet,
             transform.position + Vector3.up * 3f,
             Quaternion.LookRotation(direction));
         bullet.GetComponent<Rigidbody>().velocity = direction * 20;
@@ -223,15 +223,6 @@ public class Enemy_base : MonoBehaviour
         return nearest;
     }
 
-    protected virtual void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        if (currentHealth <= 0 && !isDead)
-        {
-            currentState = EnemyState.Dead;
-        }
-    }
-
     protected virtual void Die()
     {
         isDead = true;
@@ -241,13 +232,13 @@ public class Enemy_base : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (EnemyManager.instance != null)
-            EnemyManager.instance.UnregisterEnemy(this);
+        if (PlayableMnager.instance != null)
+            PlayableMnager.instance.UnregisterPlayable(this);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Bullet"))
+        if (other.CompareTag("EnemyBullet"))
         {
             Bullet bullet = other.GetComponent<Bullet>();
             Vector3 reactVec = transform.position - other.transform.position;
@@ -256,11 +247,6 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
-    public void HitByGrenade(Vector3 explosionPos)
-    {
-        Vector3 reactVec = transform.position - explosionPos;
-        ApplyDamage(100f, reactVec, true);
-    }
 
     public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
     {
@@ -290,11 +276,11 @@ public class Enemy_base : MonoBehaviour
             animator.SetTrigger("doDie");
 
             reactVec = reactVec.normalized + Vector3.up * (isGrenade ? 3f : 1f);
-            rigidbodyEnemy.freezeRotation = false;
-            rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
+            rigidbodyPlayable.freezeRotation = false;
+            rigidbodyPlayable.AddForce(reactVec * 5, ForceMode.Impulse);
 
             if (isGrenade)
-                rigidbodyEnemy.AddTorque(reactVec * 15, ForceMode.Impulse);
+                rigidbodyPlayable.AddTorque(reactVec * 15, ForceMode.Impulse);
 
             Destroy(gameObject, 1.8f);
         }

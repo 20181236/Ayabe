@@ -6,11 +6,11 @@ public enum PlayableState
 {
     Create,
     Idle,
-    TargetSearch,
-    CheckRange,
-    Move,
+    Chasing,
     Attack,
-    Death
+    Skill,
+    ExSkill,
+    Dead
 }
 public enum PlayableType
 {

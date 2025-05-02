@@ -747,6 +747,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playablePrefab: {fileID: 0}
   playables: []
+  playables_imsi: []
   PlayableSpawnPoints: []
 --- !u!4 &897050310
 Transform:
@@ -1228,10 +1229,10 @@ MonoBehaviour:
   enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
   currentState: 0
   maxTargetCount: 3
-  exSkillCoolTime: 30
+  exSkillCoolTime: 10
   exSkillTimer: 0
   missile: {fileID: 7664551313295523910, guid: 259f52ed5c3075442b9f459196759ae8, type: 3}
-  missilePort: {fileID: 0}
+  exMissile: {fileID: 4583922287561585601, guid: eaabaddc6bd5be64691daede3c51f8f8, type: 3}
 --- !u!65 &1362554289
 BoxCollider:
   m_ObjectHideFlags: 0
