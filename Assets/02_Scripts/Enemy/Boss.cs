@@ -45,7 +45,7 @@ public class Boss : Enemy_base
             case EnemyState.ExSkill:
                 if (readyExSkillActive)
                 {
-                    ExSkill();  // ExSkill ½ÇÇà
+                    ExSkill();
                 }
                 break;
         }
