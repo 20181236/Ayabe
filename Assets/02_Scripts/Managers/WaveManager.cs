@@ -2,66 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveManager : MonoBehaviour
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WaveSpawnManager : MonoBehaviour
 {
-    public static WaveManager instance;
-
-    public int currentWave = 1;
-    public int enemiesPerWave = 5;
-    private int remainingEnemiesInWave;
-
-    public float waveInterval = 3f; // 웨이브 간 대기 시간
-    private bool isWaveInProgress = false;
-
-    void Start()
+    [System.Serializable]
+    public class SpawnData
     {
-        StartNextWave();
+        public Vector3 spawnPosition;  // 적이 스폰될 위치
+        public string enemyType;       // 적의 타입 (Melee, Ranged, Elite 등)
     }
 
-    public void StartNextWave()
+    // 하드코딩된 웨이브 데이터
+    public List<SpawnData> waveSpawnTable = new List<SpawnData>()
     {
-        if (isWaveInProgress)
-            return;
+        new SpawnData() { spawnPosition = new Vector3(0, 0, 0), enemyType = "Ranged" },
+        new SpawnData() { spawnPosition = new Vector3(5, 0, 5), enemyType = "Ranged" },
+        new SpawnData() { spawnPosition = new Vector3(-5, 0, -5), enemyType = "Elite" },
+    };
 
+    private int currentWave = 0;  // 현재 웨이브
+
+    private void Start()
+    {
+        SpawnWave(currentWave);  // 첫 번째 웨이브 스폰
+    }
+
+    // 웨이브에 맞는 적을 스폰
+    public void SpawnWave(int waveIndex)
+    {
+        // 현재 웨이브에 맞는 스폰 데이터 가져오기
+        List<SpawnData> spawnDataList = waveSpawnTable;
+
+        foreach (var spawnData in spawnDataList)
+        {
+            // 적을 생성
+            Enemy_base enemy = EnemyManager.instance.SpawnEnemy(spawnData.enemyType, spawnData.spawnPosition, Quaternion.identity);
+            if (enemy != null)
+            {
+                enemy.gameObject.SetActive(true);  // 적 활성화
+            }
+        }
+    }
+
+    // 다음 웨이브로 넘어가기
+    public void NextWave()
+    {
         currentWave++;
-        remainingEnemiesInWave = enemiesPerWave * currentWave;
-        isWaveInProgress = true;
-
-        // 웨이브 시작 전 대기 시간
-        InvokeRepeating("ActivateEnemies", 0f, 1f); // 1초마다 적을 활성화
-    }
-
-    void ActivateEnemies()
-    {
-        if (remainingEnemiesInWave > 0)
-        {
-            Enemy_base enemy = EnemyManager.instance.SpawnEnemy("Enemy", GetRandomSpawnPosition(), Quaternion.identity);
-            remainingEnemiesInWave--;
-        }
-        else
-        {
-            CancelInvoke("ActivateEnemies");
-            StartCoroutine(WaitBeforeNextWave());
-        }
-    }
-
-    IEnumerator WaitBeforeNextWave()
-    {
-        yield return new WaitForSeconds(waveInterval); // 웨이브 간 대기 시간
-        isWaveInProgress = false;
-        StartNextWave(); // 다음 웨이브 시작
-    }
-
-    Vector3 GetRandomSpawnPosition()
-    {
-        return new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)); // 랜덤 생성 위치
-    }
-
-    public void OnEnemyDie()
-    {
-        if (EnemyManager.instance.activeEnemies.Count == 0) // 모든 적이 처치되었으면
-        {
-            StartNextWave(); // 웨이브 완료 후 다음 웨이브 시작
-        }
+        SpawnWave(currentWave);  // 다음 웨이브 스폰
     }
 }
