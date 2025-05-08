@@ -34,6 +34,7 @@ public class Enemy_base : MonoBehaviour
 
     protected SoonDoBu_Playable currentTarget;
 
+    // 상태 변경 중첩 방지용 플래그
     public bool isStateChanging = false;
 
     protected virtual void Awake()
@@ -195,9 +196,12 @@ public class Enemy_base : MonoBehaviour
         isChase = false;
         isAttack = true;
         animator.SetBool("isAttack", true);
-        navMeshAgent.isStopped = true;
         attackCount++;
 
+<<<<<<< HEAD
+=======
+        // 공격 실행
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
         ShootBulletAtTarget();
 
         // Reset attack state after attack
@@ -208,7 +212,11 @@ public class Enemy_base : MonoBehaviour
         animator.SetBool("isAttack", false);
         currentState = EnemyState.Idle;
 
+<<<<<<< HEAD
         // Change to Skill state after certain number of attacks
+=======
+        // 공격 횟수가 5회 이상일 때 스킬 발동
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
         if (attackCount > 5)
         {
             currentState = EnemyState.Skill;
@@ -216,12 +224,16 @@ public class Enemy_base : MonoBehaviour
             attackCount = 0;
         }
 
+<<<<<<< HEAD
         // Change to ExSkill state
+=======
+        // ExSkill이 준비되었으면 ExSkill 상태로 전환
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
         if (readyExSkillActive && currentState != EnemyState.ExSkill)
         {
-            currentState = EnemyState.ExSkill;
-            readyExSkillActive = false;
-            isStateChanging = true;
+            currentState = EnemyState.ExSkill;  // ExSkill 상태로 변경
+            readyExSkillActive = false;  // ExSkill 준비 상태를 false로 설정
+            isStateChanging = true;  // 상태 변경 중임을 설정
         }
     }
 

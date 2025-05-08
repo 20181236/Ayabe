@@ -4,24 +4,13 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 
-public class EnemyPoolSetting
-{
-    public string enemyType;
-    public GameObject enemyPrefab;
-    public int poolSize = 7;
-}
-
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
-
-    public List<EnemyPoolSetting> enemyPoolSettings;//풀링용 리스트만들고
-    private Dictionary<string, Queue<Enemy_base>> enemyPools = new Dictionary<string, Queue<Enemy_base>>();//에너미 딕셔너리만들고
-
-    public Transform[] EnemySpawnPosition;
-
-    // 현재 게임 내 활성화된 적 리스트
+    public GameObject enemyPrefab;//어떤 애를 생성할건지 필요할듯
+    //public List<GameObject> enemies = new List<GameObject>();//게임오브젝트에서 불러와야할게 너무 많다네
     public List<Enemy_base> enemies = new List<Enemy_base>();
+    public Transform[] EnemySpawnPoints;
 
     private void Awake()
     {
@@ -34,6 +23,7 @@ public class EnemyManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+<<<<<<< HEAD
     private void Start()
     {
         InitializePools();
@@ -102,6 +92,8 @@ public class EnemyManager : MonoBehaviour
         enemy.gameObject.SetActive(false);
         enemyPools[type].Enqueue(enemy);
     }
+=======
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
 
     public void RegisterEnemy(Enemy_base enemy)
     {

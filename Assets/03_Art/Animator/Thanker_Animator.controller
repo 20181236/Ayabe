@@ -1,5 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< HEAD
 --- !u!1102 &-7344784355676697670
 AnimatorState:
   serializedVersion: 6
@@ -74,6 +75,8 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+=======
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
 --- !u!1102 &-4570479831574532452
 AnimatorState:
   serializedVersion: 6
@@ -84,8 +87,7 @@ AnimatorState:
   m_Name: Idle
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: -5140886760778912724}
+  m_Transitions: []
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -142,12 +144,15 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+<<<<<<< HEAD
   - m_Name: isAttack
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 0}
+=======
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -176,9 +181,6 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -328370206194688091}
     m_Position: {x: 357.56433, y: 28.531158, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: -7344784355676697670}
-    m_Position: {x: 400, y: 270, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 3090784518968060511}

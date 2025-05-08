@@ -10,8 +10,7 @@ AnimatorState:
   m_Name: Idle
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: -1994271364011773134}
+  m_Transitions: []
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -27,6 +26,7 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+<<<<<<< HEAD
 --- !u!1101 &-2787405577592006893
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -104,6 +104,8 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+=======
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
 --- !u!1102 &-328370206194688091
 AnimatorState:
   serializedVersion: 6
@@ -144,6 +146,7 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
+<<<<<<< HEAD
     m_Controller: {fileID: 0}
   - m_Name: isAttack
     m_Type: 4
@@ -151,6 +154,9 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 0}
+=======
+    m_Controller: {fileID: 9100000}
+>>>>>>> parent of c1d2e0f (EnemyPolling_init)
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -179,9 +185,6 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -328370206194688091}
     m_Position: {x: 360, y: 30, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: -1036617650027490205}
-    m_Position: {x: 440, y: 330, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 3090784518968060511}
