@@ -23,8 +23,7 @@ public class PlayableMnager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
-    // 플레이어블 등록
+    
     public void RegisterPlayable(SoonDoBu_Playable playable)
     {
         if (!playables.Contains(playable))
@@ -41,7 +40,6 @@ public class PlayableMnager : MonoBehaviour
         }
     }
 
-    // 플레이어블 제거
     public void UnregisterPlayable(SoonDoBu_Playable playable)
     {
         if (playables.Contains(playable))
@@ -58,13 +56,11 @@ public class PlayableMnager : MonoBehaviour
         }
     }
 
-    // 모든 플레이어블 가져오기
     public List<SoonDoBu_Playable> GetPlayables()
     {
         return playables;
     }
 
-    // 플레이어블이 하나라도 있는지 체크
     public bool HasPlayable()
     {
         return playables.Count > 0;

@@ -85,7 +85,6 @@ public class EnemyManager : MonoBehaviour
         enemy.gameObject.SetActive(true);
 
         RegisterEnemy(enemy);
-        enemy.OnSpawn();
 
         return enemy;
     }

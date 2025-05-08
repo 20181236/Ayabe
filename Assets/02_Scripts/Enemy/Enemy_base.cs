@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy_base : MonoBehaviour
-{   
+{
     public float maxHealth;
     public float currentHealth;
     public float attackRange;
@@ -20,7 +20,7 @@ public class Enemy_base : MonoBehaviour
     public bool readyAttack;
     public bool isDead;
 
-    public bool readyExSkillActive = true; 
+    public bool readyExSkillActive = true;
 
     public Rigidbody rigidbodyEnemy;
     public BoxCollider boxCollider;
@@ -38,12 +38,13 @@ public class Enemy_base : MonoBehaviour
 
     protected virtual void Awake()
     {
-        SetStats();
+
         rigidbodyEnemy = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         currentHealth = maxHealth;
-        currentState = EnemyState.Create;
+
+        EnemyStateManager.instance.Initialize(this);
     }
 
     protected virtual void Start()
@@ -57,14 +58,7 @@ public class Enemy_base : MonoBehaviour
         if (isDead)
             return;
 
-        if (currentState == EnemyState.Chasing)
-        {
-            Targeting();
-        }
-
-        HandleState();
-
-        AttackCoolTime();
+        EnemyStateManager.instance.Update();
     }
 
     protected virtual void FixedUpdate()
@@ -81,10 +75,8 @@ public class Enemy_base : MonoBehaviour
 
     protected virtual void SetStats() { }
 
-    protected virtual void HandleState()
+    public virtual void HandleState()
     {
-        if (isStateChanging) return;  // 상태 변경 중에는 다른 상태로 변경하지 않음
-
         switch (currentState)
         {
             case EnemyState.Create:
@@ -121,27 +113,24 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
-    protected virtual void Skill()
-    {
-    }
+    protected virtual void Skill() { }
 
     protected virtual void ExSkill()
     {
-        // ExSkill 로직
-        // ...
-
-        // ExSkill이 끝난 후 상태 변경
+        // ExSkill 로직 처리
         currentState = EnemyState.Attack;  // 상태를 다시 Attack으로 변경
         isStateChanging = false;  // 상태 변경 완료
     }
 
-    protected virtual void Initialize()
+    // Enemy initialization
+    public virtual void Initialize()
     {
+        SetStats();
         isCreate = false;
         isChase = true;
-        currentState = EnemyState.Idle;
     }
 
+    // Targeting logic
     public virtual void Targeting()
     {
         if (isDead)
@@ -164,6 +153,7 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
+    // Move towards the target position
     void MoveToTarget(Vector3 targetPosition)
     {
         if (navMeshAgent != null)
@@ -184,6 +174,7 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
+    // Cooldown management for attacks
     protected virtual void AttackCoolTime()
     {
         attackTimer += Time.deltaTime;
@@ -193,6 +184,7 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
+    // Attack logic
     protected virtual void Attack()
     {
         if (!readyAttack || currentTarget == null || currentTarget.isDead)
@@ -205,10 +197,10 @@ public class Enemy_base : MonoBehaviour
         animator.SetBool("isAttack", true);
         navMeshAgent.isStopped = true;
         attackCount++;
-    
+
         ShootBulletAtTarget();
 
-        // 공격 후 상태 리셋
+        // Reset attack state after attack
         readyAttack = false;
         attackTimer = 0f;
         isAttack = false;
@@ -216,6 +208,7 @@ public class Enemy_base : MonoBehaviour
         animator.SetBool("isAttack", false);
         currentState = EnemyState.Idle;
 
+        // Change to Skill state after certain number of attacks
         if (attackCount > 5)
         {
             currentState = EnemyState.Skill;
@@ -223,6 +216,7 @@ public class Enemy_base : MonoBehaviour
             attackCount = 0;
         }
 
+        // Change to ExSkill state
         if (readyExSkillActive && currentState != EnemyState.ExSkill)
         {
             currentState = EnemyState.ExSkill;
@@ -231,6 +225,7 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
+    // Shoot bullet at the target
     protected void ShootBulletAtTarget()
     {
         if (currentTarget == null || currentTarget.isDead)
@@ -245,13 +240,14 @@ public class Enemy_base : MonoBehaviour
         bullet.GetComponent<Rigidbody>().velocity = direction * 20;
     }
 
+    // Get nearest target to the position
     public SoonDoBu_Playable GetNearestEnemyToPosition(Vector3 position)
     {
         SoonDoBu_Playable nearest = null;
         float minDist = Mathf.Infinity;
 
         foreach (var playable in PlayableMnager.instance.playables)
-        {   
+        {
             if (playable == null)
                 continue;
             float dist = Vector3.Distance(position, playable.transform.position);
@@ -264,7 +260,8 @@ public class Enemy_base : MonoBehaviour
         return nearest;
     }
 
-    protected virtual void TakeDamage(float damage)
+    // Handle damage application
+    protected virtual void ApplyDamage(float damage)
     {
         currentHealth -= damage;
         if (currentHealth <= 0 && !isDead)
@@ -273,6 +270,7 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
+    // Die logic
     protected virtual void Die()
     {
         isDead = true;
@@ -280,65 +278,12 @@ public class Enemy_base : MonoBehaviour
         OnDestroy();
     }
 
+    // Destroy enemy and unregister from the manager
     public void OnDestroy()
     {
         if (EnemyManager.instance != null)
             EnemyManager.instance.UnregisterEnemy(this);
     }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Bullet"))
-        {
-            Bullet bullet = other.GetComponent<Bullet>();
-            Vector3 reactVec = transform.position - other.transform.position;
-            Destroy(other.gameObject);
-            ApplyDamage(bullet.damage, reactVec, false);
-        }
-    }
-
-    public void HitByGrenade(Vector3 explosionPos)
-    {
-        Vector3 reactVec = transform.position - explosionPos;
-        ApplyDamage(100f, reactVec, true);
-    }
-
-    public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
-    {
-        currentHealth -= damage;
-        StartCoroutine(OnDamage(reactVec, isGrenade));
-    }
-
-    IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
-    {
-        foreach (MeshRenderer mesh in meshs)
-            mesh.material.color = Color.red;
-
-        yield return new WaitForSeconds(0.1f);
-
-        if (currentHealth > 0)
-        {
-            foreach (MeshRenderer mesh in meshs)
-                mesh.material.color = Color.white;
-        }
-        else
-        {
-            foreach (MeshRenderer mesh in meshs)
-                mesh.material.color = Color.gray;
-
-            isDead = true;
-            isChase = false;
-            animator.SetTrigger("doDie");
-
-            reactVec = reactVec.normalized + Vector3.up * (isGrenade ? 3f : 1f);
-            rigidbodyEnemy.freezeRotation = false;
-            rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
-
-            if (isGrenade)
-                rigidbodyEnemy.AddTorque(reactVec * 15, ForceMode.Impulse);
-
-            Destroy(gameObject, 1.8f);
-        }
-    }
 }
+
 
