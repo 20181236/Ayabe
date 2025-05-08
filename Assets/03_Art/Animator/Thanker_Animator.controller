@@ -59,7 +59,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isAttack
+    m_ConditionEvent: IsAttack
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7344784355676697670}
@@ -145,7 +145,11 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
   - m_Name: isAttack
+=======
+  - m_Name: IsAttack
+>>>>>>> parent of 16298a4 (wave_init)
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
