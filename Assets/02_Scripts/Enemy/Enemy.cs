@@ -11,11 +11,11 @@ public class Enemy : Enemy_base
     {
         maxHealth = (float)EnemyHealth.Thanker;
         attackRange = (float)EnemyAttackRange.Thanker;
-        attackInterval = 1.5f;
+        basicAttackInterval = 1.5f;
     }
 
-    protected override void Attack()
-    {
-        base.Attack();  
-    }
+    //protected override void BasicAttack()
+    //{
+    //    base.BasicAttack();  
+    //}
 }

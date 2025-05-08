@@ -12,9 +12,15 @@ public enum EnemyState
     Idle,
     Chasing,
     Attack,
-    Skill,
-    ExSkill,
     Dead
+}
+
+public enum EnemyAttackState
+{
+    BasicAttack,
+    SkillAttack,
+    ExSkillAttack,
+    Reload,
 }
 
 public enum EnemyHealth
@@ -26,8 +32,9 @@ public enum EnemyHealth
 
 public enum EnemyAttackRange
 {
-    Thanker =  30,
-    Middler = 30,
+    Thanker =  50,
+    Middler = 50,
+    Sinper = 50,
     Boss = 100,
 }
 

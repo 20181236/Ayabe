@@ -77,7 +77,7 @@ Animator:
   m_GameObject: {fileID: 2934906372645605823}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 96b05a7e7c1fa7f4fb6a9d485b3e176f, type: 2}
+  m_Controller: {fileID: 9100000, guid: de3557e090d34664f8896d0f936f1907, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -585,15 +585,32 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   attackRange: 10
+  basicAttackInterval: 0
+  basicAttackTimer: 0
+  basicAttackCount: 0
+  skillInterval: 0
+  skillTimer: 0
+  exSkillInterval: 0
+  exSkillTimer: 0
+  moveSpeed: 0
+  distance: 0
+  isCreate: 0
   isChase: 0
   isAttack: 0
+  isSkill: 0
+  isExSkill: 0
   isDead: 0
+  checkInAttackRenge: 0
+  readyBasicAttack: 0
+  readySkill: 0
+  readyExSkill: 0
   rigidbodyEnemy: {fileID: 4912246592243882025}
   boxCollider: {fileID: 2898995844016275095}
   meshs: []
   navMeshAgent: {fileID: 6137310506369253759}
   animator: {fileID: 2632422830809904678}
   enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
+  currentState: 0
 --- !u!1 &7453213600498232769
 GameObject:
   m_ObjectHideFlags: 0

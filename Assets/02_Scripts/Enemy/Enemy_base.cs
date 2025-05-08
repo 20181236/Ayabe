@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,18 +9,28 @@ public class Enemy_base : MonoBehaviour
     public float maxHealth;
     public float currentHealth;
     public float attackRange;
-    public float attackInterval;
-    public float attackTimer;
-    public float attackCount;
+    public float basicAttackInterval;
+    public float basicAttackTimer;
+    public float basicAttackCount;
+    public float skillInterval;
+    public float skillTimer;
+    public float exSkillInterval;
+    public float exSkillTimer;
     public float moveSpeed;
 
+    public float distance;
+
     public bool isCreate;
+    public bool isIdle;
     public bool isChase;
     public bool isAttack;
-    public bool readyAttack;
+    public bool isSkill;
+    public bool isExSkill;
     public bool isDead;
-
-    public bool readyExSkillActive = true;
+    public bool checkInAttackRenge;
+    public bool readyBasicAttack;
+    public bool readySkill;
+    public bool readyExSkill;
 
     public Rigidbody rigidbodyEnemy;
     public BoxCollider boxCollider;
@@ -34,18 +44,18 @@ public class Enemy_base : MonoBehaviour
 
     protected SoonDoBu_Playable currentTarget;
 
-    // »óÅÂ º¯°æ ÁßÃ¸ ¹æÁö¿ë ÇÃ·¡±×
-    public bool isStateChanging = false;
-
     protected virtual void Awake()
     {
-
         rigidbodyEnemy = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
-        currentHealth = maxHealth;
 
-        EnemyStateManager.instance.Initialize(this);
+        currentState = EnemyState.Create;
+        isCreate = true;
+        Initialize();
+        readyBasicAttack = true;
+        readySkill = false;
+        readyExSkill = false;
     }
 
     protected virtual void Start()
@@ -59,7 +69,27 @@ public class Enemy_base : MonoBehaviour
         if (isDead)
             return;
 
-        EnemyStateManager.instance.Update();
+        CoolTime();
+
+        UpdateTargetAndDistance();//ì—¬ê¸°ì„œ í˜„ìž¬ íƒ€ê²Ÿ(ë¦¬íƒ€ê²Ÿí¬í•¨), íƒ€ê²Ÿê³¼ ê±°ë¦¬ ê³„ì† ì—…ë°ì´íŠ¸ë¨
+
+        CheckingAttackRenge();
+
+        if (currentState == EnemyState.Chasing)
+        {
+            isIdle = false;
+            isChase = true;
+            isAttack = false;
+            MoveToTarget(currentTarget.transform.position);
+        }
+        if (currentState == EnemyState.Attack)
+        {
+            isIdle = false;
+            isChase = false;
+            isAttack = true;
+            AttackThnking();
+        }
+
     }
 
     protected virtual void FixedUpdate()
@@ -74,65 +104,7 @@ public class Enemy_base : MonoBehaviour
         }
     }
 
-    protected virtual void SetStats() { }
-
-    public virtual void HandleState()
-    {
-        switch (currentState)
-        {
-            case EnemyState.Create:
-                Initialize();
-                break;
-
-            case EnemyState.Idle:
-                Targeting();
-                break;
-
-            case EnemyState.Chasing:
-                currentTarget = GetNearestEnemyToPosition(transform.position);
-                if (currentTarget != null)
-                {
-                    MoveToTarget(currentTarget.transform.position);
-                }
-                break;
-
-            case EnemyState.Attack:
-                Attack();
-                break;
-
-            case EnemyState.Dead:
-                Die();
-                break;
-
-            case EnemyState.Skill:
-                Skill();
-                break;
-
-            case EnemyState.ExSkill:
-                ExSkill();
-                break;
-        }
-    }
-
-    protected virtual void Skill() { }
-
-    protected virtual void ExSkill()
-    {
-        // ExSkill ·ÎÁ÷ Ã³¸®
-        currentState = EnemyState.Attack;  // »óÅÂ¸¦ ´Ù½Ã AttackÀ¸·Î º¯°æ
-        isStateChanging = false;  // »óÅÂ º¯°æ ¿Ï·á
-    }
-
-    // Enemy initialization
-    public virtual void Initialize()
-    {
-        SetStats();
-        isCreate = false;
-        isChase = true;
-    }
-
-    // Targeting logic
-    public virtual void Targeting()
+    protected virtual void UpdateTargetAndDistance()
     {
         if (isDead)
             return;
@@ -142,88 +114,96 @@ public class Enemy_base : MonoBehaviour
         if (currentTarget == null)
             return;
 
-        float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
-
-        if (distance > attackRange)
-        {
-            currentState = EnemyState.Chasing;
-        }
-        else if (distance <= attackRange && attackTimer >= attackInterval)
-        {
-            currentState = EnemyState.Attack;
-        }
+        distance = Vector3.Distance(transform.position, currentTarget.transform.position);
     }
 
-    // Move towards the target position
+    protected virtual void CheckingAttackRenge()
+    {
+        Debug.Log($"[Check] Distance: {distance}, AttackRange: {attackRange}");
+        currentState = (distance <= attackRange) ? EnemyState.Attack : EnemyState.Chasing;
+    }
+
+    protected virtual void Initialize()
+    {
+        SetStats();
+        currentHealth = maxHealth;
+        isCreate = false;
+        currentState = EnemyState.Idle;
+        isIdle = true;
+    }
+
+    protected virtual void SetStats() { }
+
     void MoveToTarget(Vector3 targetPosition)
     {
         if (navMeshAgent != null)
         {
             navMeshAgent.SetDestination(targetPosition);
 
-            float distance = Vector3.Distance(transform.position, targetPosition);
-
-            if (distance <= attackRange && attackTimer >= attackInterval)
-            {
-                navMeshAgent.isStopped = true;
-                currentState = EnemyState.Attack;
-            }
-            else
-            {
-                navMeshAgent.isStopped = false;
-            }
+            //float distance = Vector3.Distance(transform.position, targetPosition);
         }
     }
 
-    // Cooldown management for attacks
-    protected virtual void AttackCoolTime()
+    protected virtual void CoolTime()
     {
-        attackTimer += Time.deltaTime;
-        if (attackTimer >= attackInterval)
+        basicAttackTimer += Time.deltaTime;
+        if (basicAttackTimer >= basicAttackInterval)
         {
-            readyAttack = true;
+            readyBasicAttack = true;
+            basicAttackTimer = 0;
+        }
+        skillTimer += Time.deltaTime;
+        if (skillTimer >= skillInterval)
+        {
+            readySkill = true;
+        }
+        exSkillTimer += Time.deltaTime;
+        if (exSkillTimer >= exSkillInterval)
+        {
+            readyExSkill = true;
         }
     }
-
-    // Attack logic
-    protected virtual void Attack()
+    protected virtual void AttackThnking()
     {
-        if (!readyAttack || currentTarget == null || currentTarget.isDead)
+        if (readyBasicAttack)
+        {
+            BasicAttack();
+        }
+        if (readySkill)
+        {
+            Skill();
+        }
+        if (readyExSkill)
+        {
+            ExSkill();
+        }
+    }
+    protected virtual void BasicAttack()
+    {
+        if (!isAttack || currentTarget == null || currentTarget.isDead)
         {
             return;
         }
-
         isChase = false;
         isAttack = true;
         animator.SetBool("isAttack", true);
-        attackCount++;
+        navMeshAgent.isStopped = true;
+        basicAttackCount++;
+
         ShootBulletAtTarget();
 
-        // Reset attack state after attack
-        readyAttack = false;
-        attackTimer = 0f;
         isAttack = false;
+        basicAttackCount = 0f;
         isChase = true;
         animator.SetBool("isAttack", false);
         currentState = EnemyState.Idle;
 
-        if (attackCount > 5)
+        if (basicAttackCount > 5)
         {
-            currentState = EnemyState.Skill;
-            Skill();
-            attackCount = 0;
-        }
-
-
-        if (readyExSkillActive && currentState != EnemyState.ExSkill)
-        {
-            currentState = EnemyState.ExSkill;  // ExSkill »óÅÂ·Î º¯°æ
-            readyExSkillActive = false;  // ExSkill ÁØºñ »óÅÂ¸¦ false·Î ¼³Á¤
-            isStateChanging = true;  // »óÅÂ º¯°æ ÁßÀÓÀ» ¼³Á¤
+            readySkill = true;
+            basicAttackCount = 0;
         }
     }
-
-    // Shoot bullet at the target
     protected void ShootBulletAtTarget()
     {
         if (currentTarget == null || currentTarget.isDead)
@@ -237,10 +217,16 @@ public class Enemy_base : MonoBehaviour
             Quaternion.LookRotation(direction));
         bullet.GetComponent<Rigidbody>().velocity = direction * 20;
     }
+    protected virtual void Skill()
+    {
+    }
 
-    // Get nearest target to the position
+    protected virtual void ExSkill()
+    {
+    }
+
     public SoonDoBu_Playable GetNearestEnemyToPosition(Vector3 position)
-        {
+    {
         SoonDoBu_Playable nearest = null;
         float minDist = Mathf.Infinity;
 
@@ -258,17 +244,16 @@ public class Enemy_base : MonoBehaviour
         return nearest;
     }
 
-    // Handle damage application
-    protected virtual void ApplyDamage(float damage)
+    protected virtual void TakeDamage(float damage)
     {
         currentHealth -= damage;
         if (currentHealth <= 0 && !isDead)
         {
             currentState = EnemyState.Dead;
+            Die();
         }
     }
 
-    // Die logic
     protected virtual void Die()
     {
         isDead = true;
@@ -276,12 +261,64 @@ public class Enemy_base : MonoBehaviour
         OnDestroy();
     }
 
-    // Destroy enemy and unregister from the manager
     public void OnDestroy()
     {
         if (EnemyManager.instance != null)
             EnemyManager.instance.UnregisterEnemy(this);
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Bullet"))
+        {
+            Bullet bullet = other.GetComponent<Bullet>();
+            Vector3 reactVec = transform.position - other.transform.position;
+            Destroy(other.gameObject);
+            ApplyDamage(bullet.damage, reactVec, false);
+        }
+    }
+
+    public void HitByGrenade(Vector3 explosionPos)
+    {
+        Vector3 reactVec = transform.position - explosionPos;
+        ApplyDamage(100f, reactVec, true);
+    }
+
+    public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
+    {
+        currentHealth -= damage;
+        StartCoroutine(OnDamage(reactVec, isGrenade));
+    }
+
+    IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
+    {
+        foreach (MeshRenderer mesh in meshs)
+            mesh.material.color = Color.red;
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (currentHealth > 0)
+        {
+            foreach (MeshRenderer mesh in meshs)
+                mesh.material.color = Color.white;
+        }
+        else
+        {
+            foreach (MeshRenderer mesh in meshs)
+                mesh.material.color = Color.gray;
+
+            isDead = true;
+            isChase = false;
+            animator.SetTrigger("doDie");
+
+            reactVec = reactVec.normalized + Vector3.up * (isGrenade ? 3f : 1f);
+            rigidbodyEnemy.freezeRotation = false;
+            rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
+
+            if (isGrenade)
+                rigidbodyEnemy.AddTorque(reactVec * 15, ForceMode.Impulse);
+
+            Destroy(gameObject, 1.8f);
+        }
+    }
 }
-
-

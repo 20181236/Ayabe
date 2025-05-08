@@ -354,14 +354,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4931071578747650822}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7856524097129735432}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!54 &4227591098561413268
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -447,15 +447,32 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   attackRange: 10
+  basicAttackInterval: 0
+  basicAttackTimer: 0
+  basicAttackCount: 0
+  skillInterval: 0
+  skillTimer: 0
+  exSkillInterval: 0
+  exSkillTimer: 0
+  moveSpeed: 0
+  distance: 0
+  isCreate: 0
   isChase: 0
   isAttack: 0
+  isSkill: 0
+  isExSkill: 0
   isDead: 0
+  checkInAttackRenge: 0
+  readyBasicAttack: 0
+  readySkill: 0
+  readyExSkill: 0
   rigidbodyEnemy: {fileID: 4227591098561413268}
   boxCollider: {fileID: 2451850200465814943}
   meshs: []
   navMeshAgent: {fileID: 3506899790702820262}
-  animator: {fileID: 0}
+  animator: {fileID: 6460493037093374342}
   enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
+  currentState: 0
 --- !u!1 &6014152868675815248
 GameObject:
   m_ObjectHideFlags: 0
