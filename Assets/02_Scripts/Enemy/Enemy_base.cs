@@ -89,7 +89,6 @@ public class Enemy_base : MonoBehaviour
             isAttack = true;
             AttackThnking();
         }
-
     }
 
     protected virtual void FixedUpdate()
@@ -103,6 +102,17 @@ public class Enemy_base : MonoBehaviour
             rigidbodyEnemy.velocity = Vector3.zero;
         }
     }
+
+    protected virtual void Initialize()
+    {
+        SetStats();
+        currentHealth = maxHealth;
+        isCreate = false;
+        currentState = EnemyState.Idle;
+        isIdle = true;
+    }
+
+    protected virtual void SetStats() { }
 
     protected virtual void UpdateTargetAndDistance()
     {
@@ -119,20 +129,8 @@ public class Enemy_base : MonoBehaviour
 
     protected virtual void CheckingAttackRenge()
     {
-        Debug.Log($"[Check] Distance: {distance}, AttackRange: {attackRange}");
         currentState = (distance <= attackRange) ? EnemyState.Attack : EnemyState.Chasing;
     }
-
-    protected virtual void Initialize()
-    {
-        SetStats();
-        currentHealth = maxHealth;
-        isCreate = false;
-        currentState = EnemyState.Idle;
-        isIdle = true;
-    }
-
-    protected virtual void SetStats() { }
 
     void MoveToTarget(Vector3 targetPosition)
     {
@@ -150,7 +148,6 @@ public class Enemy_base : MonoBehaviour
         if (basicAttackTimer >= basicAttackInterval)
         {
             readyBasicAttack = true;
-            basicAttackTimer = 0;
         }
         skillTimer += Time.deltaTime;
         if (skillTimer >= skillInterval)
@@ -203,6 +200,8 @@ public class Enemy_base : MonoBehaviour
             readySkill = true;
             basicAttackCount = 0;
         }
+        basicAttackTimer = 0;
+        readyBasicAttack = false;
     }
     protected void ShootBulletAtTarget()
     {

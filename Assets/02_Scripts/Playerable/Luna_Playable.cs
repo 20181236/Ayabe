@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Luna_Playable : SoonDoBu_Playable
 {
-
     protected override void SetStats()
     {
         maxHealth = (float)PlayableHelath.Luna;
@@ -14,30 +13,22 @@ public class Luna_Playable : SoonDoBu_Playable
     protected override IEnumerator BasicSkill()
     {
         yield return new WaitForSeconds(0.5f);  // 딜레이 수정
-
         if (currentTarget == null)
             yield break;
-
         Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
-
         transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z)); 
-
         GameObject instantMissile = Instantiate(
             missile,
             transform.position + Vector3.up * 3f,
             Quaternion.LookRotation(directionToTarget)
         );
-
         Missile missileScript = instantMissile.GetComponent<Missile>();
         missileScript.target = currentTarget.transform;
-
-        // 미사일에 속도 적용 (Rigidbody가 필요)
         Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
         if (missileRigidbody != null)
         {
             missileRigidbody.velocity = directionToTarget * 20f;
         }
-
         yield return new WaitForSeconds(0.2f);
     }
 }

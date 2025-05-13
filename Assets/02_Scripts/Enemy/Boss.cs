@@ -11,7 +11,7 @@
 //    public float exSkillTimer = 0f;
 
 //    private bool skillActivated = false;
-//    //public bool readyExSkillActive = false;
+//    public bool readyExSkillActive = false;
 
 //    public GameObject missile;
 //    public GameObject exMissile;
@@ -23,7 +23,7 @@
 //        if (isDead)
 //            return;
 
-//        // ExSkill 쿨타임 관리
+//        ExSkill 쿨타임 관리
 //        ExSkillCooldown();
 //    }
 
@@ -55,7 +55,7 @@
 //    {
 //        base.Attack();
 
-//        // 공격 횟수가 5회 이상일 때 스킬 발동
+//        공격 횟수가 5회 이상일 때 스킬 발동
 //        if (attackCount > 5)
 //        {
 //            currentState = EnemyState.Skill;
@@ -63,7 +63,7 @@
 //            attackCount = 0;
 //        }
 
-//        // ExSkill이 준비되었으면 ExSkill 상태로 전환
+//        ExSkill이 준비되었으면 ExSkill 상태로 전환
 //        if (readyExSkillActive && currentState != EnemyState.ExSkill)
 //        {
 //            currentState = EnemyState.ExSkill;  // ExSkill 상태로 변경
@@ -74,10 +74,8 @@
 //    protected override void Skill()
 //    {
 //        List<SoonDoBu_Playable> targets = new List<SoonDoBu_Playable>(PlayableMnager.instance.playables);
-
-//        // 유효한 타겟만 필터링
+//        유효한 타겟만 필터링
 //        List<SoonDoBu_Playable> validTargets = new List<SoonDoBu_Playable>();
-
 //        foreach (SoonDoBu_Playable target in targets)
 //        {
 //            if (target != null && !target.isDead)
@@ -85,14 +83,12 @@
 //                validTargets.Add(target);
 //            }
 //        }
-
-//        // 가까운 순으로 정렬
+//        가까운 순으로 정렬
 //        validTargets.Sort((a, b) =>
 //            Vector3.Distance(transform.position, a.transform.position)
 //            .CompareTo(Vector3.Distance(transform.position, b.transform.position))
 //        );
-
-//        // 최대 타겟 수만큼 미사일 발사
+//        최대 타겟 수만큼 미사일 발사
 //        for (int i = 0; i < Mathf.Min(maxTargetCount, validTargets.Count); i++)
 //        {
 //            SoonDoBu_Playable target = validTargets[i];
@@ -105,46 +101,34 @@
 //                transform.position + Vector3.up * 1.0f + lookDirection * 1.5f, // 캐릭터보다 앞에서 발사
 //                Quaternion.LookRotation(lookDirection)
 //            );
-
 //            Missile missileScript = instantMissile.GetComponent<Missile>();
 //            missileScript.target = target.transform;
-
 //            Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
 //            if (missileRigidbody != null)
 //            {
 //                missileRigidbody.velocity = lookDirection * 50f;  // 미사일 초기 속도
 //            }
 //        }
-
 //        currentState = EnemyState.Attack;  // 공격 상태로 돌아가도록 설정
 //    }
-
 //    protected override void ExSkill()
 //    {
-//        // 유효한 타겟 랜덤 선택
 //        var targets = PlayableMnager.instance.playables.FindAll(t => t != null && !t.isDead);
 //        if (targets.Count == 0)
 //        {
 //            return;
 //        }
-
 //        var selectedTarget = targets[UnityEngine.Random.Range(0, targets.Count)];
-
 //        if (selectedTarget == null)
 //        {
 //            return;
 //        }
-
-//        // 방향 설정
 //        Vector3 direction = (selectedTarget.transform.position - transform.position).normalized;
 //        Vector3 spawnPos = transform.position + Vector3.up * 10f + direction * 5f;
-
 //        if (exMissile == null)
 //        {
 //            return;
 //        }
-
-//        // Instantiate BossExMissile
 //        GameObject missileObj = Instantiate(exMissile, spawnPos, Quaternion.LookRotation(direction));
 //        var exMissileScript = missileObj.GetComponent<BossExMissile>();
 //        if (exMissileScript == null)
@@ -152,9 +136,7 @@
 //            return;
 //        }
 //        exMissileScript.Init(selectedTarget.transform.position);
-
-//        // ExSkill을 사용한 후 상태 변경
-//        currentState = EnemyState.Attack;  // 상태를 다시 Attack으로 변경
+//        currentState = EnemyState.Attack;
 //    }
 
 //    private void ExSkillCooldown()
