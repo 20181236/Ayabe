@@ -110,6 +110,7 @@ public class Enemy_base : MonoBehaviour
         isCreate = false;
         currentState = EnemyState.Idle;
         isIdle = true;
+        readyBasicAttack = false;
     }
 
     protected virtual void SetStats() { }
@@ -170,7 +171,7 @@ public class Enemy_base : MonoBehaviour
         {
             Skill();
         }
-        if (readyExSkill)
+        if (exSkillTimer >= exSkillInterval)   
         {
             ExSkill();
         }

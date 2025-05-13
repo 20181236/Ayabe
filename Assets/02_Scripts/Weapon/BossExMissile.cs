@@ -21,21 +21,20 @@ public class BossExMissile : MonoBehaviour
 
     public void Split()
     {
-        if (hasSplit) return;  // 이미 Split이 실행되었으면 종료
+        if (hasSplit)
+            return;  // 이미 Split이 실행되었으면 종료
 
         hasSplit = true;  // Split을 한 번 실행했으므로 플래그 설정
 
         Debug.Log("Split");
-
         // 서브 미사일 생성
         for (int i = 0; i < 5; i++)
         {
             Vector2 offset = Random.insideUnitCircle * 2f;
-            Vector3 subTarget = new Vector3(targetPosition.x + offset.x, 10f, targetPosition.z + offset.y);
+            Vector3 subTarget = new Vector3(targetPosition.x + offset.x, 1f, targetPosition.z + offset.y);
             GameObject sub = Instantiate(subMissilePrefab, transform.position, Quaternion.identity);
             sub.GetComponent<BossExSubMissile>().Init(subTarget);
         }
-
         // 미사일 객체 제거
         Destroy(gameObject);
     }
