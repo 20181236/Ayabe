@@ -99,14 +99,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
-  moveSpeed: 15
   attackRange: 15
+  basicSkillCooldown: 0
+  basicSkillTimer: 0
+  readyBasicSkill: 0
+  currentState: 0
   isChase: 0
   isAttack: 0
   isDead: 0
   bullet: {fileID: 589644376409995535, guid: ad81f6d95223d0e44885783cb2c7ee76, type: 3}
+  missile: {fileID: 0}
   excapeSpotTransform: {fileID: 0}
-  rigidbody_SoonDoBu: {fileID: 6451167297155870258}
+  rigidbody_Playable: {fileID: 0}
   boxCollider: {fileID: 0}
   meshs: []
   navMeshAgent: {fileID: 7187312169412409887}

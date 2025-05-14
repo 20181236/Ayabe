@@ -1,7 +1,6 @@
 public enum EnemyType
 {
-    Melee,
-    Ranged,
+    Normal,
     Elite,
     Boss
 }

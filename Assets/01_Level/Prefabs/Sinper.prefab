@@ -664,7 +664,7 @@ GameObject:
   - component: {fileID: 8724632003758491935}
   - component: {fileID: 7438950974451946118}
   m_Layer: 0
-  m_Name: Mesh Object
+  m_Name: Sinper Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -827,6 +827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4151a1fcb51254abf19a0008fcb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 1
   maxHealth: 100
   currentHealth: 0
   attackRange: 30
@@ -840,6 +841,7 @@ MonoBehaviour:
   moveSpeed: 0
   distance: 0
   isCreate: 0
+  isIdle: 0
   isChase: 0
   isAttack: 0
   isSkill: 0

@@ -7,15 +7,9 @@ using UnityEngine.Playables;
 
 public class Enemy : Enemy_base
 {
-    protected override void SetStats()
+    public override void SetData(EnemyData data)
     {
-        maxHealth = (float)EnemyHealth.Thanker;
-        attackRange = (float)EnemyAttackRange.Thanker;
-        basicAttackInterval = 1.5f;
+        base.SetData(data);
+        // Boss 전용 데이터 처리 가능
     }
-
-    //protected override void BasicAttack()
-    //{
-    //    base.BasicAttack();  
-    //}
 }

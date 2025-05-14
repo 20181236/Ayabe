@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class Enemy_base : MonoBehaviour
 {
+    public EnemyType enemyType;
     public float maxHealth;
     public float currentHealth;
     public float attackRange;
@@ -104,8 +105,7 @@ public class Enemy_base : MonoBehaviour
     }
 
     protected virtual void Initialize()
-    {
-        SetStats();
+    { 
         currentHealth = maxHealth;
         isCreate = false;
         currentState = EnemyState.Idle;
@@ -113,8 +113,16 @@ public class Enemy_base : MonoBehaviour
         readyBasicAttack = false;
     }
 
-    protected virtual void SetStats() { }
-
+    public virtual void SetData(EnemyData data)
+    {
+        enemyType = data.enemyType;
+        maxHealth = data.maxHealth;
+        attackRange = data.attackRange;
+        basicAttackInterval = data.basicAttackInterval;
+        skillInterval = data.skillInterval;
+        exSkillInterval = data.exSkillInterval;
+        moveSpeed = data.moveSpeed;
+    }
     protected virtual void UpdateTargetAndDistance()
     {
         if (isDead)

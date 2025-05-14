@@ -7,22 +7,11 @@ using UnityEngine.AI;
 public class Boss : Enemy_base
 {
     public int maxTargetCount = 3;
-
-    private bool skillActivated = false;
     public bool readyExSkillActive = false;
 
     public GameObject skMissile;
     public GameObject exMissile;
     public GameObject exSubMissile;
-
-    protected override void SetStats()
-    {
-        maxHealth = (float)EnemyHealth.Boss;
-        attackRange = (float)EnemyAttackRange.Boss;
-        basicAttackInterval = 5f;
-        skillInterval = 6f;
-        exSkillInterval = 8f;
-    }
 
     protected override void Skill()
     {
@@ -66,36 +55,36 @@ public class Boss : Enemy_base
     }
     protected override void ExSkill()
     {
-        if (!readyExSkill)
-            return;
-        var targets = PlayableMnager.instance.playables.FindAll(t => t != null && !t.isDead);
-        if (targets.Count == 0)
-        {
-            return;
-        }
-        var selectedTarget = targets[UnityEngine.Random.Range(0, targets.Count)];
-        if (selectedTarget == null)
-        {
-            return;
-        }
-        Vector3 direction = (selectedTarget.transform.position - transform.position).normalized;
-        Vector3 spawnPos = transform.position + Vector3.up * 10f + direction * 5f;
-        if (exMissile == null)
-        {
-            return;
-        }
-        GameObject missileObj = Instantiate(
-            exMissile, 
-            spawnPos, 
-            Quaternion.LookRotation(direction));
-        exSkillTimer = 0;
-        readyExSkill = false;
-        var exMissileScript = missileObj.GetComponent<BossExMissile>();
-        if (exMissileScript == null)
-        {
-            return;
-        }
-        exMissileScript.Init(selectedTarget.transform.position);
+        //    if (!readyExSkill)
+        //        return;
+        //    var targets = PlayableMnager.instance.playables.FindAll(t => t != null && !t.isDead);
+        //    if (targets.Count == 0)
+        //    {
+        //        return;
+        //    }
+        //    var selectedTarget = targets[UnityEngine.Random.Range(0, targets.Count)];
+        //    if (selectedTarget == null)
+        //    {
+        //        return;
+        //    }
+        //    Vector3 direction = (selectedTarget.transform.position - transform.position).normalized;
+        //    Vector3 spawnPos = transform.position + Vector3.up * 10f + direction * 5f;
+        //    if (exMissile == null)
+        //    {
+        //        return;
+        //    }
+        //    GameObject missileObj = Instantiate(
+        //        exMissile, 
+        //        spawnPos, 
+        //        Quaternion.LookRotation(direction));
+        //    exSkillTimer = 0;
+        //    readyExSkill = false;
+        //    var exMissileScript = missileObj.GetComponent<BossExMissile>();
+        //    if (exMissileScript == null)
+        //    {
+        //        return;
+        //    }
+        //    exMissileScript.Init(selectedTarget.transform.position);
 
     }
 }

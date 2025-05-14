@@ -120,6 +120,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 50
   target: {fileID: 0}
+  speed: 10
+  rotateSpeed: 10
 --- !u!1 &7502201913181014271
 GameObject:
   m_ObjectHideFlags: 0
