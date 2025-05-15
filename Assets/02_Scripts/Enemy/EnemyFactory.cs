@@ -13,8 +13,9 @@ public static class EnemyFactory
         }
 
         GameObject enemyObj = GameObject.Instantiate(data.prefab, position, Quaternion.identity);
-
+        Debug.Log($"[EnemyFactory] Creating enemy of type {data.enemyType} at {position}");
         Enemy_base enemy = enemyObj.GetComponent<Enemy_base>();
+
         if (enemy != null)
         {
             enemy.SetData(data); // Enemy¿« Ω∫≈» º≥¡§

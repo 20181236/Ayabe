@@ -7,7 +7,9 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager instance { get; private set; }
 
-    public int totalWaves;
+    public bool hasBoss = false;
+    public bool isEnemyAllClear = false;
+    public bool isBossClear = false;
     public bool isStageClear = false;
 
     private void Awake()
@@ -23,20 +25,37 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-        if (SpawnManager.instance != null)
-        {
-            totalWaves = SpawnManager.instance.waves.Length;
-            SpawnManager.instance.StartWave(); // 첫 웨이브 자동 시작
-        }
-        else
-        {
-            Debug.LogError("SpawnManager가 존재하지 않습니다.");
-        }
+        WaveManager.instance.StartFirstWave();
+        StartCoroutine(CheckWaveProgressCoroutine());
     }
 
-    private void Update()
+    private IEnumerator CheckWaveProgressCoroutine()
     {
+        while (!isStageClear)
+        {
+            // 모든 웨이브가 끝나지 않았고, 적이 없을 때 다음 웨이브 진행
+            if (!WaveManager.instance.IsAllWaveSpawned() && !EnemyManager.instance.HasEnemy())
+            {
+                WaveManager.instance.StartWave();
+            }
+            // 모든 웨이브가 끝났고 적도 없고 보스도 끝났다면 스테이지 클리어
+            else if (WaveManager.instance.IsAllWaveSpawned() &&
+                         !EnemyManager.instance.HasEnemy() &&
+                         !EnemyManager.instance.HasBoss())
+            {
+                isEnemyAllClear = true;
+                isStageClear = true;    
+                OnStageClear();
+            }
 
+            yield return new WaitForSeconds(1f);
+        }
     }
 
+    private void OnStageClear()
+    {
+        Debug.Log("스테이지 클리어!");
+        // 결과창 등 추가
+    }
 }
+

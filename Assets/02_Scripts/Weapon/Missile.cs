@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Missile : Bullet
+public class Missile : MonoBehaviour
 {
     public Transform target;
+    public int damage;
     public float speed = 50f;
     public float rotateSpeed = 10f;
 

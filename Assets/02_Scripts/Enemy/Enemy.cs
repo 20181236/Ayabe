@@ -7,9 +7,5 @@ using UnityEngine.Playables;
 
 public class Enemy : Enemy_base
 {
-    public override void SetData(EnemyData data)
-    {
-        base.SetData(data);
-        // Boss 전용 데이터 처리 가능
-    }
+
 }

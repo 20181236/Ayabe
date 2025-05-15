@@ -9,7 +9,6 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager instance { get; private set; }
     public List<Enemy_base> enemies = new List<Enemy_base>();
     public Dictionary<EnemyType, List<Enemy_base>> enemiesType = new Dictionary<EnemyType, List<Enemy_base>>();
-    public Transform[] EnemySpawnPoints;
     public EnemyData[] enemyDatas; // 에디터에 드래그해서 연결할 수 있게
 
 
@@ -21,8 +20,8 @@ public class EnemyManager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
-        foreach (EnemyType type in System.Enum.GetValues(typeof(EnemyType)))
+        //DontDestroyOnLoad(gameObject);
+        foreach (EnemyType type in (EnemyType[])System.Enum.GetValues(typeof(EnemyType)))
         {
             enemiesType[type] = new List<Enemy_base>();
         }
@@ -39,7 +38,7 @@ public class EnemyManager : MonoBehaviour
             }
         }
         else
-        {
+        {   
             Debug.LogError("EnemyData not found for type: " + type);
         }
     }
@@ -61,7 +60,6 @@ public class EnemyManager : MonoBehaviour
             enemiesType[enemy.enemyType].Remove(enemy);
         }
     }
-
     public List<Enemy_base> GetEnemies()
     {
         return enemies;
@@ -77,5 +75,9 @@ public class EnemyManager : MonoBehaviour
     public bool HasEnemyOfType(EnemyType type)
     {
         return enemiesType[type].Count > 0;
+    }
+    public bool HasBoss()
+    {
+        return HasEnemyOfType(EnemyType.Boss);
     }
 }

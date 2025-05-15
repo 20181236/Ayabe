@@ -4,17 +4,37 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    //쓸모없는 상속을 하고있음
+    public float speed = 20f;
+    public float lifeTime = 2f;
 
-    public int damage;//이게 캐릭터마다 데미지가 다를꺼고 버프나 이런거 맥이면 더쌔져야하는데 어떻하지?
+    private Coroutine returnCoroutine;
 
-    void OnCollisionEnter(Collision collision)
+    private void OnEnable()
     {
-
+        returnCoroutine = StartCoroutine(ReturnAfterSeconds());
+    }
+        
+    private void OnDisable()
+    {
+        if (returnCoroutine != null)
+            StopCoroutine(returnCoroutine);
     }
 
-    void OnTriggerEnter(Collider other)
+    private void Update()
     {
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    }
 
+    private IEnumerator ReturnAfterSeconds()
+    {
+        yield return new WaitForSeconds(lifeTime);
+        Bullet_ObjectPooling.instance.ReturnBullet(this);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 충돌시 바로 반환
+        Bullet_ObjectPooling.instance.ReturnBullet(this);
     }
 }
+

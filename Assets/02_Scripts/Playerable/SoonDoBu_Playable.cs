@@ -25,7 +25,6 @@ public class SoonDoBu_Playable : MonoBehaviour
     public bool isAttack;
     public bool isDead;
 
-    //이것도 뺄 수 있을 거 같음
     [Header("Game Objects")]
     public GameObject bullet;
     public GameObject missile;
@@ -38,7 +37,6 @@ public class SoonDoBu_Playable : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public Animator animator;
 
-    // -------------------- Targeting --------------------
     protected Enemy_base currentTarget;
 
     void Start()
@@ -58,7 +56,7 @@ public class SoonDoBu_Playable : MonoBehaviour
         meshs = GetComponentsInChildren<MeshRenderer>();
         currentHealth = maxHealth;
 
-        Invoke("ChaseStart", 2f);
+        Invoke("ChaseStart", 1.5f);
     }
 
     void Update()
