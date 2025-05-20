@@ -33,7 +33,6 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // 충돌시 바로 반환
         Bullet_ObjectPooling.instance.ReturnBullet(this);
     }
 }
