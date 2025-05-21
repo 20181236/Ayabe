@@ -296,7 +296,7 @@ public class SoonDoBu_Playable : MonoBehaviour
         if (other.tag == "EnemyBullet")
         {
             Bullet bullet = other.GetComponent<Bullet>();
-            currentHealth -= bullet.damage;
+            currentHealth -= 10;
             Vector3 reactVec = transform.position - other.transform.position;
             Destroy(other.gameObject);
 

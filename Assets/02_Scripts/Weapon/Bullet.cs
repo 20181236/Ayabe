@@ -5,35 +5,23 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
-    public float lifeTime = 2f;
-
-    private Coroutine returnCoroutine;
+    public float lifeTime = 5f;
+    private float timer;
+    public bool isActive;
 
     private void OnEnable()
     {
-        returnCoroutine = StartCoroutine(ReturnAfterSeconds());
-    }
-        
-    private void OnDisable()
-    {
-        if (returnCoroutine != null)
-            StopCoroutine(returnCoroutine);
+        timer = 0f; // 총알이 활성화되면 타이머 초기화
     }
 
     private void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
-    private IEnumerator ReturnAfterSeconds()
+    private void OnDisable()
     {
-        yield return new WaitForSeconds(lifeTime);
-        Bullet_ObjectPooling.instance.ReturnBullet(this);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Bullet_ObjectPooling.instance.ReturnBullet(this);
+        // 필요시 이곳에 효과 리셋, 상태 초기화 가능
     }
 }
+
 

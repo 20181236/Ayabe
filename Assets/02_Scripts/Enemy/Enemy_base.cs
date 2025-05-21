@@ -40,6 +40,7 @@ public class Enemy_base : MonoBehaviour
     public Animator animator;
 
     public GameObject enemyBullet;
+    public Transform enemyBulletFirePoint;
 
     [HideInInspector] public EnemyState currentState;
 
@@ -220,10 +221,12 @@ public class Enemy_base : MonoBehaviour
         Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
-        GameObject bullet = Instantiate(enemyBullet,
-            transform.position + Vector3.up * 3f,
-            Quaternion.LookRotation(direction));
-        bullet.GetComponent<Rigidbody>().velocity = direction * 20;
+        //GameObject bullet = Instantiate(enemyBullet,
+        //    transform.position + Vector3.up * 3f,
+        //    Quaternion.LookRotation(direction));
+        //bullet.GetComponent<Rigidbody>().velocity = direction * 20;
+
+        GameObject bullet = PoolManager.instance.Spawn("EnemyBullet", enemyBulletFirePoint.position, enemyBulletFirePoint.rotation);
     }
     protected virtual void Skill()
     {
@@ -282,7 +285,7 @@ public class Enemy_base : MonoBehaviour
             Bullet bullet = other.GetComponent<Bullet>();
             Vector3 reactVec = transform.position - other.transform.position;
             Destroy(other.gameObject);
-            ApplyDamage(bullet.damage, reactVec, false);
+            ApplyDamage(10, reactVec, false);
         }
     }
 
