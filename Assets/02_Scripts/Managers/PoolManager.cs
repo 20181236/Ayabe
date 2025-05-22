@@ -13,8 +13,6 @@ public class PoolManager : MonoBehaviour
 
     private Dictionary<PoolType, Bullet> bulletPrefabDictionary = new Dictionary<PoolType, Bullet>();
     private Dictionary<PoolType, Queue<Bullet>> bulletPool = new Dictionary<PoolType, Queue<Bullet>>();
-    //private Dictionary<Bullet, bool> bulletActiveStateDictionary = new Dictionary<Bullet, bool>();//키 - 프리팹 - > 값 - aticve의bool 이거는 결국 foreach를 사용해야함
-
 
     private void Awake()
     {
@@ -26,7 +24,7 @@ public class PoolManager : MonoBehaviour
 
     public void RegisterBulletPrefab(PoolType type, Bullet prefab)
     {
-        if (bulletPrefabDictionary.ContainsKey(type))
+        if (bulletPrefabDictionary.ContainsKey(type))//중복 등록 방지를 위해 ContainsKey로 체크
         {
             Debug.LogWarning($"PoolManager: {type} prefab is already registered.");
             return;
@@ -65,25 +63,23 @@ public class PoolManager : MonoBehaviour
         Queue<Bullet> poolQueue = bulletPool[type];
 
         Bullet bullet;
+
         if (poolQueue.Count > 0)
         {
             bullet = poolQueue.Dequeue();
-            bullet.gameObject.SetActive(true);
         }
         else
         {
-            // 풀에 총알이 없으면 새로 생성
             if (!bulletPrefabDictionary.ContainsKey(type))
             {
                 Debug.LogError($"PoolManager: No prefab registered for {type}.");
-                return
-                    null;
+                return null;
             }
 
             bullet = Instantiate(bulletPrefabDictionary[type]);
-            bullet.gameObject.SetActive(true);
         }
 
+        bullet.gameObject.SetActive(true);
         return bullet;
     }
 

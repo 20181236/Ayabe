@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
 
-public class SoonDoBu_Playable : MonoBehaviour
+public class SoonDoBuPlayable : MonoBehaviour
 {
     [Header("Player Stats")]
     public float maxHealth;

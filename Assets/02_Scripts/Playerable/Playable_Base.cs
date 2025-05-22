@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public abstract class Playable_base : MonoBehaviour
+public abstract class PlayableBase : MonoBehaviour
 {
     [Header("Player Stats")]
     public float maxHealth;

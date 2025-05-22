@@ -8,8 +8,8 @@ public class PlayableMnager : MonoBehaviour
 {
     public static PlayableMnager instance { get; private set; }
     public GameObject playablePrefab; // 어떤 애를 생성할건지 필요할듯
-    public List<SoonDoBu_Playable> playables = new List<SoonDoBu_Playable>();
-    public List<Playable_base> playables_imsi = new List<Playable_base>();
+    public List<SoonDoBuPlayable> playables = new List<SoonDoBuPlayable>();
+    public List<PlayableBase> playables_imsi = new List<PlayableBase>();
     public Transform[] PlayableSpawnPoints;
 
     private void Awake()
@@ -24,7 +24,7 @@ public class PlayableMnager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
     
-    public void RegisterPlayable(SoonDoBu_Playable playable)
+    public void RegisterPlayable(SoonDoBuPlayable playable)
     {
         if (!playables.Contains(playable))
         {
@@ -32,7 +32,7 @@ public class PlayableMnager : MonoBehaviour
         }
     }
 
-    public void RegisterPlayable_imsi(Playable_base playables)
+    public void RegisterPlayable_imsi(PlayableBase playables)
     {
         if (!playables_imsi.Contains(playables))
         {
@@ -40,7 +40,7 @@ public class PlayableMnager : MonoBehaviour
         }
     }
 
-    public void UnregisterPlayable(SoonDoBu_Playable playable)
+    public void UnregisterPlayable(SoonDoBuPlayable playable)
     {
         if (playables.Contains(playable))
         {
@@ -48,7 +48,7 @@ public class PlayableMnager : MonoBehaviour
         }
     }
 
-    public void UnregisterPlayable(Playable_base playable)
+    public void UnregisterPlayable(PlayableBase playable)
     {
         if (playables_imsi.Contains(playable))
         {
@@ -56,7 +56,7 @@ public class PlayableMnager : MonoBehaviour
         }
     }
 
-    public List<SoonDoBu_Playable> GetPlayables()
+    public List<SoonDoBuPlayable> GetPlayables()
     {
         return playables;
     }
