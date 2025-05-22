@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     public float lifeTime = 5f;
     private float timer;
     public bool isActive;
+    public PoolManager.PoolType poolType;  // 추가: 자기 자신 타입 저장
 
     private void OnEnable()
     {
@@ -16,6 +17,11 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
+        timer += Time.deltaTime;
+        if (timer >= lifeTime)
+        {
+            PoolManager.instance.ReturnBullet(this, poolType);
+        }
     }
 
     private void OnDisable()
