@@ -5,11 +5,12 @@ public class PoolManager : MonoBehaviour
 {
     public enum PoolType
     {
+        PlayableBullet,
         EnemyBullet,
         EnemyMissile
     }
 
-    public static PoolManager instance;
+    public static PoolManager instance { get; private set; }
 
     private Dictionary<PoolType, Bullet> bulletPrefabDictionary = new Dictionary<PoolType, Bullet>();
     private Dictionary<PoolType, Queue<Bullet>> bulletPool = new Dictionary<PoolType, Queue<Bullet>>();

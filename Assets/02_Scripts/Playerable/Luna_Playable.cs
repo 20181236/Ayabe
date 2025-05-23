@@ -2,19 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Luna_Playable : SoonDoBuPlayable
+public class Luna_Playable : PlayableBase
 {
-    protected override void SetStats()
+    protected override void Skill()
     {
-        maxHealth = (float)PlayableHelath.Luna;
-        attackRange = (float)PlayableAttackRenge.Luna;
-        basicSkillCooldown = (float)PlayalbeBaiscSkillCoolTime.Luna;
-    }
-    protected override IEnumerator BasicSkill()
-    {
-        yield return new WaitForSeconds(0.5f);  // µô·¹ÀÌ ¼öÁ¤
-        if (currentTarget == null)
-            yield break;
+        //yield return new WaitForSeconds(0.5f);  // µô·¹ÀÌ ¼öÁ¤
+        //if (currentTarget == null)
+           // yield break;
         Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z)); 
         GameObject instantMissile = Instantiate(
@@ -29,6 +23,6 @@ public class Luna_Playable : SoonDoBuPlayable
         {
             missileRigidbody.velocity = directionToTarget * 20f;
         }
-        yield return new WaitForSeconds(0.2f);
+       // yield return new WaitForSeconds(0.2f);
     }
 }

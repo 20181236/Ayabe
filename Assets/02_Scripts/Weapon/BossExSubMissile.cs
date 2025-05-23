@@ -22,16 +22,16 @@ public class BossExSubMissile : MonoBehaviour
 
     public void Explode()
     {
-        Collider[] hitTargets = Physics.OverlapSphere(targetPosition, damageRadius, LayerMask.GetMask("Playable"));
-        foreach (Collider col in hitTargets)
-        {
-            var player = col.GetComponent<SoonDoBu_Playable>();
-            if (player != null)
-                player.TakeDamage(damageAmount);  // 피해 적용
-        }
+        //Collider[] hitTargets = Physics.OverlapSphere(targetPosition, damageRadius, LayerMask.GetMask("Playable"));
+        //foreach (Collider col in hitTargets)
+        //{
+        //    var player = col.GetComponent<PlayableBase>();
+        //    if (player != null)
+        //        player.TakeDamage(damageAmount);  // 피해 적용
+        //}
 
-        Instantiate(explosionEffect, targetPosition, Quaternion.identity);
-        Destroy(warning);
-        Destroy(gameObject);
+        //Instantiate(explosionEffect, targetPosition, Quaternion.identity);
+        //Destroy(warning);
+        //Destroy(gameObject);
     }
 }

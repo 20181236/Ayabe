@@ -2,25 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ludo_Playable : SoonDoBuPlayable
+public class Ludo_Playable : PlayableBase
 {
     public GameObject grenadePrefab;
 
-    protected override void SetStats()
-    {
-        maxHealth = (float)PlayableHelath.Ludo;
-        attackRange = (float)PlayableAttackRenge.Ludo;
-        basicSkillCooldown = (float)PlayalbeBaiscSkillCoolTime.Ludo;
-    }
-    
-    protected override IEnumerator BasicSkill()
+    protected override void Skill()
     {
         //yield return null;
 
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
 
-        if (currentTarget == null)
-            yield break;
+        //if (currentTarget == null)
+            //yield break;
         Vector3 spawnPosition = transform.position + Vector3.up * 3f;
         GameObject grenadeObject = Instantiate(
             grenadePrefab,

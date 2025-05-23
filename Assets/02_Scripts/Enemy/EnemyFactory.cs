@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class EnemyFactory
 {
-    public static Enemy_base CreateEnemy(EnemyData data, Vector3 position)
+    public static Enemybase CreateEnemy(EnemyData data, Vector3 position)
     {
         if (data == null || data.prefab == null)
         {
@@ -14,7 +14,7 @@ public static class EnemyFactory
 
         GameObject enemyObj = GameObject.Instantiate(data.prefab, position, Quaternion.identity);
         Debug.Log($"[EnemyFactory] Creating enemy of type {data.enemyType} at {position}");
-        Enemy_base enemy = enemyObj.GetComponent<Enemy_base>();
+        Enemybase enemy = enemyObj.GetComponent<Enemybase>();
 
         if (enemy != null)
         {

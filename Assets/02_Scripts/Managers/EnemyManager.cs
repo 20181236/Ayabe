@@ -7,8 +7,8 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
-    public List<Enemy_base> enemies = new List<Enemy_base>();
-    public Dictionary<EnemyType, List<Enemy_base>> enemiesType = new Dictionary<EnemyType, List<Enemy_base>>();
+    public List<Enemybase> enemies = new List<Enemybase>();
+    public Dictionary<EnemyType, List<Enemybase>> enemiesType = new Dictionary<EnemyType, List<Enemybase>>();
     public EnemyData[] enemyDatas; // 에디터에 드래그해서 연결할 수 있게
 
 
@@ -20,10 +20,9 @@ public class EnemyManager : MonoBehaviour
             return;
         }
         instance = this;
-        //DontDestroyOnLoad(gameObject);
         foreach (EnemyType type in (EnemyType[])System.Enum.GetValues(typeof(EnemyType)))
         {
-            enemiesType[type] = new List<Enemy_base>();
+            enemiesType[type] = new List<Enemybase>();
         }
     }
     public void SpawnEnemy(EnemyType type, Vector3 spawnPosition)
@@ -31,7 +30,7 @@ public class EnemyManager : MonoBehaviour
         EnemyData data = System.Array.Find(enemyDatas, d => d.enemyType == type);
         if (data != null)
         {
-            Enemy_base enemy = EnemyFactory.CreateEnemy(data, spawnPosition);
+            Enemybase enemy = EnemyFactory.CreateEnemy(data, spawnPosition);
             if (enemy != null)
             {
                 RegisterEnemy(enemy);
@@ -43,7 +42,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void RegisterEnemy(Enemy_base enemy)
+    public void RegisterEnemy(Enemybase enemy)
     {
         if (!enemies.Contains(enemy))
         {
@@ -52,7 +51,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void UnregisterEnemy(Enemy_base enemy)
+    public void UnregisterEnemy(Enemybase enemy)
     {
         if (enemies.Contains(enemy))
         {
@@ -60,11 +59,11 @@ public class EnemyManager : MonoBehaviour
             enemiesType[enemy.enemyType].Remove(enemy);
         }
     }
-    public List<Enemy_base> GetEnemies()
+    public List<Enemybase> GetEnemies()
     {
         return enemies;
     }
-    public List<Enemy_base> GetEnemiesType(EnemyType type)
+    public List<Enemybase> GetEnemiesType(EnemyType type)
     {
         return enemiesType[type];
     }

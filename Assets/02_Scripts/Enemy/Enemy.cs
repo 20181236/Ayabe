@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
 
-public class Enemy : Enemy_base
+public class Enemy : Enemybase
 {
 
 }

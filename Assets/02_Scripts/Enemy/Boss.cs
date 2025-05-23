@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Boss : Enemy_base
+public class Boss : Enemybase
 {
     public int maxTargetCount = 3;
     public bool readyExSkillActive = false;
@@ -17,9 +17,9 @@ public class Boss : Enemy_base
     {
         if (!readySkill)
             return;
-        List<SoonDoBu_Playable> targets = new List<SoonDoBu_Playable>(PlayableMnager.instance.playables);
-        List<SoonDoBu_Playable> validTargets = new List<SoonDoBu_Playable>();
-        foreach (SoonDoBu_Playable target in targets)
+        List<PlayableBase> targets = new List<PlayableBase>(PlayableMnager.instance.playables);
+        List<PlayableBase> validTargets = new List<PlayableBase>();
+        foreach (PlayableBase target in targets)
         {
             if (target != null && !target.isDead)
             {
@@ -32,7 +32,7 @@ public class Boss : Enemy_base
         );
         for (int i = 0; i < Mathf.Min(maxTargetCount, validTargets.Count); i++)
         {
-            SoonDoBu_Playable target = validTargets[i];
+            PlayableBase target = validTargets[i];
             Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
             Vector3 lookDirection = new Vector3(directionToTarget.x, 0, directionToTarget.z);
             transform.rotation = Quaternion.LookRotation(lookDirection);

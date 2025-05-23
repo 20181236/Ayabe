@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy_base : MonoBehaviour
+public class Enemybase : MonoBehaviour
 {
+    [Header("Enemy Settings")]
     public EnemyType enemyType;
+
+    [Header("Health Stats")]
     public float maxHealth;
     public float currentHealth;
+
+    [Header("Attack Settings")]
     public float attackRange;
     public float basicAttackInterval;
     public float basicAttackTimer;
@@ -17,10 +22,12 @@ public class Enemy_base : MonoBehaviour
     public float skillTimer;
     public float exSkillInterval;
     public float exSkillTimer;
-    public float moveSpeed;
 
+    [Header("Movement Settings")]
+    public float moveSpeed;
     public float distance;
 
+    [Header("Enemy State Flags")]
     public bool isCreate;
     public bool isIdle;
     public bool isChase;
@@ -33,18 +40,16 @@ public class Enemy_base : MonoBehaviour
     public bool readySkill;
     public bool readyExSkill;
 
+    [Header("Component References")]
     public Rigidbody rigidbodyEnemy;
     public BoxCollider boxCollider;
     public MeshRenderer[] meshs;
     public NavMeshAgent navMeshAgent;
     public Animator animator;
-
-    //public GameObject enemyBullet;
     public Transform enemyBulletFirePoint;
 
     [HideInInspector] public EnemyState currentState;
-
-    protected SoonDoBu_Playable currentTarget;
+    protected PlayableBase currentTarget;
 
     protected virtual void Awake()
     {
@@ -228,19 +233,12 @@ public class Enemy_base : MonoBehaviour
             bullet.transform.position = enemyBulletFirePoint.position;
             bullet.transform.rotation = Quaternion.LookRotation(direction);
 
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
-            if (rb != null)
+            Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+            if (bulletRigidbody != null)
             {
-                rb.velocity = direction * bullet.speed;
+                bulletRigidbody.velocity = direction * bullet.speed;
             }
         }
-
-        //GameObject bullet = Instantiate(enemyBullet,
-        //    transform.position + Vector3.up * 3f,
-        //    Quaternion.LookRotation(direction));
-        //bullet.GetComponent<Rigidbody>().velocity = direction * 20;
-
-
     }
     protected virtual void Skill()
     {
@@ -250,9 +248,9 @@ public class Enemy_base : MonoBehaviour
     {
     }
 
-    public SoonDoBu_Playable GetNearestEnemyToPosition(Vector3 position)
+    public PlayableBase GetNearestEnemyToPosition(Vector3 position)
     {
-        SoonDoBu_Playable nearest = null;
+        PlayableBase nearest = null;
         float minDist = Mathf.Infinity;
 
         foreach (var playable in PlayableMnager.instance.playables)

@@ -2,22 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayableType
+{
+    Front,
+    Middle,
+    Back
+}
 public enum PlayableState
 {
     Create,
     Idle,
     Chasing,
     Attack,
-    Skill,
-    ExSkill,
     Dead
 }
-public enum PlayableType
+public enum PlayableAttackState
 {
-    forward,
-    middle,
-    back
+    BasicAttack,
+    SkillAttack,
+    ExSkillAttack,
+    Reload,
 }
+
 
 public enum PlayableHelath
 {

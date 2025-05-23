@@ -1,161 +1,325 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 
 public abstract class PlayableBase : MonoBehaviour
 {
-    [Header("Player Stats")]
+    [Header("Playable Settings")]
+    public PlayableType playableType;
+    [Header("Health Stats")]
     public float maxHealth;
     public float currentHealth;
+    [Header("Attack Settings")]
     public float attackRange;
-    public float attackInterval;
-    public float attackTimer;
-    public float attackCount;
+    public float basicAttackInterval;
+    public float basicAttackTimer;
+    public float basicAttackCount;
+    public float skillInterval;
+    public float skillTimer;
+    public float exSkillInterval;
+    public float exSkillTimer;
+    [Header("Movement Settings")]
     public float moveSpeed;
-
-    [Header("Skills and Cooldowns")]
-    public float basicSkillCooldown;
-    public float basicSkillTimer;
-    public bool readyBasicSkill;
-
-    [Header("State Flags")]
-    public PlayableState currentState;
+    public float distance;
+    [Header("Playable State Flags")]
+    public bool isCreate;
+    public bool isIdle;
     public bool isChase;
     public bool isAttack;
+    public bool isSkill;
+    public bool isExSkill;
     public bool isDead;
-
-    [Header("Game Objects")]
-    public GameObject bullet;
-    public GameObject missile;
-
-    [Header("Components")]
-    public Rigidbody rigidbody_Playable;
+    public bool checkInAttackRenge;
+    public bool readyBasicAttack;
+    public bool readySkill;
+    public bool readyExSkill;
+    [Header("Component References")]
+    public Rigidbody rigidbodyPlayable;
     public BoxCollider boxCollider;
     public MeshRenderer[] meshs;
     public NavMeshAgent navMeshAgent;
-    public Animator animator;
+    public Animator playableAnimator;
+    public Transform playableBulletFirePoint;
 
-    protected Enemy_base currentTarget;
+    [Header("Game Object References")]
+    public GameObject bullet;//이거 풀링으로바꿔야됨
+    public GameObject missile;//이것도
+    public Transform excapeSpotTransform;
 
-    // 추상 메서드
-    protected abstract void SetStats();
-    protected abstract void HandleState();
-    protected abstract IEnumerator Attack();
-    protected abstract IEnumerator BasicSkill();
+    [HideInInspector] public PlayableState currentState;
+    protected Enemybase currentTarget;
 
-    void Start()
+    protected virtual void Awake()
     {
-        //PlayableMnager.instance.RegisterPlayable(this); 
-        StartCoroutine(SkillCooldownRoutine());
-    }
+        rigidbodyPlayable = GetComponent<Rigidbody>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        playableAnimator = GetComponentInChildren<Animator>();
 
-    void Awake()
+        currentState = PlayableState.Create;
+        isCreate = true;
+        Initialize();
+        readyBasicAttack = true;
+        readySkill = false;
+        readyExSkill = false;
+    }
+    protected virtual void Start()
     {
-        SetStats();
-        InitializeComponents();
+        if (PlayableMnager.instance != null)
+            PlayableMnager.instance.RegisterPlayable(this);
     }
-
-    void Update()
+    protected virtual void Update()
     {
         if (isDead)
             return;
 
-        HandleState();
-    }
+        CoolTime();
 
-    void FixedUpdate()
-    {
-        FreezeVelocity();
-    }
+        UpdateTargetAndDistance();//여기서 현재 타겟(리타겟포함), 타겟과 거리 계속 업데이트됨
 
-    // -------------------- Movement --------------------
-    void FreezeVelocity()
-    {
-        if (isChase)
+        CheckingAttackRenge();
+
+        if (currentState == PlayableState.Chasing)
         {
-            rigidbody_Playable.velocity = Vector3.zero;
-            rigidbody_Playable.angularVelocity = Vector3.zero;
+            isIdle = false;
+            isChase = true;
+            isAttack = false;
+            MoveToTarget(currentTarget.transform.position);
+        }
+        if (currentState == PlayableState.Attack)
+        {
+            isIdle = false;
+            isChase = false;
+            isAttack = true;
+            AttackThnking();
         }
     }
-
-    // -------------------- Targeting & Attacking --------------------
-    public void Targeting()
+    protected virtual void FixedUpdate()
+    {
+        if (currentState == PlayableState.Chasing)
+        {
+            MoveToTarget(currentTarget.transform.position);
+        }
+        else if (currentState == PlayableState.Dead)
+        {
+            rigidbodyPlayable.velocity = Vector3.zero;
+        }
+    }
+    protected virtual void Initialize()
+    {
+        currentHealth = maxHealth;
+        isCreate = false;
+        currentState = PlayableState.Idle;
+        isIdle = true;
+        readyBasicAttack = false;
+    }
+    public virtual void SetData(PlayableData data)
+    {
+        playableType = data.playableType; 
+        maxHealth = data.maxHealth;
+        attackRange = data.attackRange;
+        basicAttackInterval = data.basicAttackInterval;
+        skillInterval = data.skillInterval;
+        exSkillInterval = data.exSkillInterval;
+        moveSpeed = data.moveSpeed;
+    }
+    protected virtual void UpdateTargetAndDistance()
     {
         if (isDead)
             return;
 
+        currentTarget = GetNearestEnemyToPosition(transform.position);
+
+        if (currentTarget == null)
+            return;
+
+        distance = Vector3.Distance(transform.position, currentTarget.transform.position);
+    }
+    protected virtual void CheckingAttackRenge()
+    {
+        currentState = (distance <= attackRange) ? PlayableState.Attack : PlayableState.Chasing;
+    }
+    void MoveToTarget(Vector3 targetPosition)
+    {
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.SetDestination(targetPosition);
+
+            //float distance = Vector3.Distance(transform.position, targetPosition);
+        }
+    }
+    protected virtual void CoolTime()
+    {
+        basicAttackTimer += Time.deltaTime;
+        if (basicAttackTimer >= basicAttackInterval)
+        {
+            readyBasicAttack = true;
+        }
+        skillTimer += Time.deltaTime;
+        if (skillTimer >= skillInterval)
+        {
+            readySkill = true;
+        }
+        exSkillTimer += Time.deltaTime;
+        if (exSkillTimer >= exSkillInterval)
+        {
+            readyExSkill = true;
+        }
+    }
+    protected virtual void AttackThnking()
+    {
+        if (readyBasicAttack)
+        {
+            BasicAttack();
+        }
+        if (readySkill)
+        {
+            Skill();
+        }
+        if (exSkillTimer >= exSkillInterval)
+        {
+            ExSkill();
+        }
+    }
+    protected virtual void BasicAttack()
+    {
+        if (!isAttack || currentTarget == null || currentTarget.isDead)
+        {
+            return;
+        }
+        isChase = false;
+        isAttack = true;
+        playableAnimator.SetBool("isAttack", true);
+        navMeshAgent.isStopped = true;
+        basicAttackCount++;
+
+        ShootBulletAtTarget();
+
+        isAttack = false;
+        basicAttackCount = 0f;
+        isChase = true;
+        playableAnimator.SetBool("isAttack", false);
+        currentState = PlayableState.Idle;
+
+        if (basicAttackCount > 5)
+        {
+            readySkill = true;
+            basicAttackCount = 0;
+        }
+        basicAttackTimer = 0;
+        readyBasicAttack = false;
+    }
+    protected void ShootBulletAtTarget()
+    {
         if (currentTarget == null || currentTarget.isDead)
-        {
-            currentTarget = GetNearestEnemyToPosition(transform.position);
-        }
+            return;
 
-        float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
+        Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
-        if (distance <= attackRange && !isAttack)
+        Bullet bullet = PoolManager.instance.GetBullet(PoolManager.PoolType.EnemyBullet);
+
+        if (bullet != null)
         {
-            StartCoroutine(Attack());
+            bullet.transform.position = playableBulletFirePoint.position;
+            bullet.transform.rotation = Quaternion.LookRotation(direction);
+
+            Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+            if (bulletRigidbody != null)
+            {
+                bulletRigidbody.velocity = direction * bullet.speed;
+            }
         }
     }
-
-    public Enemy_base GetNearestEnemyToPosition(Vector3 position)
+    protected virtual void Skill()
     {
-        Enemy_base nearestEnemy = null;
+    }
+
+    protected virtual void ExSkill()
+    {
+    }
+    public Enemybase GetNearestEnemyToPosition(Vector3 position)
+    {
+        Enemybase nearest = null;
         float minDist = Mathf.Infinity;
 
-        foreach (Enemy_base enemy in EnemyManager.instance.enemies)
+        foreach (var playable in EnemyManager.instance.enemies)
         {
-            if (enemy == null) continue;
-
-            float dist = Vector3.Distance(position, enemy.transform.position);
+            if (playable == null)
+                continue;
+            float dist = Vector3.Distance(position, playable.transform.position);
             if (dist < minDist)
             {
                 minDist = dist;
-                nearestEnemy = enemy;
+                nearest = playable;
             }
         }
-        return nearestEnemy;
+        return nearest;
     }
-
-    // -------------------- Skill & Cooldown --------------------
-    IEnumerator SkillCooldownRoutine()
+    //-------------데미지 고쳐야됨
+    protected virtual void TakeDamage(float damage)
     {
-        while (!isDead)
-        {
-            if (!readyBasicSkill)
-            {
-                yield return new WaitForSeconds(basicSkillCooldown);
-                readyBasicSkill = true;
-            }
-            else
-            {
-                yield return null;
-            }
-        }
-    }
-
-    // -------------------- Damage Handling --------------------
-    public void TakeDamage(int damage)
-    {
-        if (isDead) return;
-
         currentHealth -= damage;
-
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isDead)
         {
-            currentHealth = 0;
-            isDead = true;
-            animator.SetBool("isDead", true);
+            currentState = PlayableState.Dead;
+            Die();
         }
     }
-
-    private void InitializeComponents()
+    public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
     {
-        rigidbody_Playable = GetComponent<Rigidbody>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        boxCollider = GetComponent<BoxCollider>();
-        animator = GetComponentInChildren<Animator>();
-        meshs = GetComponentsInChildren<MeshRenderer>();
-        currentHealth = maxHealth;
+        currentHealth -= damage;
+        StartCoroutine(OnDamage(reactVec, isGrenade));
+    }
+   //------------------------------------
+    protected virtual void Die()
+    {
+        isDead = true;
+        playableAnimator.SetTrigger("doDie");
+        OnDestroy();
+    }
+    public void OnDestroy()
+    {
+        if (PlayableMnager.instance != null)
+            PlayableMnager.instance.UnregisterPlayable(this);
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyBullet"))
+        {
+            Bullet bullet = other.GetComponent<Bullet>();
+            Vector3 reactVec = transform.position - other.transform.position;
+            Destroy(other.gameObject);
+            ApplyDamage(10, reactVec, false);
+        }
+    }
+    IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
+    {
+        foreach (MeshRenderer mesh in meshs)
+            mesh.material.color = Color.red;
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (currentHealth > 0)
+        {
+            foreach (MeshRenderer mesh in meshs)
+                mesh.material.color = Color.white;
+        }
+        else
+        {
+            foreach (MeshRenderer mesh in meshs)
+                mesh.material.color = Color.gray;
+
+            isDead = true;
+            isChase = false;
+            playableAnimator.SetTrigger("doDie");
+
+            reactVec = reactVec.normalized + Vector3.up * (isGrenade ? 3f : 1f);
+            rigidbodyPlayable.freezeRotation = false;
+            rigidbodyPlayable.AddForce(reactVec * 5, ForceMode.Impulse);
+
+            Destroy(gameObject, 1.8f);
+        }
     }
 }
 
