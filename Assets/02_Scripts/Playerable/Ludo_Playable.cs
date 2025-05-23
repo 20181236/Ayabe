@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ludo_Playable : SoonDoBu_Playable
+public class Ludo_Playable : SoonDoBuPlayable
 {
     public GameObject grenadePrefab;
 

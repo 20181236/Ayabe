@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Luna_Playable : SoonDoBu_Playable
+public class Luna_Playable : SoonDoBuPlayable
 {
     protected override void SetStats()
     {
