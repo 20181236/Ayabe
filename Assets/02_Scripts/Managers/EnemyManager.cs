@@ -10,8 +10,6 @@ public class EnemyManager : MonoBehaviour
     public List<Enemybase> enemies = new List<Enemybase>();
     public Dictionary<EnemyType, List<Enemybase>> enemiesType = new Dictionary<EnemyType, List<Enemybase>>();
     public EnemyData[] enemyDatas; // 에디터에 드래그해서 연결할 수 있게
-
-
     private void Awake()
     {
         if (instance != null && instance != this)

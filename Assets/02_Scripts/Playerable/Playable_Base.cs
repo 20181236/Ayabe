@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
+using static PoolManager;
 
 public abstract class PlayableBase : MonoBehaviour
 {
@@ -43,8 +44,8 @@ public abstract class PlayableBase : MonoBehaviour
     public Transform playableBulletFirePoint;
 
     [Header("Game Object References")]
-    public GameObject bullet;//이거 풀링으로바꿔야됨
-    public GameObject missile;//이것도
+    public GameObject bullet;
+    public GameObject missile;
     public Transform excapeSpotTransform;
 
     [HideInInspector] public PlayableState currentState;
@@ -240,7 +241,7 @@ public abstract class PlayableBase : MonoBehaviour
     }
     public Enemybase GetNearestEnemyToPosition(Vector3 position)
     {
-        Enemybase nearest = null;
+        Enemybase nearestEnemy = null;
         float minDist = Mathf.Infinity;
 
         foreach (var playable in EnemyManager.instance.enemies)
@@ -251,10 +252,11 @@ public abstract class PlayableBase : MonoBehaviour
             if (dist < minDist)
             {
                 minDist = dist;
-                nearest = playable;
+                nearestEnemy = playable;
             }
         }
-        return nearest;
+        //Debug.Log(nearestEnemy);
+        return nearestEnemy;
     }
     //-------------데미지 고쳐야됨
     protected virtual void TakeDamage(float damage)
@@ -289,7 +291,7 @@ public abstract class PlayableBase : MonoBehaviour
         {
             Bullet bullet = other.GetComponent<Bullet>();
             Vector3 reactVec = transform.position - other.transform.position;
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
             ApplyDamage(10, reactVec, false);
         }
     }

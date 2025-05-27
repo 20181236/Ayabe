@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayableData", menuName = "PlayableData")]
 public class PlayableData : ScriptableObject
 {
+    public PlayableID playableID;
     public PlayableType playableType;
     public GameObject prefab;
     public float maxHealth;

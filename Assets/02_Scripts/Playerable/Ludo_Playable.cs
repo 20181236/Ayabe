@@ -6,27 +6,27 @@ public class Ludo_Playable : PlayableBase
 {
     public GameObject grenadePrefab;
 
-    protected override void Skill()
-    {
-        //yield return null;
+    //protected override void Skill()
+    //{
+    //    //yield return null;
 
-        //yield return new WaitForSeconds(0.5f);
+    //    //yield return new WaitForSeconds(0.5f);
 
-        //if (currentTarget == null)
-            //yield break;
-        Vector3 spawnPosition = transform.position + Vector3.up * 3f;
-        GameObject grenadeObject = Instantiate(
-            grenadePrefab,
-            transform.position + Vector3.up * 2f,
-            Quaternion.identity);
-        Rigidbody grenadeRigidbody = grenadeObject.GetComponent<Rigidbody>();
-        Vector3 toTarget = (currentTarget.transform.position - transform.position).normalized;//规氢林绊
-        Vector3 force = toTarget * 8f + Vector3.up * 7f;
-        grenadeRigidbody.AddForce(force, ForceMode.Impulse);
-        Granade grenadeScript = grenadeObject.GetComponent<Granade>();
-        if (grenadeScript != null)
-        {
-            grenadeScript.targetPosition = currentTarget.transform.position;
-        }
-    }
+    //    //if (currentTarget == null)
+    //        //yield break;
+    //    Vector3 spawnPosition = transform.position + Vector3.up * 3f;
+    //    GameObject grenadeObject = Instantiate(
+    //        grenadePrefab,
+    //        transform.position + Vector3.up * 2f,
+    //        Quaternion.identity);
+    //    Rigidbody grenadeRigidbody = grenadeObject.GetComponent<Rigidbody>();
+    //    Vector3 toTarget = (currentTarget.transform.position - transform.position).normalized;//规氢林绊
+    //    Vector3 force = toTarget * 8f + Vector3.up * 7f;
+    //    grenadeRigidbody.AddForce(force, ForceMode.Impulse);
+    //    Granade grenadeScript = grenadeObject.GetComponent<Granade>();
+    //    if (grenadeScript != null)
+    //    {
+    //        grenadeScript.targetPosition = currentTarget.transform.position;
+    //    }
+    //}
 }

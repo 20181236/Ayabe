@@ -989,7 +989,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playables: []
-  playableDatas: []
+  playableDatas:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &897050310
 Transform:
   m_ObjectHideFlags: 0
@@ -1292,13 +1295,13 @@ Transform:
   - {fileID: 815386342}
   - {fileID: 897050310}
   - {fileID: 808695710}
-  - {fileID: 1372128706}
-  - {fileID: 1228424275}
-  - {fileID: 1302812659}
-  - {fileID: 125666872}
   - {fileID: 430602182}
+  - {fileID: 1302812659}
+  - {fileID: 1228424275}
+  - {fileID: 125666872}
   - {fileID: 506349612}
   - {fileID: 720231431}
+  - {fileID: 1372128706}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1090993965
@@ -2554,6 +2557,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 908394965}
     m_Modifications:
+    - target: {fileID: 397983305347310345, guid: 18530a8ecaf9391489b39db933de18ad, type: 3}
+      propertyPath: maxHealth
+      value: 100000
+      objectReference: {fileID: 0}
+    - target: {fileID: 397983305347310345, guid: 18530a8ecaf9391489b39db933de18ad, type: 3}
+      propertyPath: attackRange
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 397983305347310345, guid: 18530a8ecaf9391489b39db933de18ad, type: 3}
       propertyPath: excapeSpotTransform
       value: 

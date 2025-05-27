@@ -120,9 +120,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playableType: 0
-  maxHealth: 0
+  maxHealth: 50
   currentHealth: 0
-  attackRange: 0
+  attackRange: 50
   basicAttackInterval: 0
   basicAttackTimer: 0
   basicAttackCount: 0

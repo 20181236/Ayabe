@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e786b62000bb0849a62cf9136962370, type: 3}
+  m_Name: Ludo
+  m_EditorClassIdentifier: 
+  playableID: 2
+  playableType: 2
+  prefab: {fileID: 3410974531977784702, guid: deccb67eff28d5d469831aa61a087137, type: 3}
+  maxHealth: 50
+  attackRange: 60
+  basicAttackInterval: 0
+  skillInterval: 0
+  exSkillInterval: 0
+  moveSpeed: 0

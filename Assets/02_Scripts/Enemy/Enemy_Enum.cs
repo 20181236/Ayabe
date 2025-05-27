@@ -1,3 +1,10 @@
+public enum EnemyID
+{
+    Thanker,
+    Midller,
+    Sinper
+}
+
 public enum EnemyType
 {
     Normal,

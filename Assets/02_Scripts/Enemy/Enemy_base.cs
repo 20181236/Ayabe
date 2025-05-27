@@ -51,6 +51,8 @@ public class Enemybase : MonoBehaviour
     [HideInInspector] public EnemyState currentState;
     protected PlayableBase currentTarget;
 
+    public int test = 0;
+
     protected virtual void Awake()
     {
         rigidbodyEnemy = GetComponent<Rigidbody>();
@@ -227,6 +229,8 @@ public class Enemybase : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
         Bullet bullet = PoolManager.instance.GetBullet(PoolManager.PoolType.EnemyBullet);
+        test++;
+        Debug.Log(test);
 
         if (bullet != null)
         {
@@ -296,7 +300,7 @@ public class Enemybase : MonoBehaviour
         {
             Bullet bullet = other.GetComponent<Bullet>();
             Vector3 reactVec = transform.position - other.transform.position;
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
             ApplyDamage(10, reactVec, false);
         }
     }

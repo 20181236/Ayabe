@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayableID
+{
+    SoonDoBu,
+    Luna,
+    Ludo
+}
+
 public enum PlayableType
 {
     Front,
     Middle,
     Back
 }
+
 public enum PlayableState
 {
     Create,
