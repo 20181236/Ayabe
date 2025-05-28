@@ -7,13 +7,10 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
+        if (instance == null)
+            instance = this;
+        else
             Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
     }
 
     public void SpawnWave(WaveData wave)
@@ -25,7 +22,21 @@ public class SpawnManager : MonoBehaviour
     {
         foreach (var info in wave.enemiesInWave)
         {
-            EnemyManager.instance.SpawnEnemy(info.enemyType, info.spawnPosition);
+            EnemyManager.instance.SpawnEnemy(info.enemyID, info.spawnPosition);
+            yield return new WaitForSeconds(info.delayAfter);
+        }
+    }
+
+    public void PlayableSpawn(PlayableSpawnData spawnData)
+    {
+        StartCoroutine(SpawnCoroutine(spawnData));
+    }
+
+    private IEnumerator SpawnCoroutine(PlayableSpawnData spawnData)
+    {
+        foreach (var info in spawnData.playableSpawn)
+        {
+            PlayableManager.instance.SpawnPlayable(info.playableID, info.spawnPosition);
             yield return new WaitForSeconds(info.delayAfter);
         }
     }

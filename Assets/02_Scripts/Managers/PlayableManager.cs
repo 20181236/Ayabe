@@ -4,10 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class PlayableMnager : MonoBehaviour
+public class PlayableManager : MonoBehaviour
 {
-    public static PlayableMnager instance { get; private set; }
+    public static PlayableManager instance { get; private set; }
     public List<PlayableBase> playables = new List<PlayableBase>();
+    public Dictionary<PlayableID, List<PlayableBase>> playablesID = new Dictionary<PlayableID, List<PlayableBase>>();
     public Dictionary<PlayableType, List<PlayableBase>> playablesType = new Dictionary<PlayableType, List<PlayableBase>>();
     public PlayableData[] playableDatas; // 에디터에 드래그해서 연결할 수 있게
 
@@ -20,14 +21,14 @@ public class PlayableMnager : MonoBehaviour
         }
         instance = this;
 
-        foreach (PlayableType type in (PlayableType[])System.Enum.GetValues(typeof(PlayableType)))
+        foreach (PlayableID id in (PlayableID[])System.Enum.GetValues(typeof(PlayableID)))
         {
-            playablesType[type] = new List<PlayableBase>();
+            playablesID[id] = new List<PlayableBase>();
         }
     }
-    public void SpawnPlayable(PlayableType type, Vector3 spawnPosition)
+    public void SpawnPlayable(PlayableID id, Vector3 spawnPosition)
     {
-        PlayableData data = System.Array.Find(playableDatas, d => d.playableType == type);
+        PlayableData data = System.Array.Find(playableDatas, d => d.playableID == id);
         if (data != null)
         {
             PlayableBase playable = PlayableFactory.CreatePlayable(data, spawnPosition);
@@ -38,7 +39,7 @@ public class PlayableMnager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("PlayableData not found for type: " + type);
+            Debug.LogError("PlayableData not found for type: " + id);
         }
     }
     public void RegisterPlayable(PlayableBase playable)
@@ -46,7 +47,7 @@ public class PlayableMnager : MonoBehaviour
         if (!playables.Contains(playable))
         {
             playables.Add(playable);
-            playablesType[playable.playableType].Add(playable);
+            playablesID[playable.playableID].Add(playable);
         }
     }
     public void UnregisterPlayable(PlayableBase playable)
@@ -54,7 +55,7 @@ public class PlayableMnager : MonoBehaviour
         if (playables.Contains(playable))
         {
             playables.Remove(playable);
-            playablesType[playable.playableType].Remove(playable);
+            playablesID[playable.playableID].Remove(playable);
         }
     }
     public List<PlayableBase> GetPlayables()
@@ -69,8 +70,8 @@ public class PlayableMnager : MonoBehaviour
     {
         return playables.Count > 0;
     }
-    public bool HasPlayableOfType(PlayableType type)
+    public bool HasPlayable(PlayableID id)
     {
-        return playablesType[type].Count > 0;
+        return playablesID[id].Count > 0;
     }
 }

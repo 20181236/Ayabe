@@ -13,12 +13,47 @@ MonoBehaviour:
   m_Name: 1StageWave1
   m_EditorClassIdentifier: 
   enemiesInWave:
-  - enemyType: 0
+  - enemyID: 0
+    enemyType: 0
     spawnPosition: {x: 0, y: 0, z: 5}
     delayAfter: 0
-  - enemyType: 0
+  - enemyID: 0
+    enemyType: 0
     spawnPosition: {x: 0, y: 0, z: 10}
     delayAfter: 0
-  - enemyType: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
+    spawnPosition: {x: 0, y: 0, z: 15}
+    delayAfter: 0
+  - enemyID: 0
+    enemyType: 0
     spawnPosition: {x: 0, y: 0, z: 15}
     delayAfter: 0

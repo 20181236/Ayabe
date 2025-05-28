@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a1aca25ed377a49b32db6090eeae4e, type: 3}
   m_Name: SinperData
   m_EditorClassIdentifier: 
+  enemyID: 2
   enemyType: 1
   prefab: {fileID: 8887462714870468420, guid: fe6ee48bcace29c459fef84067eeaa16, type: 3}
   maxHealth: 500

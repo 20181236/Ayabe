@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a1aca25ed377a49b32db6090eeae4e, type: 3}
   m_Name: BossData
   m_EditorClassIdentifier: 
+  enemyID: 3
   enemyType: 2
   prefab: {fileID: 3975601563747165166, guid: 4a0fac76372a56c40a85d1626654e09f, type: 3}
   maxHealth: 800

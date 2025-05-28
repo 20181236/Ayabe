@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
-using static PoolManager;
 
 public abstract class PlayableBase : MonoBehaviour
 {
     [Header("Playable Settings")]
+    public PlayableID playableID;
     public PlayableType playableType;
     [Header("Health Stats")]
     public float maxHealth;
@@ -66,8 +66,8 @@ public abstract class PlayableBase : MonoBehaviour
     }
     protected virtual void Start()
     {
-        if (PlayableMnager.instance != null)
-            PlayableMnager.instance.RegisterPlayable(this);
+        if (PlayableManager.instance != null)
+            PlayableManager.instance.RegisterPlayable(this);
     }
     protected virtual void Update()
     {
@@ -218,7 +218,7 @@ public abstract class PlayableBase : MonoBehaviour
         Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
-        Bullet bullet = PoolManager.instance.GetBullet(PoolManager.PoolType.EnemyBullet);
+        Bullet bullet = BulletPoolManager.instance.GetBullet(BulletPoolManager.PoolType.PlayableBullet);
 
         if (bullet != null)
         {
@@ -282,8 +282,8 @@ public abstract class PlayableBase : MonoBehaviour
     }
     public void OnDestroy()
     {
-        if (PlayableMnager.instance != null)
-            PlayableMnager.instance.UnregisterPlayable(this);
+        if (PlayableManager.instance != null)
+            PlayableManager.instance.UnregisterPlayable(this);
     }
     void OnTriggerEnter(Collider other)
     {

@@ -14,13 +14,10 @@ public class StageManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
+        if (instance == null)
+            instance = this;
+        else
             Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
     }
 
     private void Start()

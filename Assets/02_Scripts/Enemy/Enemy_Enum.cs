@@ -2,14 +2,16 @@ public enum EnemyID
 {
     Thanker,
     Midller,
-    Sinper
+    Sinper,
+    Stage1Boss,
 }
 
 public enum EnemyType
 {
     Normal,
     Elite,
-    Boss
+    Boss,
+
 }
 
 public enum EnemyState

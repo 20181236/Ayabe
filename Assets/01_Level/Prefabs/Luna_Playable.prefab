@@ -89,6 +89,37 @@ Transform:
   - {fileID: 2316663107872682834}
   m_Father: {fileID: 2310407508717527840}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1535347177327980361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3977316978837264195}
+  m_Layer: 0
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3977316978837264195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535347177327980361}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.9, y: 3.7, z: 2.5600052}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3497296476513939937}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1598581487214506311
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,6 +302,7 @@ Transform:
   m_Children:
   - {fileID: 583152865679487501}
   - {fileID: 4400371162854345245}
+  - {fileID: 3977316978837264195}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5572751623237064209
@@ -358,7 +390,7 @@ MonoBehaviour:
   playableType: 0
   maxHealth: 100
   currentHealth: 0
-  attackRange: 40
+  attackRange: 50
   basicAttackInterval: 0
   basicAttackTimer: 0
   basicAttackCount: 0
@@ -541,7 +573,7 @@ Transform:
   m_GameObject: {fileID: 5445383826113797660}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.9, y: 2.02, z: 8.57}
+  m_LocalPosition: {x: 0.19, y: 2.02, z: 2.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -17,7 +17,7 @@ public class Boss : Enemybase
     {
         if (!readySkill)
             return;
-        List<PlayableBase> targets = new List<PlayableBase>(PlayableMnager.instance.playables);
+        List<PlayableBase> targets = new List<PlayableBase>(PlayableManager.instance.playables);
         List<PlayableBase> validTargets = new List<PlayableBase>();
         foreach (PlayableBase target in targets)
         {

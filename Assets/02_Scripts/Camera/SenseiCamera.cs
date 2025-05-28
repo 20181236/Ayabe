@@ -11,12 +11,9 @@ public class SenseiCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target == null) return;
-
-        // 목표 위치 계산
+        if (target == null)
+            return;
         Vector3 targetPos = target.position + offset;
-
-        // z축이나 y축을 원하지 않게 바꾸는 걸 방지 (필요 시)
         targetPos.y = offset.y;  // 고정 y높이 유지
         transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * followSpeed);
 

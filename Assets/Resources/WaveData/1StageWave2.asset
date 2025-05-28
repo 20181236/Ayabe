@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: 1StageWave2
   m_EditorClassIdentifier: 
   enemiesInWave:
-  - enemyType: 0
+  - enemyID: 0
+    enemyType: 0
     spawnPosition: {x: 0, y: 0, z: 55}
     delayAfter: 0
-  - enemyType: 0
+  - enemyID: 0
+    enemyType: 0
     spawnPosition: {x: 3, y: 0, z: 55}
     delayAfter: 0
-  - enemyType: 0
+  - enemyID: 0
+    enemyType: 0
     spawnPosition: {x: -3, y: 0, z: 55}
     delayAfter: 0
-  - enemyType: 1
+  - enemyID: 1
+    enemyType: 1
     spawnPosition: {x: 0, y: 0, z: 70}
     delayAfter: 0

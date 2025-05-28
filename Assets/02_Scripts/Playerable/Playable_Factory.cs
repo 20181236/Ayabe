@@ -7,15 +7,11 @@ public static class PlayableFactory
     public static PlayableBase CreatePlayable(PlayableData data, Vector3 position)
     {
         if (data == null || data.prefab == null)
-        {
-            Debug.LogError("PlayableData or prefab is null");
             return null;
-        }
 
-        GameObject playableObj = GameObject.Instantiate(data.prefab, position, Quaternion.identity);
-        Debug.Log($"[PlayableFactory] Creating playable of type {data.playableType} at {position}");
+        GameObject playableObject = GameObject.Instantiate(data.prefab, position, Quaternion.identity);
 
-        PlayableBase playable = playableObj.GetComponent<PlayableBase>();
+        PlayableBase playable = playableObject.GetComponent<PlayableBase>();
 
         if (playable != null)
         {

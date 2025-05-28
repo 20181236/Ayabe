@@ -8,6 +8,7 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
     public List<Enemybase> enemies = new List<Enemybase>();
+    public Dictionary<EnemyID, List<Enemybase>> enemiesID = new Dictionary<EnemyID, List<Enemybase>>();
     public Dictionary<EnemyType, List<Enemybase>> enemiesType = new Dictionary<EnemyType, List<Enemybase>>();
     public EnemyData[] enemyDatas; // 에디터에 드래그해서 연결할 수 있게
     private void Awake()
@@ -18,14 +19,14 @@ public class EnemyManager : MonoBehaviour
             return;
         }
         instance = this;
-        foreach (EnemyType type in (EnemyType[])System.Enum.GetValues(typeof(EnemyType)))
+        foreach (EnemyID id in (EnemyID[])System.Enum.GetValues(typeof(EnemyID)))
         {
-            enemiesType[type] = new List<Enemybase>();
+            enemiesID[id] = new List<Enemybase>();
         }
     }
-    public void SpawnEnemy(EnemyType type, Vector3 spawnPosition)
+    public void SpawnEnemy(EnemyID id, Vector3 spawnPosition)
     {
-        EnemyData data = System.Array.Find(enemyDatas, d => d.enemyType == type);
+        EnemyData data = System.Array.Find(enemyDatas, d => d.enemyID == id);
         if (data != null)
         {
             Enemybase enemy = EnemyFactory.CreateEnemy(data, spawnPosition);
@@ -36,7 +37,7 @@ public class EnemyManager : MonoBehaviour
         }
         else
         {   
-            Debug.LogError("EnemyData not found for type: " + type);
+            Debug.LogError("EnemyData not found for type: " + id);
         }
     }
 
@@ -45,7 +46,7 @@ public class EnemyManager : MonoBehaviour
         if (!enemies.Contains(enemy))
         {
             enemies.Add(enemy);
-            enemiesType[enemy.enemyType].Add(enemy);
+            enemiesID[enemy.enemyID].Add(enemy);
         }
     }
 
@@ -54,7 +55,7 @@ public class EnemyManager : MonoBehaviour
         if (enemies.Contains(enemy))
         {
             enemies.Remove(enemy);
-            enemiesType[enemy.enemyType].Remove(enemy);
+            enemiesID[enemy.enemyID].Remove(enemy);
         }
     }
     public List<Enemybase> GetEnemies()

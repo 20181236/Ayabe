@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e786b62000bb0849a62cf9136962370, type: 3}
   m_Name: Luna
   m_EditorClassIdentifier: 
-  playableID: 0
+  playableID: 1
   playableType: 1
   prefab: {fileID: 2175214197470128850, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
   maxHealth: 100

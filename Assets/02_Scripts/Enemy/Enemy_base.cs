@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class Enemybase : MonoBehaviour
 {
     [Header("Enemy Settings")]
+    public EnemyID enemyID;
     public EnemyType enemyType;
 
     [Header("Health Stats")]
@@ -228,9 +229,7 @@ public class Enemybase : MonoBehaviour
         Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
-        Bullet bullet = PoolManager.instance.GetBullet(PoolManager.PoolType.EnemyBullet);
-        test++;
-        Debug.Log(test);
+        Bullet bullet = BulletPoolManager.instance.GetBullet(BulletPoolManager.PoolType.EnemyBullet);
 
         if (bullet != null)
         {
@@ -257,7 +256,7 @@ public class Enemybase : MonoBehaviour
         PlayableBase nearest = null;
         float minDist = Mathf.Infinity;
 
-        foreach (var playable in PlayableMnager.instance.playables)
+        foreach (var playable in PlayableManager.instance.playables)
         {
             if (playable == null)
                 continue;
