@@ -14,7 +14,7 @@ AnimatorStateMachine:
     m_Position: {x: 340, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5523971213305260461}
-    m_Position: {x: 340, y: 230, z: 0}
+    m_Position: {x: 340, y: 220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1691951162512517136}
     m_Position: {x: 50, y: -90, z: 0}
@@ -237,6 +237,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: isWalk
+    m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: isAttack
     m_EventTreshold: 0

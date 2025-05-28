@@ -228,7 +228,7 @@ public abstract class PlayableBase : MonoBehaviour
             Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
             if (bulletRigidbody != null)
             {
-                bulletRigidbody.velocity = direction * bullet.speed;
+                bulletRigidbody.velocity = direction * bullet.bulletSpeed;
             }
         }
     }
@@ -262,15 +262,16 @@ public abstract class PlayableBase : MonoBehaviour
     protected virtual void TakeDamage(float damage)
     {
         currentHealth -= damage;
+
+    }
+    public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
+    {
+        currentHealth -= damage;
         if (currentHealth <= 0 && !isDead)
         {
             currentState = PlayableState.Dead;
             Die();
         }
-    }
-    public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
-    {
-        currentHealth -= damage;
         StartCoroutine(OnDamage(reactVec, isGrenade));
     }
    //------------------------------------
@@ -291,8 +292,8 @@ public abstract class PlayableBase : MonoBehaviour
         {
             Bullet bullet = other.GetComponent<Bullet>();
             Vector3 reactVec = transform.position - other.transform.position;
-            //Destroy(other.gameObject);
-            ApplyDamage(10, reactVec, false);
+            BulletPoolManager.instance.ReturnBullet(bullet);
+            ApplyDamage(bullet.bulletDamage, reactVec, false);
         }
     }
     IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
