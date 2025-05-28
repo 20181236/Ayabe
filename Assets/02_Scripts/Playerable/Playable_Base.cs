@@ -278,13 +278,21 @@ public abstract class PlayableBase : MonoBehaviour
     protected virtual void Die()
     {
         isDead = true;
+        isChase = false;
         playableAnimator.SetTrigger("doDie");
+        Destroy(gameObject, 1.8f);
         OnDestroy();
     }
     public void OnDestroy()
     {
         if (PlayableManager.instance != null)
             PlayableManager.instance.UnregisterPlayable(this);
+        Transform cameraTarget = transform.Find("CameraTarget");
+        SenseiCamera camera = GameObject.FindObjectOfType<SenseiCamera>();
+        if (camera != null && cameraTarget != null)
+        {
+            camera.UnregisterCameraTarget(cameraTarget);
+        }
     }
     void OnTriggerEnter(Collider other)
     {
@@ -313,15 +321,9 @@ public abstract class PlayableBase : MonoBehaviour
             foreach (MeshRenderer mesh in meshs)
                 mesh.material.color = Color.gray;
 
-            isDead = true;
-            isChase = false;
-            playableAnimator.SetTrigger("doDie");
-
             reactVec = reactVec.normalized + Vector3.up * (isGrenade ? 3f : 1f);
             rigidbodyPlayable.freezeRotation = false;
             rigidbodyPlayable.AddForce(reactVec * 5, ForceMode.Impulse);
-
-            Destroy(gameObject, 1.8f);
         }
     }
 }

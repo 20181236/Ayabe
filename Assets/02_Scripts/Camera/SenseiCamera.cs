@@ -1,24 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class SenseiCamera : MonoBehaviour
 {
-    public Transform target;
-    public Vector3 offset = new Vector3(0, 15, -10);
-    public float followSpeed = 2f;  // 너무 빠르면 흔들림 유발
+    public float baseDistance = 50f;
+    public float distanceMultiplier = 0.5f;
+    public Vector3 cameraOffset = new Vector3(20, 5, -10);
+
+    private List<Transform> cameraTargets = new List<Transform>();
+
+    public void RegisterCameraTarget(Transform target)
+    {
+        cameraTargets.Add(target);
+    }
+
+    public void UnregisterCameraTarget(Transform target)
+    {
+        cameraTargets.Remove(target);
+    }
 
     void LateUpdate()
     {
-        if (target == null)
+        if (cameraTargets.Count == 0)
             return;
-        Vector3 targetPos = target.position + offset;
-        targetPos.y = offset.y;  // 고정 y높이 유지
-        transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * followSpeed);
 
-        // 고정된 각도 유지
-        transform.rotation = Quaternion.Euler(60f, -90f, 0f);
+        Transform frontTarget = cameraTargets.OrderByDescending(t => t.position.z).First();
+        Transform backTarget = cameraTargets.OrderBy(t => t.position.z).First();
+
+        float zDistance = Mathf.Abs(frontTarget.position.z - backTarget.position.z);
+        float dynamicDistance = baseDistance + zDistance * distanceMultiplier;
+
+        Vector3 targetPosition = frontTarget.position + cameraOffset.normalized * dynamicDistance;
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5f);
+        transform.LookAt(frontTarget);
     }
 }
     

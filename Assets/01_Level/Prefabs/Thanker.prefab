@@ -614,6 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4151a1fcb51254abf19a0008fcb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyID: 0
   enemyType: 0
   maxHealth: 100
   currentHealth: 0
@@ -643,9 +644,9 @@ MonoBehaviour:
   meshs: []
   navMeshAgent: {fileID: 6137310506369253759}
   animator: {fileID: 2632422830809904678}
-  enemyBullet: {fileID: 589644376409995535, guid: d02aa06411d86c64da70ea3eeb60e564, type: 3}
   enemyBulletFirePoint: {fileID: 3509512496219452002}
   currentState: 0
+  test: 0
 --- !u!1 &7453213600498232769
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,18 +10,25 @@ public static class PlayableFactory
             return null;
 
         GameObject playableObject = GameObject.Instantiate(data.prefab, position, Quaternion.identity);
-
         PlayableBase playable = playableObject.GetComponent<PlayableBase>();
 
         if (playable != null)
         {
-            playable.SetData(data); // 스탯 등 초기 설정
+            playable.SetData(data);
         }
         else
         {
             Debug.LogError("Prefab does not contain PlayableBase component");
         }
-
+        Transform cameraTarget = playableObject.transform.Find("CameraTarget");
+        if (cameraTarget != null)
+        {
+            SenseiCamera camera = GameObject.FindObjectOfType<SenseiCamera>();
+            if (camera != null)
+            {
+                camera.RegisterCameraTarget(cameraTarget);
+            }
+        }
         return playable;
     }
 }

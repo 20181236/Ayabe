@@ -20,5 +20,5 @@ MonoBehaviour:
     spawnPosition: {x: 5, y: 0, z: -65}
     delayAfter: 0
   - playableID: 2
-    spawnPosition: {x: 5, y: 0, z: -70}
+    spawnPosition: {x: 5, y: 0, z: -83.8}
     delayAfter: 0

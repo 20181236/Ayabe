@@ -978,7 +978,6 @@ Transform:
   - {fileID: 6448213157856765556}
   - {fileID: 4807638279038874048}
   - {fileID: 2322599252825256750}
-  - {fileID: 1636531957918191192}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6451167297155870258
@@ -1063,10 +1062,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5239887d2d49a804fac0ab23d2eb325e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playableID: 0
   playableType: 0
-  maxHealth: 100000
+  maxHealth: 0
   currentHealth: 0
-  attackRange: 40
+  attackRange: 0
   basicAttackInterval: 0
   basicAttackTimer: 0
   basicAttackCount: 0
@@ -1123,37 +1123,6 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8393298177302427086}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7647690893606325083
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1636531957918191192}
-  m_Layer: 0
-  m_Name: CameraTarget
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1636531957918191192
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7647690893606325083}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.7, z: -3.4399948}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

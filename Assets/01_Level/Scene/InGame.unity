@@ -1115,9 +1115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e047ac423e2214ab29f14419bdafa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  offset: {x: 30, y: 45, z: 30}
-  followSpeed: 5
+  baseDistance: 50
+  distanceMultiplier: 0.5
+  cameraOffset: {x: 15, y: 10, z: -30}
 --- !u!1 &981626816
 GameObject:
   m_ObjectHideFlags: 0
@@ -1721,37 +1721,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1075597506}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1266640473
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1266640474}
-  m_Layer: 0
-  m_Name: SenseiCamera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1266640474
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1266640473}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41.57916, y: 34.0283, z: -35.08877}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1302812658
 GameObject:
@@ -2790,4 +2759,3 @@ SceneRoots:
   - {fileID: 49250070}
   - {fileID: 1793903259}
   - {fileID: 1075597506}
-  - {fileID: 1266640474}

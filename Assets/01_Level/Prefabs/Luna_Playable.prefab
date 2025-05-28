@@ -387,10 +387,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48bfa9b7ef3f4248907e755ab34f257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playableID: 0
   playableType: 0
-  maxHealth: 100
+  maxHealth: 0
   currentHealth: 0
-  attackRange: 50
+  attackRange: 0
   basicAttackInterval: 0
   basicAttackTimer: 0
   basicAttackCount: 0
