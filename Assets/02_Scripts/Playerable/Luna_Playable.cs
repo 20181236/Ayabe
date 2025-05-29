@@ -4,25 +4,31 @@ using UnityEngine;
 
 public class Luna_Playable : PlayableBase
 {
-    //protected override void Skill()
-    //{
-    //    //yield return new WaitForSeconds(0.5f);  // µô·¹ÀÌ ¼öÁ¤
-    //    //if (currentTarget == null)
-    //       // yield break;
-    //    Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
-    //    transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z)); 
-    //    GameObject instantMissile = Instantiate(
-    //        missile,
-    //        transform.position + Vector3.up * 3f,
-    //        Quaternion.LookRotation(directionToTarget)
-    //    );
-    //    Missile missileScript = instantMissile.GetComponent<Missile>();
-    //    missileScript.target = currentTarget.transform;
-    //    Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
-    //    if (missileRigidbody != null)
-    //    {
-    //        missileRigidbody.velocity = directionToTarget * 20f;
-    //    }
-    //   // yield return new WaitForSeconds(0.2f);
-    //}
+    protected override void Skill()
+    {
+        if (currentTarget == null)
+            return;
+
+        isAttacking = true;
+        isSkill = true;
+        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
+        GameObject instantMissile = Instantiate(
+            missile,
+            transform.position + Vector3.up * 3f,
+            Quaternion.LookRotation(directionToTarget)
+        );
+        Missile missileScript = instantMissile.GetComponent<Missile>();
+        missileScript.target = currentTarget.transform;
+        Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
+        if (missileRigidbody != null)
+        {
+            missileRigidbody.velocity = directionToTarget * 20f;
+        }
+        skillTimer = 0;
+        readySkill = false;
+        isSkill = false;
+        isAttacking = false;
+        currentState = PlayableState.Idle;
+    }
 }

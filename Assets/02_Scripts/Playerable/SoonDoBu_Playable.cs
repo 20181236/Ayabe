@@ -41,5 +41,6 @@ public class SoonDoBuPlayable : PlayableBase
         readySkill = false;
         isSkill = false;
         isAttacking=false;
+        currentState = PlayableState.Idle;
     }
 }

@@ -18,6 +18,6 @@ MonoBehaviour:
   maxHealth: 1000
   attackRange: 80
   basicAttackInterval: 5
-  skillInterval: 0
-  exSkillInterval: 0
+  skillInterval: 3
+  exSkillInterval: 3
   moveSpeed: 0
