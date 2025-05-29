@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
+using Unity.VisualScripting;
 
 public abstract class PlayableBase : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public abstract class PlayableBase : MonoBehaviour
     public bool isIdle;
     public bool isChase;
     public bool isAttack;
+    public bool isAttacking;
+    public bool isBisicAttack;
     public bool isSkill;
     public bool isExSkill;
     public bool isDead;
@@ -92,6 +95,7 @@ public abstract class PlayableBase : MonoBehaviour
             isIdle = false;
             isChase = false;
             isAttack = true;
+            navMeshAgent.isStopped = true;
             AttackThnking();
         }
     }
@@ -118,6 +122,7 @@ public abstract class PlayableBase : MonoBehaviour
     {
         playableType = data.playableType; 
         maxHealth = data.maxHealth;
+        currentHealth = maxHealth;
         attackRange = data.attackRange;
         basicAttackInterval = data.basicAttackInterval;
         skillInterval = data.skillInterval;
@@ -169,17 +174,22 @@ public abstract class PlayableBase : MonoBehaviour
     }
     protected virtual void AttackThnking()
     {
+        if (isAttacking) // 이미 공격중이면 리턴
+            return;
         if (readyBasicAttack)
         {
             BasicAttack();
+            //return;
         }
         if (readySkill)
         {
             Skill();
+           // return;
         }
         if (exSkillTimer >= exSkillInterval)
         {
             ExSkill();
+            //return;
         }
     }
     protected virtual void BasicAttack()
@@ -188,27 +198,22 @@ public abstract class PlayableBase : MonoBehaviour
         {
             return;
         }
-        isChase = false;
-        isAttack = true;
+        
+        isAttacking= true; 
+        isBisicAttack = true;
         playableAnimator.SetBool("isAttack", true);
-        navMeshAgent.isStopped = true;
-        basicAttackCount++;
+
 
         ShootBulletAtTarget();
 
-        isAttack = false;
-        basicAttackCount = 0f;
-        isChase = true;
+        basicAttackTimer = 0;
+
+        isBisicAttack = false;
+        readyBasicAttack = false;
+        isAttacking = false;
+
         playableAnimator.SetBool("isAttack", false);
         currentState = PlayableState.Idle;
-
-        if (basicAttackCount > 5)
-        {
-            readySkill = true;
-            basicAttackCount = 0;
-        }
-        basicAttackTimer = 0;
-        readyBasicAttack = false;
     }
     protected void ShootBulletAtTarget()
     {
@@ -287,12 +292,6 @@ public abstract class PlayableBase : MonoBehaviour
     {
         if (PlayableManager.instance != null)
             PlayableManager.instance.UnregisterPlayable(this);
-        Transform cameraTarget = transform.Find("CameraTarget");
-        SenseiCamera camera = GameObject.FindObjectOfType<SenseiCamera>();
-        if (camera != null && cameraTarget != null)
-        {
-            camera.UnregisterCameraTarget(cameraTarget);
-        }
     }
     void OnTriggerEnter(Collider other)
     {

@@ -1070,7 +1070,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 34
+  field of view: 31
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1096,13 +1096,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.29592505, y: -0.6422059, z: 0.29592505, w: 0.6422059}
-  m_LocalPosition: {x: 44.8, y: 44.4, z: -130.4}
+  m_LocalRotation: {x: 0.17403473, y: -0.68535537, z: 0.17403477, w: 0.68535537}
+  m_LocalPosition: {x: 57, y: 25.2, z: -16.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 49.48, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 28.496, y: -90, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1112,12 +1112,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42e047ac423e2214ab29f14419bdafa6, type: 3}
+  m_Script: {fileID: 11500000, guid: e136d3dacaafd5b488bb375bfc2678b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDistance: 50
-  distanceMultiplier: 0.5
-  cameraOffset: {x: 15, y: 10, z: -30}
+  smoothSpeed: 5
+  offsetX: 50
+  offsetY: 20
+  offsetZ: 9.01
+  minFOV: 40
+  maxFOV: 60
+  fovPerZGap: 1.5
 --- !u!1 &981626816
 GameObject:
   m_ObjectHideFlags: 0

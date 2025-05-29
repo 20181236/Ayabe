@@ -20,15 +20,7 @@ public static class PlayableFactory
         {
             Debug.LogError("Prefab does not contain PlayableBase component");
         }
-        Transform cameraTarget = playableObject.transform.Find("CameraTarget");
-        if (cameraTarget != null)
-        {
-            SenseiCamera camera = GameObject.FindObjectOfType<SenseiCamera>();
-            if (camera != null)
-            {
-                camera.RegisterCameraTarget(cameraTarget);
-            }
-        }
+
         return playable;
     }
 }

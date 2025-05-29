@@ -15,12 +15,10 @@ public class PlayableManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
+        if (instance == null)
+            instance = this;
+        else
             Destroy(gameObject);
-            return;
-        }
-        instance = this;
 
         foreach (PlayableID id in (PlayableID[])System.Enum.GetValues(typeof(PlayableID)))
         {
