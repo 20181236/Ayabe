@@ -15,7 +15,7 @@ public class Ludo_Playable : PlayableBase
         Vector3 spawnPosition = transform.position + Vector3.up * 3f;
         GameObject grenadeObject = Instantiate(
             grenadePrefab,
-            transform.position + Vector3.up * 2f,
+            transform.position + Vector3.up * 8f + Vector3.forward * 3f,
             Quaternion.identity);
         Rigidbody grenadeRigidbody = grenadeObject.GetComponent<Rigidbody>();
         Vector3 toTarget = (currentTarget.transform.position - transform.position).normalized;//방향주고

@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class EnemyBullet : Bullet
 {
-
+    protected override void SetProjectileInfo()
+    {
+        base.SetProjectileInfo();
+        damage = 10;
+        isExplosion = false;
+    }
 }

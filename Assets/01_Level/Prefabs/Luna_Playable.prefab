@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 583152865679487501}
   - component: {fileID: 8708193625459291519}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,7 +65,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7715014771187684174}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Arm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3977316978837264195}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 2316663107872682834}
   - component: {fileID: 901997342817954484}
   - component: {fileID: 8126755507876051422}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: RightHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5801109336690298273}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Foot_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994247885839519561}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Arm_R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 3160820024153573427}
   - component: {fileID: 5482310726448674114}
   - component: {fileID: 7366966939161098626}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Luna_Playable
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -405,6 +405,8 @@ MonoBehaviour:
   isIdle: 0
   isChase: 0
   isAttack: 0
+  isAttacking: 0
+  isBisicAttack: 0
   isSkill: 0
   isExSkill: 0
   isDead: 0
@@ -431,7 +433,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2310407508717527840}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Shoulder_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +465,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6872313623300677436}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Foot_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -496,7 +498,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4930942611713714678}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Head_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +529,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4479743579079655810}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Arm_L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -558,7 +560,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4400371162854345245}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: PlayableFirePositoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +593,7 @@ GameObject:
   - component: {fileID: 3398955074282857246}
   - component: {fileID: 7907456248788132541}
   - component: {fileID: 5415282625476329876}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: LeftHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -674,7 +676,7 @@ GameObject:
   - component: {fileID: 7215443387517707688}
   - component: {fileID: 5158974498116217605}
   - component: {fileID: 4137171530181583605}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: RightFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -755,7 +757,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3459435830418279044}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Foot_R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -786,7 +788,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 351768479745556234}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Leg_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -818,7 +820,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8607444810140005759}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -853,7 +855,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6790592198741601236}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Foot_L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -884,7 +886,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4766791416375806545}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Leg_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -916,7 +918,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2570708809056605044}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Shoulder_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -948,7 +950,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5466355036713873269}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -981,7 +983,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1742141467269243896}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Arm_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1014,7 +1016,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7591380617429194215}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Bone_Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1048,7 +1050,7 @@ GameObject:
   - component: {fileID: 3122717745574997453}
   - component: {fileID: 6990640885708142909}
   - component: {fileID: 8531441122450342205}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1131,7 +1133,7 @@ GameObject:
   - component: {fileID: 8717813065643348657}
   - component: {fileID: 3813110196844318506}
   - component: {fileID: 4944301710432001949}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1214,7 +1216,7 @@ GameObject:
   - component: {fileID: 4810266594895840197}
   - component: {fileID: 6988864905335561011}
   - component: {fileID: 2148130886929489432}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: LeftFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

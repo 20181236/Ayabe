@@ -4,10 +4,19 @@ using UnityEditor.EditorTools;
 using UnityEngine;
 using static BulletPoolManager;
 
-public class Bullet : MonoBehaviour
+public class Bullet : ProjectileBase
 {
-    public float bulletDamage = 10;
-    public float bulletSpeed = 30;
+    protected override void SetProjectileInfo()
+    {
+        base.SetProjectileInfo();
+        damage = 10;
+        isExplosion = false;
+    }
+
+    //public void ReturnBullet(ProjectileBase projectile)
+    //{
+    //    BulletPoolManager.instance.ReturnBullet(this);
+    //}
 }
 
 

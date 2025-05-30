@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemybase : MonoBehaviour
+public class EnemyBase : CharacterBase
 {
+    public override ObjectType ObjectType => ObjectType.Enemy;
     [Header("Enemy Settings")]
     public EnemyID enemyID;
     public EnemyType enemyType;
-
     [Header("Health Stats")]
     public float maxHealth;
     public float currentHealth;
@@ -114,7 +114,7 @@ public class Enemybase : MonoBehaviour
     }
 
     protected virtual void Initialize()
-    { 
+    {
         currentHealth = maxHealth;
         isCreate = false;
         currentState = EnemyState.Idle;
@@ -188,7 +188,7 @@ public class Enemybase : MonoBehaviour
         {
             Skill();
         }
-        if (exSkillTimer >= exSkillInterval)   
+        if (exSkillTimer >= exSkillInterval)
         {
             ExSkill();
         }
@@ -239,7 +239,7 @@ public class Enemybase : MonoBehaviour
             Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
             if (bulletRigidbody != null)
             {
-                bulletRigidbody.velocity = direction * bullet.bulletSpeed;
+                bulletRigidbody.velocity = direction * bullet.speed;
             }
         }
     }
@@ -273,6 +273,7 @@ public class Enemybase : MonoBehaviour
     protected virtual void Die()
     {
         isDead = true;
+        isChase = false;
         animator.SetTrigger("doDie");
         OnDestroy();
     }
@@ -283,35 +284,35 @@ public class Enemybase : MonoBehaviour
             EnemyManager.instance.UnregisterEnemy(this);
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Bullet"))
+        void OnTriggerEnter(Collider other)
         {
-            Bullet bullet = other.GetComponent<Bullet>();
-            Vector3 reactVec = transform.position - other.transform.position;
-            BulletPoolManager.instance.ReturnBullet(bullet);
-            ApplyDamage(bullet.bulletDamage, reactVec, false);
+            if (other.TryGetComponent<ProjectileBase>(out var projectile))
+            {
+                projectile.OnHit(gameObject);
+
+                if (projectile is Bullet bullet)
+                {
+                    BulletPoolManager.instance.ReturnBullet(bullet);
+                }
+                else
+                {
+                    Destroy(projectile.gameObject);
+                }
+            }
         }
-    }
-
-    public void HitByGrenade(Vector3 explosionPos)
+    public Vector3 HitByExplosion(Vector3 explosionPos)
     {
-        Vector3 reactVec = transform.position - explosionPos;
-        ApplyDamage(100f, reactVec, true);
+        var reactVec = (transform.position - explosionPos).normalized;
+        return reactVec;
     }
 
-    public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
+    public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
         currentHealth -= damage;
-        if (currentHealth <= 0 && !isDead)
-        {
-            currentState = EnemyState.Dead;
-            Die();
-        }
-        StartCoroutine(OnDamage(reactVec, isGrenade));
+        StartCoroutine(OnDamage(isExplosion, explosionPos));
     }
 
-    IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
+    IEnumerator OnDamage(bool isExplosion, Vector3? explosionPos)
     {
         foreach (MeshRenderer mesh in meshs)
             mesh.material.color = Color.red;
@@ -322,23 +323,26 @@ public class Enemybase : MonoBehaviour
         {
             foreach (MeshRenderer mesh in meshs)
                 mesh.material.color = Color.white;
+
+            Vector3 finalVec;
+
+            if (isExplosion && explosionPos.HasValue)
+                finalVec = HitByExplosion(explosionPos.Value) + Vector3.up * 3f;
+            else
+                finalVec = Vector3.up * 1f;
+
+            rigidbodyEnemy.freezeRotation = false;
+            rigidbodyEnemy.AddForce(finalVec * 5f, ForceMode.Impulse);
+
+            if (isExplosion)
+                rigidbodyEnemy.AddTorque(finalVec * 15f, ForceMode.Impulse);
         }
         else
         {
+            currentState = EnemyState.Dead;
+            Die();
             foreach (MeshRenderer mesh in meshs)
                 mesh.material.color = Color.gray;
-
-            isDead = true;
-            isChase = false;
-            animator.SetTrigger("doDie");
-
-            reactVec = reactVec.normalized + Vector3.up * (isGrenade ? 3f : 1f);
-            rigidbodyEnemy.freezeRotation = false;
-            rigidbodyEnemy.AddForce(reactVec * 5, ForceMode.Impulse);
-
-            if (isGrenade)
-                rigidbodyEnemy.AddTorque(reactVec * 15, ForceMode.Impulse);
-
             Destroy(gameObject, 1.8f);
         }
     }

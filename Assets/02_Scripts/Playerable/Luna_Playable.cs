@@ -15,8 +15,8 @@ public class Luna_Playable : PlayableBase
         transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
         GameObject instantMissile = Instantiate(
             missile,
-            transform.position + Vector3.up * 3f,
-            Quaternion.LookRotation(directionToTarget)
+            transform.position + Vector3.up * 8f + Vector3.forward * 3f,
+        Quaternion.LookRotation(directionToTarget)
         );
         Missile missileScript = instantMissile.GetComponent<Missile>();
         missileScript.target = currentTarget.transform;

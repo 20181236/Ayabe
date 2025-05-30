@@ -4893,10 +4893,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 102da2d9ddd08014a92a30fe49fb1c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponType: 1
+  objectType: 0
   damage: 100
+  speed: 30
+  rotateSpeed: 50
+  isExplosion: 0
   target: {fileID: 0}
-  speed: 10
-  rotateSpeed: 10
 --- !u!195 &1968098326581663104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4904,7 +4907,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7664551313295523910}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 1
   m_Speed: 50

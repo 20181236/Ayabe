@@ -7,9 +7,9 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set; }
-    public List<Enemybase> enemies = new List<Enemybase>();
-    public Dictionary<EnemyID, List<Enemybase>> enemiesID = new Dictionary<EnemyID, List<Enemybase>>();
-    public Dictionary<EnemyType, List<Enemybase>> enemiesType = new Dictionary<EnemyType, List<Enemybase>>();
+    public List<EnemyBase> enemies = new List<EnemyBase>();
+    public Dictionary<EnemyID, List<EnemyBase>> enemiesID = new Dictionary<EnemyID, List<EnemyBase>>();
+    public Dictionary<EnemyType, List<EnemyBase>> enemiesType = new Dictionary<EnemyType, List<EnemyBase>>();
     public EnemyData[] enemyDatas; // 에디터에 드래그해서 연결할 수 있게
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class EnemyManager : MonoBehaviour
         instance = this;
         foreach (EnemyID id in (EnemyID[])System.Enum.GetValues(typeof(EnemyID)))
         {
-            enemiesID[id] = new List<Enemybase>();
+            enemiesID[id] = new List<EnemyBase>();
         }
     }
     public void SpawnEnemy(EnemyID id, Vector3 spawnPosition)
@@ -29,7 +29,7 @@ public class EnemyManager : MonoBehaviour
         EnemyData data = System.Array.Find(enemyDatas, d => d.enemyID == id);
         if (data != null)
         {
-            Enemybase enemy = EnemyFactory.CreateEnemy(data, spawnPosition);
+            EnemyBase enemy = EnemyFactory.CreateEnemy(data, spawnPosition);
             if (enemy != null)
             {
                 RegisterEnemy(enemy);
@@ -41,7 +41,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void RegisterEnemy(Enemybase enemy)
+    public void RegisterEnemy(EnemyBase enemy)
     {
         if (!enemies.Contains(enemy))
         {
@@ -50,7 +50,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void UnregisterEnemy(Enemybase enemy)
+    public void UnregisterEnemy(EnemyBase enemy)
     {
         if (enemies.Contains(enemy))
         {
@@ -58,11 +58,11 @@ public class EnemyManager : MonoBehaviour
             enemiesID[enemy.enemyID].Remove(enemy);
         }
     }
-    public List<Enemybase> GetEnemies()
+    public List<EnemyBase> GetEnemies()
     {
         return enemies;
     }
-    public List<Enemybase> GetEnemiesType(EnemyType type)
+    public List<EnemyBase> GetEnemiesType(EnemyType type)
     {
         return enemiesType[type];
     }

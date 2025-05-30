@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Boss : Enemybase
+public class Boss : EnemyBase
 {
     public int maxTargetCount = 3;
     public bool readyExSkillActive = false;

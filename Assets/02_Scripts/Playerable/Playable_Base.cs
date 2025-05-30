@@ -4,8 +4,9 @@ using System.Collections;
 using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using Unity.VisualScripting;
 
-public abstract class PlayableBase : MonoBehaviour
+public abstract class PlayableBase : CharacterBase
 {
+    public override ObjectType ObjectType => ObjectType.Playable;
     [Header("Playable Settings")]
     public PlayableID playableID;
     public PlayableType playableType;
@@ -52,7 +53,7 @@ public abstract class PlayableBase : MonoBehaviour
     public Transform excapeSpotTransform;
 
     [HideInInspector] public PlayableState currentState;
-    protected Enemybase currentTarget;
+    protected EnemyBase currentTarget;
 
     protected virtual void Awake()
     {
@@ -88,6 +89,7 @@ public abstract class PlayableBase : MonoBehaviour
             isIdle = false;
             isChase = true;
             isAttack = false;
+            navMeshAgent.isStopped = false;
             MoveToTarget(currentTarget.transform.position);
         }
         if (currentState == PlayableState.Attack)
@@ -233,7 +235,7 @@ public abstract class PlayableBase : MonoBehaviour
             Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
             if (bulletRigidbody != null)
             {
-                bulletRigidbody.velocity = direction * bullet.bulletSpeed;
+                bulletRigidbody.velocity = direction * bullet.speed;
             }
         }
     }
@@ -244,9 +246,9 @@ public abstract class PlayableBase : MonoBehaviour
     protected virtual void ExSkill()
     {
     }
-    public Enemybase GetNearestEnemyToPosition(Vector3 position)
+    public EnemyBase GetNearestEnemyToPosition(Vector3 position)
     {
-        Enemybase nearestEnemy = null;
+        EnemyBase nearestEnemy = null;
         float minDist = Mathf.Infinity;
 
         foreach (var playable in EnemyManager.instance.enemies)
@@ -263,13 +265,7 @@ public abstract class PlayableBase : MonoBehaviour
         //Debug.Log(nearestEnemy);
         return nearestEnemy;
     }
-    //-------------데미지 고쳐야됨
-    protected virtual void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-
-    }
-    public void ApplyDamage(float damage, Vector3 reactVec, bool isGrenade)
+    public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
         currentHealth -= damage;
         if (currentHealth <= 0 && !isDead)
@@ -277,9 +273,8 @@ public abstract class PlayableBase : MonoBehaviour
             currentState = PlayableState.Dead;
             Die();
         }
-        StartCoroutine(OnDamage(reactVec, isGrenade));
+        StartCoroutine(OnDamage(isExplosion));
     }
-   //------------------------------------
     protected virtual void Die()
     {
         isDead = true;
@@ -295,15 +290,24 @@ public abstract class PlayableBase : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyBullet"))
+        if (other.TryGetComponent<ProjectileBase>(out var projectile))
         {
-            Bullet bullet = other.GetComponent<Bullet>();
-            Vector3 reactVec = transform.position - other.transform.position;
-            BulletPoolManager.instance.ReturnBullet(bullet);
-            ApplyDamage(bullet.bulletDamage, reactVec, false);
+            projectile.OnHit(gameObject);
+            var character = gameObject.GetComponent<CharacterBase>();
+            if (character != null)
+            {
+                if (projectile is Bullet bullet)
+                {
+                    BulletPoolManager.instance.ReturnBullet(bullet);
+                }
+                else
+                {
+                    Destroy(projectile.gameObject);
+                }
+            }
         }
     }
-    IEnumerator OnDamage(Vector3 reactVec, bool isGrenade)
+    IEnumerator OnDamage(bool isExplosion)
     {
         foreach (MeshRenderer mesh in meshs)
             mesh.material.color = Color.red;
@@ -319,10 +323,6 @@ public abstract class PlayableBase : MonoBehaviour
         {
             foreach (MeshRenderer mesh in meshs)
                 mesh.material.color = Color.gray;
-
-            reactVec = reactVec.normalized + Vector3.up * (isGrenade ? 3f : 1f);
-            rigidbodyPlayable.freezeRotation = false;
-            rigidbodyPlayable.AddForce(reactVec * 5, ForceMode.Impulse);
         }
     }
 }

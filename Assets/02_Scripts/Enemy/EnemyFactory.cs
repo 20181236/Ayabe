@@ -4,13 +4,13 @@ using UnityEngine;
 
 public static class EnemyFactory
 {
-    public static Enemybase CreateEnemy(EnemyData data, Vector3 position)
+    public static EnemyBase CreateEnemy(EnemyData data, Vector3 position)
     {
         if (data == null || data.prefab == null)
             return null;
 
-        GameObject enemyObj = GameObject.Instantiate(data.prefab, position, Quaternion.identity);
-        Enemybase enemy = enemyObj.GetComponent<Enemybase>();
+        GameObject enemyObject = GameObject.Instantiate(data.prefab, position, Quaternion.identity);
+        EnemyBase enemy = enemyObject.GetComponent<EnemyBase>();
 
         if (enemy != null)
         {

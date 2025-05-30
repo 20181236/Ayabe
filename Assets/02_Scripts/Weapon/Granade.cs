@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Granade : MonoBehaviour
-{
-    //코드 백업
+using System.Collections;
+using UnityEngine;
 
+public class Granade : ProjectileBase
+{
     public float explosionDelay = 0.3f;
     public float explosionRadius = 5f;
-    public float explosionDamage = 100f;
     public float throwingSpeed = 30f;
 
     private bool hasExploded = false;
@@ -16,25 +16,31 @@ public class Granade : MonoBehaviour
     public GameObject explosionEffect;
     public Vector3 targetPosition;
 
+    protected override void SetProjectileInfo()
+    {
+        base.SetProjectileInfo();
+        damage = 100;
+        speed = 50f;
+        rotateSpeed = 10f;
+        isExplosion = true;
+    }
+
     void Start()
     {
         StartCoroutine(MoveToTarget());
     }
 
-    // 목표 위치로 이동
     IEnumerator MoveToTarget()
     {
-        Vector3 startPoint = transform.position;//현위치
-        Vector3 endPoint = targetPosition;//가야할위치
+        Vector3 startPoint = transform.position;  // 현재 위치
+        Vector3 endPoint = targetPosition;        // 목표 위치
 
-        // 궤적을 만들기위해서 중간의 최대 높이점을 주는것
+        // 포물선 궤적을 위한 중간점
         Vector3 centerPoint = (startPoint + endPoint) / 2 + Vector3.up * 20f;
 
-        //이동진행률?
         float progress = 0f;
-        float duration = explosionDelay;    
+        float duration = explosionDelay;
 
-        //목표에 도착할때 까지
         while (progress < 1f)
         {
             progress += Time.deltaTime / duration;
@@ -54,7 +60,7 @@ public class Granade : MonoBehaviour
     IEnumerator Esplosion()
     {
         if (hasExploded)
-            yield return null;
+            yield break;
 
         hasExploded = true;
 
@@ -63,16 +69,21 @@ public class Granade : MonoBehaviour
             explosionEffect.SetActive(true);
         }
 
+        // 폭발 위치를 현재 위치로 설정
+        Vector3 explosionPosition = transform.position;
+
+        // 범위 내 적에게 데미지 적용
         foreach (var enemy in EnemyManager.instance.enemies)
         {
             if (enemy == null)
                 continue;
 
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            float distance = Vector3.Distance(explosionPosition, enemy.transform.position);
 
             if (distance <= explosionRadius)
             {
-                enemy.HitByGrenade(transform.position);
+                // 폭발 위치 넘겨서 데미지 적용
+                enemy.ApplyDamage(damage, isExplosion, explosionPosition);
             }
         }
         StartCoroutine(DisableAfterDelay());
@@ -81,9 +92,11 @@ public class Granade : MonoBehaviour
     IEnumerator DisableAfterDelay()
     {
         yield return new WaitForSeconds(0.5f);
-        explosionEffect.SetActive(false);
+
+        if (explosionEffect != null)
+            explosionEffect.SetActive(false);
+
         gameObject.SetActive(false);
     }
-
-
 }
+

@@ -15,9 +15,9 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - Bullet
-  - EnemyBullet
   - Playable
+  - PlayerProjectile
+  - EnemyProjectile
   - 
   - 
   - 
