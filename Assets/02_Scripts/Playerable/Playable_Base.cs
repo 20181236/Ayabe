@@ -204,16 +204,11 @@ public abstract class PlayableBase : CharacterBase
         isAttacking= true; 
         isBisicAttack = true;
         playableAnimator.SetBool("isAttack", true);
-
-
         ShootBulletAtTarget();
-
         basicAttackTimer = 0;
-
         isBisicAttack = false;
         readyBasicAttack = false;
         isAttacking = false;
-
         playableAnimator.SetBool("isAttack", false);
         currentState = PlayableState.Idle;
     }
@@ -292,20 +287,41 @@ public abstract class PlayableBase : CharacterBase
     {
         if (other.TryGetComponent<ProjectileBase>(out var projectile))
         {
-            projectile.OnHit(gameObject);
-            var character = gameObject.GetComponent<CharacterBase>();
-            if (character != null)
+            // 자기 자신 무시
+            if (projectile.ShooterType == ObjectType)
+                return;
+
+            // CharacterBase 컴포넌트가 있는지 먼저 확인
+            if (gameObject.TryGetComponent<CharacterBase>(out var character))
             {
+                if (projectile.ShooterType == character.ObjectType)
+                {
+                    return;
+                }
+                projectile.OnHit(gameObject);
+
                 if (projectile is Bullet bullet)
-                {
                     BulletPoolManager.instance.ReturnBullet(bullet);
-                }
                 else
-                {
                     Destroy(projectile.gameObject);
-                }
             }
         }
+        //if (other.TryGetComponent<ProjectileBase>(out var projectile))
+        //{
+        //    projectile.OnHit(gameObject);
+        //    var character = gameObject.GetComponent<CharacterBase>();
+        //    if (character != null)
+        //    {
+        //        if (projectile is Bullet bullet)
+        //        {
+        //            BulletPoolManager.instance.ReturnBullet(bullet);
+        //        }
+        //        else
+        //        {
+        //            Destroy(projectile.gameObject);
+        //        }
+        //    }
+        //}
     }
     IEnumerator OnDamage(bool isExplosion)
     {

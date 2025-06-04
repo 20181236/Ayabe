@@ -214,3 +214,6 @@ MonoBehaviour:
   speed: 50
   rotateSpeed: 0
   isExplosion: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0

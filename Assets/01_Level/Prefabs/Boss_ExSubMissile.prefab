@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4628692316112555813}
   - component: {fileID: 8420296512182560200}
   - component: {fileID: 1395031334100996594}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4325731308491533191}
   - component: {fileID: 8669226674430565794}
   - component: {fileID: 1982542503007415493}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boss_ExSubMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

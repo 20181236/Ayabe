@@ -16,8 +16,9 @@ public class Missile : ProjectileBase
         isExplosion = false;
     }
 
-    void Awake()
+    protected override void Awake()
     {
+        SetTargetMask();
         rigidbodyMissile = GetComponent<Rigidbody>();
     }
 

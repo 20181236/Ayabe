@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3509512496219452002}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: BulletFirePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8561887412784923599}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2589905580577655557}
   - component: {fileID: 2632422830809904678}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Thanker Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4621430061057023354}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 662600007370811781}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 7922366458156501931}
   - component: {fileID: 1592349028162367041}
   - component: {fileID: 4927492495352438516}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LeftFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5461997846692301151}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Body_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 4731038730674843766}
   - component: {fileID: 5912987715507177713}
   - component: {fileID: 2872866663332361686}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: RightFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2165757817858927961}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 5988964919773490105}
   - component: {fileID: 2237185737309222434}
   - component: {fileID: 8033092579955730069}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -508,7 +508,7 @@ GameObject:
   - component: {fileID: 2898995844016275095}
   - component: {fileID: 6137310506369253759}
   - component: {fileID: 8271544076621233547}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Thanker
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -557,7 +557,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!65 &2898995844016275095
 BoxCollider:
@@ -632,6 +632,8 @@ MonoBehaviour:
   isIdle: 0
   isChase: 0
   isAttack: 0
+  isAttacking: 0
+  isBisicAttack: 0
   isSkill: 0
   isExSkill: 0
   isDead: 0
@@ -656,7 +658,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6865612071813437375}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -687,7 +689,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4761260472796860901}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -720,7 +722,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6671307026944822391}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

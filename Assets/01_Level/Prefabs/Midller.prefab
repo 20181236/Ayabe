@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5834583945665397588}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 1107547708868648571}
   - component: {fileID: 2087960016330499836}
   - component: {fileID: 7577503664058162139}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: RightFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 376649216302245714}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Body_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 2156056197265556916}
   - component: {fileID: 5907279043995506735}
   - component: {fileID: 2417743944646559896}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -238,7 +238,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1274878926279555506}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1325171031212155514}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 929341592949407720}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 2451850200465814943}
   - component: {fileID: 3506899790702820262}
   - component: {fileID: 7524648621636893778}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Midller
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -462,6 +462,8 @@ MonoBehaviour:
   isIdle: 0
   isChase: 0
   isAttack: 0
+  isAttacking: 0
+  isBisicAttack: 0
   isSkill: 0
   isExSkill: 0
   isDead: 0
@@ -486,7 +488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4046243815935962562}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7856524097129735432}
   - component: {fileID: 6460493037093374342}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Middler Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -576,7 +578,7 @@ GameObject:
   - component: {fileID: 2524034754663654822}
   - component: {fileID: 6408590848180256844}
   - component: {fileID: 763133897095934201}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LeftFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,7 +659,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5171484080253355912}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,7 +690,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1068571690697061239}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone_Foot_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}

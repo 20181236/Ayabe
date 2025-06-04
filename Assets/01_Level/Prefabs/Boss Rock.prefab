@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8098453231185426416}
   - component: {fileID: -8655203526029487666}
   - component: {fileID: -6343131074840719840}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Boss Rock
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -118,10 +118,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 102da2d9ddd08014a92a30fe49fb1c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponType: 0
+  ShooterType: 0
   damage: 50
-  target: {fileID: 0}
   speed: 10
   rotateSpeed: 10
+  isExplosion: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  target: {fileID: 0}
 --- !u!1 &7502201913181014271
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +139,7 @@ GameObject:
   - component: {fileID: 7733545841380483653}
   - component: {fileID: 8670990144477026973}
   - component: {fileID: 522481663615327273}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}

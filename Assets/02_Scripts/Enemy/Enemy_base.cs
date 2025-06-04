@@ -27,12 +27,13 @@ public class EnemyBase : CharacterBase
     [Header("Movement Settings")]
     public float moveSpeed;
     public float distance;
-
     [Header("Enemy State Flags")]
     public bool isCreate;
     public bool isIdle;
     public bool isChase;
     public bool isAttack;
+    public bool isAttacking;
+    public bool isBisicAttack;
     public bool isSkill;
     public bool isExSkill;
     public bool isDead;
@@ -40,7 +41,6 @@ public class EnemyBase : CharacterBase
     public bool readyBasicAttack;
     public bool readySkill;
     public bool readyExSkill;
-
     [Header("Component References")]
     public Rigidbody rigidbodyEnemy;
     public BoxCollider boxCollider;
@@ -90,6 +90,7 @@ public class EnemyBase : CharacterBase
             isIdle = false;
             isChase = true;
             isAttack = false;
+            navMeshAgent.isStopped = false;
             MoveToTarget(currentTarget.transform.position);
         }
         if (currentState == EnemyState.Attack)
@@ -97,6 +98,7 @@ public class EnemyBase : CharacterBase
             isIdle = false;
             isChase = false;
             isAttack = true;
+            navMeshAgent.isStopped = true;
             AttackThnking();
         }
     }
@@ -199,17 +201,14 @@ public class EnemyBase : CharacterBase
         {
             return;
         }
-        isChase = false;
-        isAttack = true;
+        isAttacking = true;
+        isBisicAttack = true;
         animator.SetBool("isAttack", true);
-        navMeshAgent.isStopped = true;
-        basicAttackCount++;
-
         ShootBulletAtTarget();
-
-        isAttack = false;
-        basicAttackCount = 0f;
-        isChase = true;
+        basicAttackTimer = 0;
+        isBisicAttack = false;
+        readyBasicAttack = false;
+        isAttacking = false;
         animator.SetBool("isAttack", false);
         currentState = EnemyState.Idle;
 

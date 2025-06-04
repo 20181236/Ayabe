@@ -39,7 +39,7 @@ public class Boss : EnemyBase
 
             GameObject instantMissile = Instantiate(
                 skMissile,
-                transform.position + Vector3.up * 1.0f + lookDirection * 1.5f, // 캐릭터보다 앞에서 발사
+                transform.position + Vector3.up * 8f + Vector3.forward * 3f, // 캐릭터보다 앞에서 발사
                 Quaternion.LookRotation(lookDirection)
             );
             Missile missileScript = instantMissile.GetComponent<Missile>();

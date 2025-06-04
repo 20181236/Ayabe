@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1967274081176302188}
   - component: {fileID: 642335852456332011}
   - component: {fileID: 9023901867609503692}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RightFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4242316175203849319}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4966202312698900291}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1754671674570256117}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 8079022619089254073}
   - component: {fileID: 9050822265530659915}
   - component: {fileID: 5884635094595122964}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BodyUpper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +272,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1798707419531957247}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Foot_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +305,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 463890103345385069}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -338,7 +338,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 406065310068069797}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Foot_R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,7 +369,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3185382833724752341}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 3517079104803747058}
   - component: {fileID: 7074447465063407191}
   - component: {fileID: 8680232837598489263}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BodyDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3849982614213251812}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Head_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6041342232180009887}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Foot_L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +548,7 @@ GameObject:
   - component: {fileID: 3969018877677324721}
   - component: {fileID: 5547316483474582619}
   - component: {fileID: 2199119613324106990}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LeftFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,7 +629,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1929706497893736288}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bone_Foot_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -663,7 +663,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8724632003758491935}
   - component: {fileID: 7438950974451946118}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sinper Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,7 +722,7 @@ GameObject:
   - component: {fileID: 8498937609090614858}
   - component: {fileID: 7144123591880922553}
   - component: {fileID: 6506847363598603686}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sinper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -770,7 +770,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!65 &8498937609090614858
 BoxCollider:
@@ -845,6 +845,8 @@ MonoBehaviour:
   isIdle: 0
   isChase: 0
   isAttack: 0
+  isAttacking: 0
+  isBisicAttack: 0
   isSkill: 0
   isExSkill: 0
   isDead: 0

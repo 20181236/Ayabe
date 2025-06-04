@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5416152053779975014}
   - component: {fileID: 5223790611275717094}
   - component: {fileID: 3911927356728933764}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: EnemyBullet
   m_TagString: EnemyBullet
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
@@ -214,3 +214,6 @@ MonoBehaviour:
   speed: 50
   rotateSpeed: 0
   isExplosion: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0

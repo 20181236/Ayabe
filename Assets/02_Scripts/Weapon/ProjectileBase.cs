@@ -11,8 +11,24 @@ public class ProjectileBase : MonoBehaviour
     public float rotateSpeed;
     public bool isExplosion;
 
+    public LayerMask targetMask;
+
+    protected virtual void Awake()
+    {
+        SetTargetMask();
+    }
     protected virtual void SetProjectileInfo()
     {
+    }
+
+    protected virtual void SetTargetMask()
+    {
+        if (ShooterType == ObjectType.Playable)
+            targetMask = 1 << (int)GameLayerMask.Enemy;
+        else if (ShooterType == ObjectType.Enemy)
+            targetMask = 1 << (int)GameLayerMask.Playable;
+        else
+            targetMask = (1 << (int)GameLayerMask.Enemy) | (1 << (int)GameLayerMask.Playable);
     }
 
     public virtual void OnHit(GameObject target)
@@ -22,10 +38,12 @@ public class ProjectileBase : MonoBehaviour
         //    return;
         if (!target.TryGetComponent<CharacterBase>(out var character))
             return;
-        // 같은 타입이면 무시
         if (character.ObjectType == ShooterType)
+        {
+            Debug.Log($"[TeamKill Prevented] Shooter ({ShooterType}) tried to hit same team target ({character.ObjectType}): {target.name}");
             return;
-
-        character.ApplyDamage(damage, isExplosion);
+        }
+        else
+            character.ApplyDamage(damage, isExplosion);
     }
 }

@@ -299,6 +299,9 @@ MonoBehaviour:
   speed: 0
   rotateSpeed: 0
   isExplosion: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
   explosionDelay: 2
   explosionRadius: 5
   throwingSpeed: 10

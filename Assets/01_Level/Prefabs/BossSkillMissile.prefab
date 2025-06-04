@@ -4893,10 +4893,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 102da2d9ddd08014a92a30fe49fb1c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponType: 0
+  ShooterType: 0
   damage: 100
-  target: {fileID: 0}
   speed: 10
   rotateSpeed: 10
+  isExplosion: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  target: {fileID: 0}
 --- !u!195 &1968098326581663104
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 929252728156616782}
   - component: {fileID: 7528226016945003039}
   - component: {fileID: 2832409207347298925}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4542813769464305370}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boss_ExMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

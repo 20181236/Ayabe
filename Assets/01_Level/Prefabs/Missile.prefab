@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8820136573018784646}
   - component: {fileID: -3110451601748089329}
   - component: {fileID: 1968098326581663104}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Missile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -4894,11 +4894,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 1
-  objectType: 0
+  ShooterType: 0
   damage: 100
   speed: 30
   rotateSpeed: 50
   isExplosion: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
   target: {fileID: 0}
 --- !u!195 &1968098326581663104
 NavMeshAgent:
@@ -4933,7 +4936,7 @@ GameObject:
   - component: {fileID: 6663452067543519398}
   - component: {fileID: 3071934195981842912}
   - component: {fileID: 757220173683252586}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
