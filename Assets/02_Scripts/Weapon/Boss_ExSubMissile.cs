@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossExSubMissile : MonoBehaviour
+public class Boss_ExSubMissile : MonoBehaviour
 {
     public GameObject redCirclePrefab;
     public GameObject explosionEffect;

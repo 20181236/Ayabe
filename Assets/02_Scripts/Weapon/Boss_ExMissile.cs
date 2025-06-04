@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossExMissile : MonoBehaviour
+public class Boss_ExMissile : MonoBehaviour
 {
     public Animator animator;
     public GameObject subMissilePrefab;
@@ -33,7 +33,7 @@ public class BossExMissile : MonoBehaviour
             Vector2 offset = Random.insideUnitCircle * 2f;
             Vector3 subTarget = new Vector3(targetPosition.x + offset.x, 1f, targetPosition.z + offset.y);
             GameObject sub = Instantiate(subMissilePrefab, transform.position, Quaternion.identity);
-            sub.GetComponent<BossExSubMissile>().Init(subTarget);
+            sub.GetComponent<Boss_ExSubMissile>().Init(subTarget);
         }
         // 미사일 객체 제거
         Destroy(gameObject);

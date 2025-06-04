@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &146240567244370099
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6753817054908682069}
+  m_Layer: 7
+  m_Name: BulletFirePosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6753817054908682069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146240567244370099}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 2}
+  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8223468271567014412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &896660440444086233
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,12 +735,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8009809945130812139}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 298721279570059315}
+  - {fileID: 6753817054908682069}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!54 &6060269354617471229
@@ -826,14 +858,13 @@ MonoBehaviour:
   meshs: []
   navMeshAgent: {fileID: 3101949999252343987}
   animator: {fileID: 1552273398443527664}
-  enemyBulletFirePoint: {fileID: 0}
+  enemyBulletFirePoint: {fileID: 6753817054908682069}
   currentState: 0
   test: 0
   maxTargetCount: 3
-  readyExSkillActive: 0
-  skMissile: {fileID: 7664551313295523910, guid: 259f52ed5c3075442b9f459196759ae8, type: 3}
-  exMissile: {fileID: 4583922287561585601, guid: eaabaddc6bd5be64691daede3c51f8f8, type: 3}
-  exSubMissile: {fileID: 8671380757377285527, guid: 2b5c540330c9c144dae983e82f97a784, type: 3}
+  skillMissile: {fileID: 7664551313295523910, guid: 259f52ed5c3075442b9f459196759ae8, type: 3}
+  exSkillMissile: {fileID: 4583922287561585601, guid: eaabaddc6bd5be64691daede3c51f8f8, type: 3}
+  exSKillSubMissile: {fileID: 8671380757377285527, guid: 2b5c540330c9c144dae983e82f97a784, type: 3}
 --- !u!1 &9104577798344888469
 GameObject:
   m_ObjectHideFlags: 0

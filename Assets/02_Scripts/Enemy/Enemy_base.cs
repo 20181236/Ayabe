@@ -60,12 +60,8 @@ public class EnemyBase : CharacterBase
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
 
-        currentState = EnemyState.Create;
-        isCreate = true;
         Initialize();
-        readyBasicAttack = true;
-        readySkill = false;
-        readyExSkill = false;
+
     }
 
     protected virtual void Start()
@@ -118,16 +114,23 @@ public class EnemyBase : CharacterBase
     protected virtual void Initialize()
     {
         currentHealth = maxHealth;
+        currentState = EnemyState.Create;
+        isCreate = true;
+
+        readyBasicAttack = false;
+        readySkill = false;
+        readyExSkill = false;
         isCreate = false;
+
         currentState = EnemyState.Idle;
         isIdle = true;
-        readyBasicAttack = false;
     }
 
     public virtual void SetData(EnemyData data)
     {
         enemyType = data.enemyType;
         maxHealth = data.maxHealth;
+        currentHealth=data.maxHealth;
         attackRange = data.attackRange;
         basicAttackInterval = data.basicAttackInterval;
         skillInterval = data.skillInterval;
@@ -205,6 +208,7 @@ public class EnemyBase : CharacterBase
         isBisicAttack = true;
         animator.SetBool("isAttack", true);
         ShootBulletAtTarget();
+        basicAttackCount++;
         basicAttackTimer = 0;
         isBisicAttack = false;
         readyBasicAttack = false;
@@ -283,22 +287,30 @@ public class EnemyBase : CharacterBase
             EnemyManager.instance.UnregisterEnemy(this);
     }
 
-        void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<ProjectileBase>(out var projectile))
         {
-            if (other.TryGetComponent<ProjectileBase>(out var projectile))
+            // 자기 자신 무시
+            if (projectile.ShooterType == ObjectType)
+                return;
+
+            // CharacterBase 컴포넌트가 있는지 먼저 확인
+            if (gameObject.TryGetComponent<CharacterBase>(out var character))
             {
+                if (projectile.ShooterType == character.ObjectType)
+                {
+                    return;
+                }
                 projectile.OnHit(gameObject);
 
                 if (projectile is Bullet bullet)
-                {
                     BulletPoolManager.instance.ReturnBullet(bullet);
-                }
                 else
-                {
                     Destroy(projectile.gameObject);
-                }
             }
         }
+    }
     public Vector3 HitByExplosion(Vector3 explosionPos)
     {
         var reactVec = (transform.position - explosionPos).normalized;

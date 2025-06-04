@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyID: 3
   enemyType: 2
-  prefab: {fileID: 3975601563747165166, guid: 4a0fac76372a56c40a85d1626654e09f, type: 3}
-  maxHealth: 800
-  attackRange: 90
+  prefab: {fileID: 8009809945130812139, guid: 58a5e55818cbf7f498786fecb53b82be, type: 3}
+  maxHealth: 3000
+  attackRange: 60
   basicAttackInterval: 5
   skillInterval: 5
   exSkillInterval: 10

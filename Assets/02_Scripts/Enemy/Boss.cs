@@ -6,52 +6,41 @@ using UnityEngine.AI;
 
 public class Boss : EnemyBase
 {
-    public int maxTargetCount = 3;
-    public bool readyExSkillActive = false;
-
-    public GameObject skMissile;
-    public GameObject exMissile;
-    public GameObject exSubMissile;
+    public float missileSpawnRadius = 2f;    // 미사일 생성 위치 반경
+    public float missileSpawnDelay = 0.1f;   // 미사일 생성 간 딜레이
+    private bool isUsingSkill = false;
+    public GameObject skillMissile;
+    public GameObject exSkillMissile;
+    public GameObject exSKillSubMissile;
 
     protected override void Skill()
     {
-        if (!readySkill)
+        if (!readySkill|| isUsingSkill)
             return;
-        List<PlayableBase> targets = new List<PlayableBase>(PlayableManager.instance.playables);
-        List<PlayableBase> validTargets = new List<PlayableBase>();
-        foreach (PlayableBase target in targets)
-        {
-            if (target != null && !target.isDead)
-            {
-                validTargets.Add(target);
-            }
-        }
-        validTargets.Sort((a, b) =>
-            Vector3.Distance(transform.position, a.transform.position)
-            .CompareTo(Vector3.Distance(transform.position, b.transform.position))
-        );
-        for (int i = 0; i < Mathf.Min(maxTargetCount, validTargets.Count); i++)
-        {
-            PlayableBase target = validTargets[i];
-            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
-            Vector3 lookDirection = new Vector3(directionToTarget.x, 0, directionToTarget.z);
-            transform.rotation = Quaternion.LookRotation(lookDirection);
+        isUsingSkill = true;      // 즉시 플래그 켜기
+        readySkill = false;       // 스킬 사용 시작과 동시에 준비 플래그 끄기
+        StartCoroutine(MissilesPattern());
+    }
+    private IEnumerator MissilesPattern()
+    {
+        List<PlayableBase> playables = PlayableManager.instance.GetPlayables();
+        int count = playables.Count;
 
-            GameObject instantMissile = Instantiate(
-                skMissile,
-                transform.position + Vector3.up * 8f + Vector3.forward * 3f, // 캐릭터보다 앞에서 발사
-                Quaternion.LookRotation(lookDirection)
-            );
-            Missile missileScript = instantMissile.GetComponent<Missile>();
-            missileScript.target = target.transform;
-            Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
-            if (missileRigidbody != null)
-            {
-                missileRigidbody.velocity = lookDirection * 50f;  // 미사일 초기 속도
-            }
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 spawnPos = GetMissileSpawnPosition(i, count);
+            Instantiate(skillMissile, spawnPos, Quaternion.identity);
+            yield return new WaitForSeconds(missileSpawnDelay);
         }
-        skillTimer = 0;
-        readySkill = false;
+        isUsingSkill = false;  // 스킬 사용 끝
+    }
+    private Vector3 GetMissileSpawnPosition(int index, int total)
+    {
+        float angle = (360f / total) * index;
+        float rad = angle * Mathf.Deg2Rad;
+
+        Vector3 offset = new Vector3(Mathf.Cos(rad), 0, Mathf.Sin(rad)) * missileSpawnRadius;
+        return transform.position + offset;
     }
     protected override void ExSkill()
     {

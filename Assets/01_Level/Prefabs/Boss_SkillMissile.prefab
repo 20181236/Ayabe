@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 137064061356332937}
   - component: {fileID: 2070505237602864430}
   - component: {fileID: 8820136573018784646}
-  - component: {fileID: -3110451601748089329}
   - component: {fileID: 1968098326581663104}
+  - component: {fileID: -950754761816260025}
   m_Layer: 8
-  m_Name: BossSkillMissile
+  m_Name: Boss_SkillMissile
   m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4881,28 +4881,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.83, y: 1.65, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-3110451601748089329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7664551313295523910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 102da2d9ddd08014a92a30fe49fb1c1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponType: 0
-  ShooterType: 0
-  damage: 100
-  speed: 10
-  rotateSpeed: 10
-  isExplosion: 0
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 0
-  target: {fileID: 0}
 --- !u!195 &1968098326581663104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4925,6 +4903,20 @@ NavMeshAgent:
   m_BaseOffset: 0.8
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-950754761816260025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664551313295523910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a65fb2ff8ff8041b9b57129acdc193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 50
+  lifeTime: 5
 --- !u!1 &8017052875248242499
 GameObject:
   m_ObjectHideFlags: 0

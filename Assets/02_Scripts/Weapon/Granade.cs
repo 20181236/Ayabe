@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using System.Collections;
-using UnityEngine;
-
 public class Granade : ProjectileBase
 {
     public float explosionDelay = 0.3f;
