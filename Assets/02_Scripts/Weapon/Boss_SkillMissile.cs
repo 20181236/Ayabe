@@ -3,31 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BossSkillMissile : MonoBehaviour
+public class BossSkillMissile : ProjectileBase
 {
-    public float speed = 10f;
-    public float lifeTime = 5f;
-
-    private void Start()
+    private Rigidbody rigidbodyMissile;
+    protected override void SetProjectileInfo()
     {
-
+        base.SetProjectileInfo();
+        WeaponType weaponType = WeaponType.Mssile;
+        damage = 25f;
+        speed = 50f;
+        rotateSpeed = 720f;
+        isExplosion = false;
     }
 
-    private void Update()
+    protected override void Awake()
     {
-        // 매 프레임 앞으로 이동
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        SetTargetMask();
+        rigidbodyMissile = GetComponent<Rigidbody>();
     }
 
-    // 필요하면 충돌 처리 함수 추가 가능
-    private void OnTriggerEnter(Collider other)
+    private void FixedUpdate()
     {
-    }
-
-    // 폭발 효과 함수 예시
-    private void Explode()
-    {
-
-        Destroy(gameObject);
+        if (target == null)
+            return;
+        if (target != null)
+        {
+            Vector3 direction = (target.position - transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.fixedDeltaTime);
+            rigidbodyMissile.MoveRotation(newRotation);
+            rigidbodyMissile.velocity = direction * speed;
+        }
+        else
+        {
+            rigidbodyMissile.velocity = transform.forward * speed;
+        }
     }
 }

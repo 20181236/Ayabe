@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class ProjectileBase : MonoBehaviour
 {
-    public WeaponType weaponType = WeaponType.Bullet;
+    public WeaponType weaponType;
     public ObjectType ShooterType;
-    public int damage;
+    public float damage;
     public float speed;
     public float rotateSpeed;
     public bool isExplosion;
+
+    public Transform target;
 
     public LayerMask targetMask;
 
     protected virtual void Awake()
     {
+        SetProjectileInfo();
         SetTargetMask();
     }
     protected virtual void SetProjectileInfo()

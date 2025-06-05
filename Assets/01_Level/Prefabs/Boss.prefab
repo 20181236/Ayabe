@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6753817054908682069}
   m_Layer: 7
-  m_Name: BulletFirePosition
+  m_Name: BulletMissilePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,38 @@ Transform:
   m_GameObject: {fileID: 146240567244370099}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 2}
+  m_LocalPosition: {x: 0, y: 12.91, z: 4.16}
+  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8223468271567014412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &373328723316199626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4952853079407574578}
+  m_Layer: 7
+  m_Name: BulletExMissilePosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4952853079407574578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373328723316199626}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.4, z: -7.68}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -563,7 +594,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2383275141800895827}
@@ -735,15 +766,17 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8009809945130812139}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 298721279570059315}
+  - {fileID: 4297665436268764774}
   - {fileID: 6753817054908682069}
+  - {fileID: 4952853079407574578}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6060269354617471229
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -790,7 +823,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 4, z: 4}
+  m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!195 &3101949999252343987
 NavMeshAgent:
@@ -847,7 +880,9 @@ MonoBehaviour:
   isAttacking: 0
   isBisicAttack: 0
   isSkill: 0
+  isUsingSkill: 0
   isExSkill: 0
+  isUsingExSkill: 0
   isDead: 0
   checkInAttackRenge: 0
   readyBasicAttack: 0
@@ -858,13 +893,15 @@ MonoBehaviour:
   meshs: []
   navMeshAgent: {fileID: 3101949999252343987}
   animator: {fileID: 1552273398443527664}
-  enemyBulletFirePoint: {fileID: 6753817054908682069}
+  enemyBulletFirePoint: {fileID: 4297665436268764774}
   currentState: 0
   test: 0
-  maxTargetCount: 3
+  skillDuration: 2
+  missileSpawnDelay: 0.1
   skillMissile: {fileID: 7664551313295523910, guid: 259f52ed5c3075442b9f459196759ae8, type: 3}
   exSkillMissile: {fileID: 4583922287561585601, guid: eaabaddc6bd5be64691daede3c51f8f8, type: 3}
-  exSKillSubMissile: {fileID: 8671380757377285527, guid: 2b5c540330c9c144dae983e82f97a784, type: 3}
+  enemyMissileFirePoint: {fileID: 6753817054908682069}
+  enemyExMissileFirePoint: {fileID: 4952853079407574578}
 --- !u!1 &9104577798344888469
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,4 +934,35 @@ Transform:
   - {fileID: 4227357372178306534}
   - {fileID: 8811054648682671071}
   m_Father: {fileID: 7118304852616942812}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9134786876098658826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4297665436268764774}
+  m_Layer: 7
+  m_Name: BulletBulletPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4297665436268764774
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9134786876098658826}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 6.17}
+  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8223468271567014412}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

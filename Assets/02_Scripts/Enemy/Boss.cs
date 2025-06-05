@@ -1,79 +1,65 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Boss : EnemyBase
 {
-    public float missileSpawnRadius = 2f;    // 미사일 생성 위치 반경
-    public float missileSpawnDelay = 0.1f;   // 미사일 생성 간 딜레이
-    private bool isUsingSkill = false;
+    public float skillDuration = 2f; // 미사일 생성 지속 시간
+    public float missileSpawnDelay = 1f;   // 미사일 생성 간 딜레이
+    float skillDurationTimer = 0f;
     public GameObject skillMissile;
     public GameObject exSkillMissile;
-    public GameObject exSKillSubMissile;
+    public Transform enemyMissileFirePoint;
+    public Transform enemyExMissileFirePoint;
 
     protected override void Skill()
     {
         if (!readySkill|| isUsingSkill)
             return;
-        isUsingSkill = true;      // 즉시 플래그 켜기
-        readySkill = false;       // 스킬 사용 시작과 동시에 준비 플래그 끄기
+        isUsingSkill = true;
+        readySkill = false;
+        skillDurationTimer = 0f;
         StartCoroutine(MissilesPattern());
     }
     private IEnumerator MissilesPattern()
     {
+
         List<PlayableBase> playables = PlayableManager.instance.GetPlayables();
         int count = playables.Count;
 
-        for (int i = 0; i < count; i++)
+        while (skillDurationTimer < skillDuration)
         {
-            Vector3 spawnPos = GetMissileSpawnPosition(i, count);
-            Instantiate(skillMissile, spawnPos, Quaternion.identity);
-            yield return new WaitForSeconds(missileSpawnDelay);
-        }
-        isUsingSkill = false;  // 스킬 사용 끝
-    }
-    private Vector3 GetMissileSpawnPosition(int index, int total)
-    {
-        float angle = (360f / total) * index;
-        float rad = angle * Mathf.Deg2Rad;
+            foreach (var target in playables)
+            {
+                if (target == null) continue;
 
-        Vector3 offset = new Vector3(Mathf.Cos(rad), 0, Mathf.Sin(rad)) * missileSpawnRadius;
-        return transform.position + offset;
+                Vector3 direction = (target.transform.position - enemyMissileFirePoint.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                GameObject instantMissile = Instantiate(skillMissile, enemyMissileFirePoint.position, targetRotation);
+                BossSkillMissile missileScript = instantMissile.GetComponent<BossSkillMissile>();
+                missileScript.target = target.transform;
+            }
+
+            yield return new WaitForSeconds(missileSpawnDelay);
+            skillDurationTimer += missileSpawnDelay;
+        }
+        isUsingSkill = false;
+        skillTimer = 0f;
+        readySkill = false;     
     }
     protected override void ExSkill()
     {
-        //    if (!readyExSkill)
-        //        return;
-        //    var targets = PlayableMnager.instance.playables.FindAll(t => t != null && !t.isDead);
-        //    if (targets.Count == 0)
-        //    {
-        //        return;
-        //    }
-        //    var selectedTarget = targets[UnityEngine.Random.Range(0, targets.Count)];
-        //    if (selectedTarget == null)
-        //    {
-        //        return;
-        //    }
-        //    Vector3 direction = (selectedTarget.transform.position - transform.position).normalized;
-        //    Vector3 spawnPos = transform.position + Vector3.up * 10f + direction * 5f;
-        //    if (exMissile == null)
-        //    {
-        //        return;
-        //    }
-        //    GameObject missileObj = Instantiate(
-        //        exMissile, 
-        //        spawnPos, 
-        //        Quaternion.LookRotation(direction));
-        //    exSkillTimer = 0;
-        //    readyExSkill = false;
-        //    var exMissileScript = missileObj.GetComponent<BossExMissile>();
-        //    if (exMissileScript == null)
-        //    {
-        //        return;
-        //    }
-        //    exMissileScript.Init(selectedTarget.transform.position);
-
+        if (!readySkill || isUsingExSkill)
+            return;
+        isUsingExSkill = true;
+        GameObject exMissileObject = Instantiate(exSkillMissile, enemyExMissileFirePoint.position, Quaternion.identity);
+        exSkillTimer = 0f;
+        skillDurationTimer = 0f;
+        isUsingExSkill = false;
+        readyExSkill = false;
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class Missile : ProjectileBase
 {
-    public Transform target;
     private Rigidbody rigidbodyMissile;
     protected override void SetProjectileInfo()
     {

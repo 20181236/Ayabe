@@ -33,7 +33,9 @@ public abstract class PlayableBase : CharacterBase
     public bool isAttacking;
     public bool isBisicAttack;
     public bool isSkill;
+    public bool isUsingSkill;
     public bool isExSkill;
+    public bool isUsingExSkill;
     public bool isDead;
     public bool checkInAttackRenge;
     public bool readyBasicAttack;
@@ -119,6 +121,7 @@ public abstract class PlayableBase : CharacterBase
         currentState = PlayableState.Idle;
         isIdle = true;
         readyBasicAttack = false;
+        isUsingSkill = false;
     }
     public virtual void SetData(PlayableData data)
     {
@@ -178,17 +181,17 @@ public abstract class PlayableBase : CharacterBase
     {
         if (isAttacking) // 이미 공격중이면 리턴
             return;
-        if (readyBasicAttack)
+        if (readyBasicAttack && !isUsingSkill && !isUsingExSkill)
         {
             BasicAttack();
             //return;
         }
-        if (readySkill)
+        if (readySkill && !isUsingSkill && !isUsingExSkill)
         {
             Skill();
            // return;
         }
-        if (exSkillTimer >= exSkillInterval)
+        if (exSkillTimer >= exSkillInterval && !isUsingSkill && ! isUsingExSkill)
         {
             ExSkill();
             //return;

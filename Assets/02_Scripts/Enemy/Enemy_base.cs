@@ -35,7 +35,9 @@ public class EnemyBase : CharacterBase
     public bool isAttacking;
     public bool isBisicAttack;
     public bool isSkill;
+    public bool isUsingSkill;
     public bool isExSkill;
+    public bool isUsingExSkill;
     public bool isDead;
     public bool checkInAttackRenge;
     public bool readyBasicAttack;
@@ -121,7 +123,7 @@ public class EnemyBase : CharacterBase
         readySkill = false;
         readyExSkill = false;
         isCreate = false;
-
+        isUsingSkill = false;
         currentState = EnemyState.Idle;
         isIdle = true;
     }
@@ -130,7 +132,7 @@ public class EnemyBase : CharacterBase
     {
         enemyType = data.enemyType;
         maxHealth = data.maxHealth;
-        currentHealth=data.maxHealth;
+        currentHealth = data.maxHealth;
         attackRange = data.attackRange;
         basicAttackInterval = data.basicAttackInterval;
         skillInterval = data.skillInterval;
@@ -185,15 +187,15 @@ public class EnemyBase : CharacterBase
     }
     protected virtual void AttackThnking()
     {
-        if (readyBasicAttack)
+        if (readyBasicAttack && !isUsingSkill)
         {
             BasicAttack();
         }
-        if (readySkill)
+        else if (readySkill && !isUsingSkill)
         {
             Skill();
         }
-        if (exSkillTimer >= exSkillInterval)
+        else if (exSkillTimer >= exSkillInterval)
         {
             ExSkill();
         }
@@ -208,7 +210,7 @@ public class EnemyBase : CharacterBase
         isBisicAttack = true;
         animator.SetBool("isAttack", true);
         ShootBulletAtTarget();
-        basicAttackCount++;
+        //basicAttackCount++;
         basicAttackTimer = 0;
         isBisicAttack = false;
         readyBasicAttack = false;
@@ -216,12 +218,12 @@ public class EnemyBase : CharacterBase
         animator.SetBool("isAttack", false);
         currentState = EnemyState.Idle;
 
-        if (basicAttackCount > 5)
-        {
-            readySkill = true;
-            basicAttackCount = 0;
-        }
-        basicAttackTimer = 0;
+        //if (basicAttackCount > 5)
+        //{
+        //    readySkill = true;
+        //    basicAttackCount = 0;
+        //}
+        //basicAttackTimer = 0;
         readyBasicAttack = false;
     }
     protected void ShootBulletAtTarget()
