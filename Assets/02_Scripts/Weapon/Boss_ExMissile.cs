@@ -58,7 +58,7 @@ public class BossExMissile : ProjectileBase
         for (int i = 0; i < subMissileCount; i++)
         {
             Vector2 randomCircle = Random.insideUnitCircle * scatterRadius;
-            Vector3 offset = new Vector3(randomCircle.x, 15f, randomCircle.y);
+            Vector3 offset = new Vector3(randomCircle.x, 30f, randomCircle.y);
             Vector3 spawnPos = basePos + offset;
 
             GameObject miniMissile = Instantiate(bossExSubMissilePrefab, spawnPos, Quaternion.identity);

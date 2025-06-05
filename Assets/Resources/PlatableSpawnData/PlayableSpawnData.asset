@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playableSpawn:
   - playableID: 0
-    spawnPosition: {x: 0, y: 0, z: -60}
+    spawnPosition: {x: -20, y: 0, z: -60}
     delayAfter: 0
   - playableID: 1
-    spawnPosition: {x: 5, y: 0, z: -65}
+    spawnPosition: {x: 0, y: 0, z: -65}
     delayAfter: 0
   - playableID: 2
-    spawnPosition: {x: 10, y: 0, z: -83.8}
+    spawnPosition: {x: 20, y: 0, z: -83.8}
     delayAfter: 0

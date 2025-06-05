@@ -143,8 +143,8 @@ MonoBehaviour:
   delayBeforeFall: 5
   bossExSubMissilePrefab: {fileID: 8671380757377285527, guid: 2b5c540330c9c144dae983e82f97a784, type: 3}
   rigidbodyExSubMissile: {fileID: 0}
-  subMissileCount: 5
-  scatterRadius: 25
+  subMissileCount: 10
+  scatterRadius: 15
   fallSpeed: 25
   hasSplit: 0
 --- !u!95 &8269233571112510697
