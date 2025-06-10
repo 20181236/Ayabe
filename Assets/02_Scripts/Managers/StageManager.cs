@@ -35,7 +35,7 @@ public class StageManager : MonoBehaviour
             {
                 WaveManager.instance.StartWave();
             }
-            // 모든 웨이브가 끝났고 적도 없고 보스도 끝났다면 스테이지 클리어
+            // 모든 웨이브가 끝났고 적도 없고 보스도 끝났다면 스테이지 클리어 근데 처음에 소환되지도 않았는데 체크되면어떻게됨?
             else if (WaveManager.instance.IsAllWaveSpawned() &&
                          !EnemyManager.instance.HasEnemy() &&
                          !EnemyManager.instance.HasBoss())

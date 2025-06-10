@@ -31,8 +31,6 @@ public enum PlayableAttackState
     ExSkillAttack,
     Reload,
 }
-
-
 public enum PlayableHelath
 {
     SoonDobu = 5000,
