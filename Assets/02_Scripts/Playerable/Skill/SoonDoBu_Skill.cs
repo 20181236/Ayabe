@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class SoonDoBuSkill : SkillBase
 {
-        public override void SkillExecute(GameObject caster, GameObject target)
-        {
-            if (target == null) return;
+    public SoonDoBuSkill(SkillData data) : base(data) { }
 
-            var playable = target.GetComponent<PlayableBase>();
-            if (playable != null && !playable.isDead)
-            {
-                playable.Heal(skillData.healValue);
-                Debug.Log($"{target.name}에게 {skillData.healValue}만큼 힐을 적용했습니다.");
-            }
+    public override void Execute(SkillContext context)
+    {
+        if (context.Target == null) return;
+
+        var playable = context.Target.GetComponent<PlayableBase>();
+        if (playable != null && !playable.isDead)
+        {
+            playable.Heal(skillData.healValue);
+            Debug.Log($"{context.Target.name}에게 {skillData.healValue}만큼 힐했습니다.");
         }
     }
+}

@@ -249,7 +249,7 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void ExSkill()
     {
-        if (readyExSkill && uniqueExSkill != null && !isUsingExSkill)
+        if (readyExSkill && exSkill != null && !isUsingExSkill)
         {
             if (ManaManager.instance.UseMana(exSkillData.manaCost))
             {
