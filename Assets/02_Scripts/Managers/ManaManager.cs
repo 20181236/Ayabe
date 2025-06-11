@@ -55,5 +55,6 @@ public class ManaManager : MonoBehaviour
             OnManaChanged?.Invoke((float)currentMana / maxMana);
         }
     }
+
     public int GetCurrentMana() => currentMana;
 }

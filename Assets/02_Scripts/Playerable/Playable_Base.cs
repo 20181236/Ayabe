@@ -57,6 +57,9 @@ public abstract class PlayableBase : CharacterBase
     [HideInInspector] public PlayableState currentState;
     protected EnemyBase currentTarget;
 
+    public SkillData exSkillData;  // 고유 스킬 데이터
+    public InterfaceSkill uniqueExSkill;
+
     protected virtual void Awake()
     {
         rigidbodyPlayable = GetComponent<Rigidbody>();
@@ -133,6 +136,8 @@ public abstract class PlayableBase : CharacterBase
         skillInterval = data.skillInterval;
         exSkillInterval = data.exSkillInterval;
         moveSpeed = data.moveSpeed;
+
+        exSkillData = data.exSkillData; // 스킬 데이터 연결
     }
     protected virtual void UpdateTargetAndDistance()
     {
@@ -243,6 +248,21 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void ExSkill()
     {
+        if (readyExSkill && uniqueExSkill != null && !isUsingExSkill)
+        {
+            if (ManaManager.instance.UseMana(exSkillData.manaCost))
+            {
+                isUsingExSkill = true;
+                uniqueExSkill.SkillExecute(gameObject, currentTarget?.gameObject);
+                exSkillTimer = 0f;
+                readyExSkill = false;
+                isUsingExSkill = false;
+            }
+            else
+            {
+                Debug.Log("마나 부족");
+            }
+        }
     }
     public EnemyBase GetNearestEnemyToPosition(Vector3 position)
     {
@@ -272,6 +292,12 @@ public abstract class PlayableBase : CharacterBase
             Die();
         }
         StartCoroutine(OnDamage(isExplosion));
+    }
+
+    public void Heal(float healthGain)
+    {
+        currentHealth = Mathf.Min(currentHealth + healthGain, maxHealth);
+        Debug.Log($"[회복] {healthGain} 만큼 회복, 현재 체력: {currentHealth}");
     }
     protected virtual void Die()
     {

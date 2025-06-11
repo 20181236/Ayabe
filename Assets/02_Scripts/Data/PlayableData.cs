@@ -13,4 +13,6 @@ public class PlayableData : ScriptableObject
     public float skillInterval;
     public float exSkillInterval;
     public float moveSpeed;
+
+    public SkillData exSkillData;  // 고유 Ex스킬 데이터 연결
 }
