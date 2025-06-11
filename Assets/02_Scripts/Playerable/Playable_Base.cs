@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using Unity.VisualScripting;
+using static UnityEngine.GraphicsBuffer;
 
 public abstract class PlayableBase : CharacterBase
 {
@@ -58,7 +59,7 @@ public abstract class PlayableBase : CharacterBase
     protected EnemyBase currentTarget;
 
     public SkillData exSkillData;  // 고유 스킬 데이터
-    public InterfaceSkill uniqueExSkill;
+    public SkillBase exSkill;
 
     protected virtual void Awake()
     {
@@ -253,7 +254,7 @@ public abstract class PlayableBase : CharacterBase
             if (ManaManager.instance.UseMana(exSkillData.manaCost))
             {
                 isUsingExSkill = true;
-                uniqueExSkill.SkillExecute(gameObject, currentTarget?.gameObject);
+                exSkill.SkillExecute(gameObject, target);
                 exSkillTimer = 0f;
                 readyExSkill = false;
                 isUsingExSkill = false;

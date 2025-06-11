@@ -7,9 +7,7 @@ public class SkillData : ScriptableObject
 {
     public SkillId skillId;
     public SkillType skillType;
-
-    public Sprite icon;
-
+    //public Sprite icon;
     public int manaCost;
     public float healValue;
 }
