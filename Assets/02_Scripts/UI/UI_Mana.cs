@@ -1,44 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Mana : MonoBehaviour
+public class UIMana : MonoBehaviour
 {
-    public Image image;
-    public float duration = 10.0f;
+    [SerializeField] private Image image;
+    [SerializeField] private TextMeshPro currentManaText;
 
-    public int maxMana=10;
-    public int currentMana;
+    private float targetFill = 1f;
+    private float fillSpeed = 5f; 
 
-    private void Awake()
+    private void OnEnable()
     {
-        image = GetComponent<Image>();
-         
+        if (ManaManager.instance != null)
+            ManaManager.instance.OnManaChanged += HandleManaChanged;
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        StartCoroutine(ChangeFillAmountTime());
+        if (ManaManager.instance != null)
+            ManaManager.instance.OnManaChanged -= HandleManaChanged;
     }
 
-    private IEnumerator ChangeFillAmountTime()
+    private void HandleManaChanged(float ratio)
     {
-        float currentTime = 0.0f;
-        float startFillAmount = 0.0f;
-        float endFillAmount = 1.0f;
+        targetFill = ratio;
+    }
 
-        while (currentTime < duration)
-        {
-            float fillAmount = Mathf.Lerp(startFillAmount, endFillAmount, currentTime / duration);
-            fillAmount = Mathf.Clamp01(fillAmount);
-
-            image.fillAmount = fillAmount;
-            currentTime += Time.deltaTime;
-
-            yield return null;
-        }
-
-        image.fillAmount = endFillAmount;
+    private void Update()
+    {
+        image.fillAmount = Mathf.Lerp(image.fillAmount, targetFill, Time.deltaTime * fillSpeed);
     }
 }

@@ -299,6 +299,7 @@ MonoBehaviour:
   speed: 0
   rotateSpeed: 0
   isExplosion: 0
+  target: {fileID: 0}
   targetMask:
     serializedVersion: 2
     m_Bits: 0
