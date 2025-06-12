@@ -9,7 +9,6 @@ public class Bullet : ProjectileBase
     protected override void SetProjectileInfo()
     {
         base.SetProjectileInfo(); weaponType = WeaponType.Bullet;
-        damage = 10;
         isExplosion = false;
     }
 

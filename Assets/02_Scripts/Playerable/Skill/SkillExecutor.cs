@@ -1,39 +1,51 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-//public class SkillExecutor
-//{
-//    private Dictionary<SkillId, InterfaceSkill> skillStrategies = new Dictionary<SkillId, InterfaceSkill>();
+public class SkillExecutor: MonoBehaviour
+{
+    public GameObject caster; // 시전자
 
-//    public void RegisterSkill(SkillId skillId, InterfaceSkill skill)
-//    {
-//        skillStrategies[skillId] = skill;
-//    }
+    public void OnSkillSelected(SkillData data)
+    {
+        SkillBase skill = SkillFactory.CreateSkill(data);
 
-//    public bool ExecuteSkill(SkillId skillId, GameObject caster, GameObject target)
-//    {
-//        if (!skillStrategies.TryGetValue(skillId, out var skill))
-//        {
-//            Debug.LogWarning($"Skill {skillId}가 등록되어 있지 않습니다.");
-//            return false;
-//        }
+        SkillContext context = new SkillContext();
+        context.Caster = caster;
 
-//        if (skill is SkillBase skillBase)
-//        {
-//            if (!ManaManager.instance.UseMana(skillBase.skillData.manaCost))
-//            {
-//                Debug.Log("스킬 사용 실패: 마나 부족");
-//                return false;
-//            }
-//        }
-//        else
-//        {
-//            Debug.LogWarning("SkillBase 상속 안한 스킬은 마나 사용 처리 불가");
-//        }
+        if(data.skillType == SkillType.PositionTarget)
+        {
+            // 위치 지정 스킬이라면 UI에서 위치 선택 후 호출하는 별도 메서드 필요
+            StartCoroutine(WaitForPositionInputAndExecute(skill, context));
+        }
+        else
+        {
+            // 즉시 실행 가능한 스킬
+            skill.Execute(context);
+        }
+    }
 
-//        skill.SkillExecute(caster, target);
-//        return true;
-//    }
-//}
+    private IEnumerator WaitForPositionInputAndExecute(SkillBase skill, SkillContext context)
+    {
+        Vector3 selectedPosition = Vector3.zero;
+        bool positionSelected = false;
 
+        // 예: UI에서 위치 입력 받는 로직 (마우스 클릭 등)
+        while (!positionSelected)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    selectedPosition = hit.point;
+                    positionSelected = true;
+                }
+            }
+            yield return null;
+        }
+
+        context.TargetPosition = selectedPosition;
+        skill.Execute(context);
+    }
+}

@@ -34,6 +34,15 @@ public class PlayableManager : MonoBehaviour
             if (playable != null)
             {
                 RegisterPlayable(playable);
+
+                if (data.exSkillData != null)
+                {
+                    SkillBase exSkill = SkillFactory.CreateSkill(data.exSkillData);
+                    if (exSkill != null)
+                    {
+                        playable.SetExSkill(exSkill);
+                    }
+                }
             }
         }
         else
@@ -49,6 +58,7 @@ public class PlayableManager : MonoBehaviour
             playablesID[playable.playableID].Add(playable);
         }
     }
+
     public void UnregisterPlayable(PlayableBase playable)
     {
         if (playables.Contains(playable))

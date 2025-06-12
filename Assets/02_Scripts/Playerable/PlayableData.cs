@@ -8,6 +8,7 @@ public class PlayableData : ScriptableObject
     public PlayableType playableType;
     public GameObject prefab;
     public float maxHealth;
+    public float attackPower;
     public float attackRange;
     public float basicAttackInterval;
     public float skillInterval;

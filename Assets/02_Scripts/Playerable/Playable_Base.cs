@@ -15,6 +15,7 @@ public abstract class PlayableBase : CharacterBase
     public float maxHealth;
     public float currentHealth;
     [Header("Attack Settings")]
+    public float attackPower;
     public float attackRange;
     public float basicAttackInterval;
     public float basicAttackTimer;
@@ -59,7 +60,8 @@ public abstract class PlayableBase : CharacterBase
     protected EnemyBase currentTarget;
 
     public SkillData exSkillData;  // 고유 스킬 데이터
-    public SkillBase exSkill;
+    protected SkillBase exSkill;
+    protected Vector3 exSkillTargetPosition;
 
     protected virtual void Awake()
     {
@@ -129,9 +131,10 @@ public abstract class PlayableBase : CharacterBase
     }
     public virtual void SetData(PlayableData data)
     {
-        playableType = data.playableType; 
+        playableType = data.playableType;
         maxHealth = data.maxHealth;
         currentHealth = maxHealth;
+        attackPower = data.attackPower;
         attackRange = data.attackRange;
         basicAttackInterval = data.basicAttackInterval;
         skillInterval = data.skillInterval;
@@ -139,6 +142,10 @@ public abstract class PlayableBase : CharacterBase
         moveSpeed = data.moveSpeed;
 
         exSkillData = data.exSkillData; // 스킬 데이터 연결
+    }
+    public void SetExSkill(SkillBase skill)
+    {
+        exSkill = skill;
     }
     protected virtual void UpdateTargetAndDistance()
     {
@@ -195,9 +202,9 @@ public abstract class PlayableBase : CharacterBase
         if (readySkill && !isUsingSkill && !isUsingExSkill)
         {
             Skill();
-           // return;
+            // return;
         }
-        if (exSkillTimer >= exSkillInterval && !isUsingSkill && ! isUsingExSkill)
+        if (exSkillTimer >= exSkillInterval && !isUsingSkill && !isUsingExSkill)
         {
             ExSkill();
             //return;
@@ -209,8 +216,8 @@ public abstract class PlayableBase : CharacterBase
         {
             return;
         }
-        
-        isAttacking= true; 
+
+        isAttacking = true;
         isBisicAttack = true;
         playableAnimator.SetBool("isAttack", true);
         ShootBulletAtTarget();
@@ -233,6 +240,8 @@ public abstract class PlayableBase : CharacterBase
 
         if (bullet != null)
         {
+            //float buffMultiplier = 함수에서 리턴해줘야됨;
+            bullet.damage = attackPower + 10;
             bullet.transform.position = playableBulletFirePoint.position;
             bullet.transform.rotation = Quaternion.LookRotation(direction);
 
@@ -249,22 +258,21 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void ExSkill()
     {
-        if (readyExSkill && exSkill != null && !isUsingExSkill)
+        if (exSkill == null)
+            return;
+
+        SkillContext context = new SkillContext
         {
-            if (ManaManager.instance.UseMana(exSkillData.manaCost))
-            {
-                isUsingExSkill = true;
-                exSkill.SkillExecute(gameObject, target);
-                exSkillTimer = 0f;
-                readyExSkill = false;
-                isUsingExSkill = false;
-            }
-            else
-            {
-                Debug.Log("마나 부족");
-            }
-        }
+            Caster = gameObject,
+            TargetPosition = exSkillTargetPosition  // 스킬 위치 지정용 변수
+        };
+
+        exSkill.Execute(context);  // 실제 스킬 실행
+
+        exSkillTimer = 0;
+        readyExSkill = false;
     }
+
     public EnemyBase GetNearestEnemyToPosition(Vector3 position)
     {
         EnemyBase nearestEnemy = null;

@@ -8,13 +8,14 @@ public class SoonDoBuSkill : SkillBase
 
     public override void Execute(SkillContext context)
     {
-        if (context.Target == null) return;
+        if (context.Target == null)
+            return;
 
         var playable = context.Target.GetComponent<PlayableBase>();
         if (playable != null && !playable.isDead)
         {
             playable.Heal(skillData.healValue);
-            Debug.Log($"{context.Target.name}에게 {skillData.healValue}만큼 힐했습니다.");
+            Debug.Log($"{context.Target.name}에게 {skillData.healValue} 힐");
         }
     }
 }
