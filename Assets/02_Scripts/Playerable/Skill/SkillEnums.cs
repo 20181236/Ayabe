@@ -1,9 +1,10 @@
 public enum SkillType
 {
     Self,
-    Target,
+    TargetAttack,
+    TargetHeal,
     Area,
-    Heal,
+    SelfHeal,
     Buff
 }
 public enum BuffType

@@ -1,51 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillExecutor: MonoBehaviour
+public class SkillExecutor : MonoBehaviour
 {
-    public GameObject caster; // 시전자
+    public GameObject caster;
 
     public void OnSkillSelected(SkillData data)
     {
         SkillBase skill = SkillFactory.CreateSkill(data);
 
-        SkillContext context = new SkillContext();
-        context.Caster = caster;
+        SkillContext context = new SkillContext
+        {
+            Caster = caster
+        };
 
-        if(data.skillType == SkillType.PositionTarget)
+        switch (data.castType)
         {
-            // 위치 지정 스킬이라면 UI에서 위치 선택 후 호출하는 별도 메서드 필요
-            StartCoroutine(WaitForPositionInputAndExecute(skill, context));
-        }
-        else
-        {
-            // 즉시 실행 가능한 스킬
-            skill.Execute(context);
+            case CastType.Instant:
+                skill.Execute(context);
+                break;
+
+            case CastType.TargetPoint:
+                Targeting.instance.RequestPosition(pos =>
+                {
+                    context.TargetPosition = pos;
+                    skill.Execute(context);
+                });
+                break;
+
+            case CastType.TargetUnit:
+                Targeting.instance.RequestUnit(unit =>
+                {
+                    context.Target = unit;  // SkillContext의 Target 프로퍼티에 저장
+                    skill.Execute(context);
+                }, unit => FilteringTeamSkill(unit, data.skillType));
+                break;
         }
     }
-
-    private IEnumerator WaitForPositionInputAndExecute(SkillBase skill, SkillContext context)
+    private bool FilteringTeamSkill(GameObject unit, SkillType skillType)
     {
-        Vector3 selectedPosition = Vector3.zero;
-        bool positionSelected = false;
+        var character = unit.GetComponent<CharacterBase>();
+        if (character == null)
+            return false;
 
-        // 예: UI에서 위치 입력 받는 로직 (마우스 클릭 등)
-        while (!positionSelected)
+        switch (skillType)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    selectedPosition = hit.point;
-                    positionSelected = true;
-                }
-            }
-            yield return null;
-        }
+            case SkillType.TargetAttack:
+                return character.ObjectType == ObjectType.Enemy;
 
-        context.TargetPosition = selectedPosition;
-        skill.Execute(context);
+            case SkillType.TargetHeal:
+            case SkillType.Buff:
+                return character.ObjectType == ObjectType.Playable;
+
+            default:
+                return false;
+        }
     }
 }

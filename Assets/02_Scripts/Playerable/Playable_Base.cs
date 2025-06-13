@@ -63,6 +63,7 @@ public abstract class PlayableBase : CharacterBase
     protected SkillBase exSkill;
     protected Vector3 exSkillTargetPosition;
 
+
     protected virtual void Awake()
     {
         rigidbodyPlayable = GetComponent<Rigidbody>();
