@@ -955,7 +955,6 @@ GameObject:
   - component: {fileID: 4480802960578815363}
   - component: {fileID: 7187312169412409887}
   - component: {fileID: 397983305347310345}
-  - component: {fileID: 6624319860673362545}
   m_Layer: 6
   m_Name: SoonDoBu_Playable
   m_TagString: Player
@@ -1103,20 +1102,7 @@ MonoBehaviour:
   missile: {fileID: 7664551313295523910, guid: 95a965c89dc932e4387d19860fb5a301, type: 3}
   excapeSpotTransform: {fileID: 0}
   currentState: 0
-  exSkillData: {fileID: 0}
---- !u!114 &6624319860673362545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6746566736275685183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da648cda088f5b444ac752f08a4a5356, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  caster: {fileID: 0}
+  exSkillData: {fileID: 11400000, guid: 455bf3096de623742940f927dc3b3055, type: 2}
 --- !u!1 &7563814381569756315
 GameObject:
   m_ObjectHideFlags: 0

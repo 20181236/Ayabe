@@ -1,27 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillPanel : MonoBehaviour
 {
-    public List<SkillSlot> skillSlots;  // 인스펙터에서 슬롯 4개 이상 연결할 것
+    public SkillButtonHandler[] skillButtons;
 
-    private PlayableBase currentPlayable;
-
-    /// <summary>
-    /// 현재 조작할 캐릭터의 스킬들을 슬롯에 바인딩
-    /// </summary>
-    public void SetCurrentPlayable(PlayableBase playable)
+    private void Start()
     {
-        currentPlayable = playable;
+        AutoAssignSkills();
+    }
 
-        int slotIndex = 0;
+    private void AutoAssignSkills()
+    {
+        var skillDatas = SkillManager.instance.skillDatas;
 
-        if (playable.exSkillData != null && slotIndex < skillSlots.Count)
+        for (int i = 0; i < skillButtons.Length; i++)
         {
-            skillSlots[slotIndex].Setup(playable.exSkillData, playable);
-            skillSlots[slotIndex].gameObject.SetActive(true);
-            slotIndex++;
+            if (i < skillDatas.Count)
+            {
+                skillButtons[i].SetSkill(skillDatas[i]);
+                Debug.Log($"SkillPanel: 슬롯 {i} 에 {skillDatas[i].skillId} 할당");
+            }
+            else
+            {
+                Debug.LogWarning($"SkillPanel: 슬롯 {i} 는 비어 있음 (skillDatas 부족)");
+            }
         }
+    }
+
+    public SkillData GetSkillDataById(SkillId skillId)
+    {
+        foreach (var handler in skillButtons)
+        {
+            if (handler.SkillData != null && handler.SkillData.skillId == skillId)
+                return handler.SkillData;
+        }
+        return null;
     }
 }

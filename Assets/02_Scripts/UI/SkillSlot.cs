@@ -13,29 +13,8 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
     private SkillBase skillInstance;
 
     public Image skillIcon;
-    public Image cooldownOverlay;
 
-    public float cooldownDuration = 0.3f;  // 쿨타임 총 시간 (초)
-    private float cooldownTimer = 0f;
-
-    private bool isCoolingDown = false;
     private bool isDragging = false;
-
-
-    void Update()
-    {
-        if (isCoolingDown)
-        {
-            cooldownTimer -= Time.deltaTime;
-            cooldownOverlay.fillAmount = cooldownTimer / cooldownDuration;
-
-            if (cooldownTimer <= 0f)
-            {
-                isCoolingDown = false;
-                cooldownOverlay.fillAmount = 0f;
-            }
-        }
-    }
 
     public void Setup(SkillData data, PlayableBase caster)
     {
@@ -47,23 +26,18 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (isCoolingDown)
-        {
-            Debug.Log("Skill is cooling down!");
-            return;
-        }
-
-        Debug.Log("Skill Selected: " + gameObject.name);
         isDragging = true;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        //if(RectTransformUtility.ScreenPointToLocalPointInRectangle(이미지.rectTransform, eventData.position,eventData.pressEventCamera, out Vector2 localPoint))
+
         if (!isDragging)
             return;
 
         Vector2 dragPosition = eventData.position;
-        // TODO: 드래그 시 스킬 투사 위치를 표시하는 UI 업데이트 가능
+        transform.position = eventData.position;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -73,9 +47,6 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
 
         isDragging = false;
 
-        if (isCoolingDown)
-            return;
-
         Vector2 releasePosition = eventData.position;
         CastSkill(releasePosition);
     }
@@ -83,17 +54,10 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
     private void CastSkill(Vector2 targetPosition)
     {
         if (skillInstance == null)
-        {
-            Debug.LogWarning("Skill instance is null.");
             return;
-        }
 
-        // Camera.main이 null일 수 있으니 방어코드 권장
         if (Camera.main == null)
-        {
-            Debug.LogError("Main Camera not found!");
             return;
-        }
 
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(targetPosition.x, targetPosition.y, 10f));
 
@@ -119,14 +83,5 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
         };
 
         skillInstance.Execute(context);
-
-        StartCooldown();
-    }
-
-    private void StartCooldown()
-    {
-        isCoolingDown = true;
-        cooldownTimer = cooldownDuration;
-        cooldownOverlay.fillAmount = 1f;
     }
 }
