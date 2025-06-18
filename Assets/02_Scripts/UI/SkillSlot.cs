@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     public SkillData skillData;
-    private PlayableBase caster; // 현재 캐릭터 (스킬 주인)
+    private PlayableBase caster;
     private SkillBase skillInstance;
 
     public Image skillIcon;
