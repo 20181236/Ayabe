@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,35 +12,24 @@ public class LunaSkill : SkillBase
 
     public override void Execute(SkillContext context)
     {
-        if (context.Caster == null)
-            return;
+        // context.TargetPosition: ±¤¿ª Èú ¹üÀ§ Áß½É À§Ä¡
+        Vector3 center = context.TargetPosition;
 
-        var casterPlayable = context.Caster.GetComponent<PlayableBase>();
-        if (casterPlayable == null)
-            return;
+        // Èú ¹üÀ§ ³» ¾Æ±º Å½»ö (layer ¼³Á¤ ÇÊ¿ä)
+        Collider[] allies = Physics.OverlapSphere(center, skillData.skillRadius, LayerMask.GetMask("Playable"));
 
-        List<PlayableBase> targetsInRange = new List<PlayableBase>();
+        int healedCount = 0;
 
-        foreach (var playable in PlayableManager.instance.GetPlayables())
+        foreach (Collider allyCollider in allies)
         {
-            if (playable == null || playable.isDead)
-                continue;
-
-            if (playable.playableType != casterPlayable.playableType)
-                continue;
-
-            float dist = Vector3.Distance(context.Caster.transform.position, playable.transform.position);
-
-            if (dist <= skillRadius)
+            var playable = allyCollider.GetComponent<PlayableBase>();
+            if (playable != null && !playable.isDead)
             {
-                targetsInRange.Add(playable);
+                playable.Heal(skillData.healValue);
+                healedCount++;
             }
         }
 
-        foreach (var target in targetsInRange)
-        {
-            target.Heal(skillData.healValue);
-            Debug.Log($"{target.name}¿¡°Ô {skillData.healValue} Èú");
-        }
+        Debug.Log($"±¤¿ª Èú ½ÇÇà: {healedCount}¸í¿¡°Ô {skillData.healValue} Èú ¿Ï·á");
     }
 }

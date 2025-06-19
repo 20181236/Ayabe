@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using System;
+using UnityEngine.UI;
 
+//Skill분류? 및 실행?
 public class InputSkill : MonoBehaviour
 {
     public static InputSkill instance { get; private set; }
@@ -18,7 +18,7 @@ public class InputSkill : MonoBehaviour
             return;
         }
 
-        //  skillPanel 자동 할당
+        // skillPanel 자동 할당
         if (skillPanel == null)
         {
             skillPanel = FindObjectOfType<SkillPanel>();
@@ -27,11 +27,32 @@ public class InputSkill : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        // 씬 내 모든 SkillButtonHandler 찾아서 이벤트 등록
+        SkillButtonHandler[] skillButtons = FindObjectsOfType<SkillButtonHandler>();
+        InitializeSkillButtons(skillButtons);
+    }
+
+    // 스킬 버튼 델리게이트에 이벤트 핸들러 등록
+    public void InitializeSkillButtons(SkillButtonHandler[] skillButtons)
+    {
+        foreach (var button in skillButtons)
+        {
+            button.OnSkillDown += OnSkillButtonDown;
+            button.OnSkillUp += OnSkillButtonUp;
+            button.OnSkillDrag += OnSkillButtonDrag;
+        }
+    }
+
+    // 버튼 누름 이벤트 처리
     public void OnSkillButtonDown(SkillId skillId, Vector2 pos)
     {
         Debug.Log($"[{skillId}] 스킬 버튼 누름 at {pos}");
+        // 필요하면 이 시점에 스킬 쿨타임 체크 등 추가 가능
     }
 
+    // 버튼 뗌 이벤트 처리
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)
     {
         if (skillPanel == null)
@@ -53,8 +74,10 @@ public class InputSkill : MonoBehaviour
         }
     }
 
+    // 버튼 드래그 이벤트 처리
     public void OnSkillButtonDrag(SkillId skillId, Vector2 pos)
     {
         Debug.Log($"[{skillId}] 드래그 중 at {pos}");
+        // 필요하면 드래그 관련 처리 추가 가능
     }
 }

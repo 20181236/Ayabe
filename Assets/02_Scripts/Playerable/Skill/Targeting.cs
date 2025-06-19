@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Targeting : MonoBehaviour
 {
@@ -15,6 +14,10 @@ public class Targeting : MonoBehaviour
 
     private Camera mainCamera;
 
+    [Tooltip("위치 표시용 프리팹 (예: 투명한 원형 오브젝트)")]
+    public GameObject positionIndicatorPrefab;
+    private GameObject positionIndicatorInstance;
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -25,20 +28,25 @@ public class Targeting : MonoBehaviour
         instance = this;
 
         mainCamera = Camera.main;
+
+        // 위치 표시 오브젝트 생성 및 비활성화
+        if (positionIndicatorPrefab != null)
+        {
+            positionIndicatorInstance = Instantiate(positionIndicatorPrefab);
+            positionIndicatorInstance.SetActive(false);
+        }
     }
 
-    // 위치 지정 요청
     public void RequestPosition(Action<Vector3> callback)
     {
         onPositionSelected = callback;
         isSelectingPosition = true;
         isSelectingUnit = false;
 
-        // TODO: 위치 지정 UI 켜기
-        Debug.Log("위치 지정 시작");
+        if (positionIndicatorInstance != null)
+            positionIndicatorInstance.SetActive(true);
     }
 
-    // 유닛 지정 요청 (필터함수는 선택 가능한 유닛 제한용)
     public void RequestUnit(Action<GameObject> callback, Func<GameObject, bool> filter = null)
     {
         onUnitSelected = callback;
@@ -46,37 +54,43 @@ public class Targeting : MonoBehaviour
         isSelectingUnit = true;
         isSelectingPosition = false;
 
-        // TODO: 유닛 선택 UI 켜기
-        Debug.Log("유닛 지정 시작");
+        if (positionIndicatorInstance != null)
+            positionIndicatorInstance.SetActive(false);
     }
 
-    // 위치 선택 UI 업데이트 (드래그 중 위치 표시용)
+    // 마우스 위치에 따라 위치 표시 오브젝트 이동
     public void UpdatePositionIndicator(Vector2 screenPosition)
     {
-        if (!isSelectingPosition) return;
+        if (!isSelectingPosition || positionIndicatorInstance == null)
+            return;
 
-        // 화면 좌표 -> 월드 좌표 변환
         Ray ray = mainCamera.ScreenPointToRay(screenPosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             Vector3 pos = hit.point;
-            // TODO: 위치 지정 마커 UI 이동 처리
-            Debug.Log($"위치 표시 이동: {pos}");
+            positionIndicatorInstance.transform.position = pos;
+        }
+        else
+        {
+            positionIndicatorInstance.SetActive(false);
         }
     }
 
-    // 위치 선택 확정 (드래그 끝났을 때 호출)
+    // 위치 확정, 콜백 호출 및 상태 초기화
     public void ConfirmPosition(Vector2 screenPosition)
     {
-        if (!isSelectingPosition) return;
+        if (!isSelectingPosition)
+            return;
 
         Ray ray = mainCamera.ScreenPointToRay(screenPosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector3 pos = hit.point;
-            Debug.Log($"위치 선택 완료: {pos}");
-            onPositionSelected?.Invoke(pos);
+            Vector3 position = hit.point;
+            onPositionSelected?.Invoke(position);
         }
+
+        if (positionIndicatorInstance != null)
+            positionIndicatorInstance.SetActive(false);
 
         ResetSelection();
     }
@@ -88,33 +102,33 @@ public class Targeting : MonoBehaviour
         onPositionSelected = null;
         onUnitSelected = null;
         unitFilter = null;
-
-        // TODO: UI 초기화
-        Debug.Log("타겟팅 종료");
     }
 
     private void Update()
     {
-        if (isSelectingUnit)
+        if (isSelectingPosition)
         {
-            // 마우스 클릭으로 유닛 선택 처리 (간단 예시)
+            // 매 프레임 위치 표시 업데이트
+            UpdatePositionIndicator(Input.mousePosition);
+
+            // 마우스 클릭 시 위치 확정
+            if (Input.GetMouseButtonDown(0))
+            {
+                ConfirmPosition(Input.mousePosition);
+            }
+        }
+        else if (isSelectingUnit)
+        {
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     GameObject selected = hit.collider.gameObject;
-
-                    // 필터가 있으면 통과해야 함
                     if (unitFilter == null || unitFilter.Invoke(selected))
                     {
-                        Debug.Log($"유닛 선택 완료: {selected.name}");
                         onUnitSelected?.Invoke(selected);
                         ResetSelection();
-                    }
-                    else
-                    {
-                        Debug.Log("선택 불가능한 유닛입니다.");
                     }
                 }
             }

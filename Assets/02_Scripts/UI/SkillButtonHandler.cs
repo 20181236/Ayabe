@@ -1,13 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
+//UI처리
 public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    public Image iconImage;  // 스킬 아이콘 표시용
+    public Image iconImage;
     private SkillData skillData;
 
-    public SkillData SkillData => skillData;  // 읽기 전용 프로퍼티 추가
+    public SkillData SkillData => skillData;
+
+    public Action<SkillId, Vector2> OnSkillDown;
+    public Action<SkillId, Vector2> OnSkillUp;
+    public Action<SkillId, Vector2> OnSkillDrag;
 
     void Awake()
     {
@@ -23,19 +29,22 @@ public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandl
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (skillData == null) return;
-        InputSkill.instance.OnSkillButtonDown(skillData.skillId, eventData.position);
+        if (skillData == null)
+            return;
+        OnSkillDown?.Invoke(skillData.skillId, eventData.position);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (skillData == null) return;
-        InputSkill.instance.OnSkillButtonUp(skillData.skillId, eventData.position);
+        if (skillData == null)
+            return;
+        OnSkillUp?.Invoke(skillData.skillId, eventData.position);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (skillData == null) return;
-        InputSkill.instance.OnSkillButtonDrag(skillData.skillId, eventData.position);
+        if (skillData == null)
+            return;
+        OnSkillDrag?.Invoke(skillData.skillId, eventData.position);
     }
 }

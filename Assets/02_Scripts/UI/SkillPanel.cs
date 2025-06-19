@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillPanel : MonoBehaviour
@@ -18,6 +19,13 @@ public class SkillPanel : MonoBehaviour
             if (i < skillDatas.Count)
             {
                 skillButtons[i].SetSkill(skillDatas[i]);
+                var handler = skillButtons[i];
+
+                // 대리자 할당
+                handler.OnSkillDown = InputSkill.instance.OnSkillButtonDown;
+                handler.OnSkillUp = InputSkill.instance.OnSkillButtonUp;
+                handler.OnSkillDrag = InputSkill.instance.OnSkillButtonDrag;
+
                 Debug.Log($"SkillPanel: 슬롯 {i} 에 {skillDatas[i].skillId} 할당");
             }
             else

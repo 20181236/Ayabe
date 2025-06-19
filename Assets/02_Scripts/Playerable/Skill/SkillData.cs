@@ -10,7 +10,8 @@ public class SkillData : ScriptableObject
     public CastType castType;
     public Sprite icon;
     public int manaCost;
-    public float renge;
+    public float range;
     public float skillRadius;
+    public float skillAngle;
     public float healValue;
 }
