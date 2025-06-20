@@ -1,4 +1,4 @@
-public enum eAnimatorType
+public enum AnimatorType
 { 
     isWalk,
     isAttack

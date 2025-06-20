@@ -14,9 +14,11 @@ public class Targeting : MonoBehaviour
 
     private Camera mainCamera;
 
-    [Tooltip("위치 표시용 프리팹 (예: 투명한 원형 오브젝트)")]
     public GameObject positionIndicatorPrefab;
     private GameObject positionIndicatorInstance;
+
+    // SkillData 연결
+    private SkillData currentSkillData;
 
     private void Awake()
     {
@@ -29,7 +31,6 @@ public class Targeting : MonoBehaviour
 
         mainCamera = Camera.main;
 
-        // 위치 표시 오브젝트 생성 및 비활성화
         if (positionIndicatorPrefab != null)
         {
             positionIndicatorInstance = Instantiate(positionIndicatorPrefab);
@@ -37,6 +38,7 @@ public class Targeting : MonoBehaviour
         }
     }
 
+    //  기존 위치 요청 방식
     public void RequestPosition(Action<Vector3> callback)
     {
         onPositionSelected = callback;
@@ -45,6 +47,13 @@ public class Targeting : MonoBehaviour
 
         if (positionIndicatorInstance != null)
             positionIndicatorInstance.SetActive(true);
+    }
+
+    //  SkillData 기반 위치 요청
+    public void RequestPosition(SkillData skillData, Action<Vector3> callback)
+    {
+        currentSkillData = skillData;
+        RequestPosition(callback); // 기본 로직 재활용
     }
 
     public void RequestUnit(Action<GameObject> callback, Func<GameObject, bool> filter = null)
@@ -56,9 +65,10 @@ public class Targeting : MonoBehaviour
 
         if (positionIndicatorInstance != null)
             positionIndicatorInstance.SetActive(false);
+
+        SkillRangeVisualizer.Hide(); // 유닛 선택 시 시각화 끄기
     }
 
-    // 마우스 위치에 따라 위치 표시 오브젝트 이동
     public void UpdatePositionIndicator(Vector2 screenPosition)
     {
         if (!isSelectingPosition || positionIndicatorInstance == null)
@@ -69,14 +79,19 @@ public class Targeting : MonoBehaviour
         {
             Vector3 pos = hit.point;
             positionIndicatorInstance.transform.position = pos;
+
+            if (currentSkillData != null)
+            {
+                SkillRangeVisualizer.Show(currentSkillData.skillRadius, pos);
+            }
         }
         else
         {
             positionIndicatorInstance.SetActive(false);
+            SkillRangeVisualizer.Hide();
         }
     }
 
-    // 위치 확정, 콜백 호출 및 상태 초기화
     public void ConfirmPosition(Vector2 screenPosition)
     {
         if (!isSelectingPosition)
@@ -92,6 +107,7 @@ public class Targeting : MonoBehaviour
         if (positionIndicatorInstance != null)
             positionIndicatorInstance.SetActive(false);
 
+        SkillRangeVisualizer.Hide(); // 시각화 숨기기
         ResetSelection();
     }
 
@@ -102,16 +118,15 @@ public class Targeting : MonoBehaviour
         onPositionSelected = null;
         onUnitSelected = null;
         unitFilter = null;
+        currentSkillData = null;
     }
 
     private void Update()
     {
         if (isSelectingPosition)
         {
-            // 매 프레임 위치 표시 업데이트
             UpdatePositionIndicator(Input.mousePosition);
 
-            // 마우스 클릭 시 위치 확정
             if (Input.GetMouseButtonDown(0))
             {
                 ConfirmPosition(Input.mousePosition);
