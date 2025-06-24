@@ -63,6 +63,7 @@ public abstract class PlayableBase : CharacterBase
     protected SkillBase exSkill;
     protected Vector3 exSkillTargetPosition;
 
+    public SkillSlot exSkillSlot;  // UI에 연결된 ex스킬 슬롯 1개
 
     protected virtual void Awake()
     {
@@ -81,6 +82,8 @@ public abstract class PlayableBase : CharacterBase
     {
         if (PlayableManager.instance != null)
             PlayableManager.instance.RegisterPlayable(this);
+        if (SkillExecutor.instance != null)
+            SkillExecutor.instance.SetCaster(this.gameObject);
     }
     protected virtual void Update()
     {
@@ -126,6 +129,7 @@ public abstract class PlayableBase : CharacterBase
         currentHealth = maxHealth;
         isCreate = false;
         currentState = PlayableState.Idle;
+
         isIdle = true;
         readyBasicAttack = false;
         isUsingSkill = false;
@@ -143,6 +147,12 @@ public abstract class PlayableBase : CharacterBase
         moveSpeed = data.moveSpeed;
 
         exSkillData = data.exSkillData; // 스킬 데이터 연결
+
+        if (exSkillSlot != null)
+        {
+            exSkillSlot.Setup(exSkillData, this);  // 캐스터(this) 넘김
+        }
+
     }
     public void SetExSkill(SkillBase skill)
     {

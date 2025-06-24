@@ -12,8 +12,8 @@ public static class SkillFactory
                 return new SoonDoBuSkill(data);
             case SkillId.LunaSkill:
                 return new LunaSkill(data);
-            //case SkillId.LudoSkill:
-            //    return new LudoSkill(data);
+            case SkillId.LudoSkill:
+                return new LudoSkill(data);
             default:
                 Debug.LogWarning("Unknown skillId: " + data.skillId);
                 return null;

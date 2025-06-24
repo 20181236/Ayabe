@@ -3,6 +3,7 @@ using UnityEngine;
 public class SkillExecutor : MonoBehaviour
 {
     public static SkillExecutor instance { get; private set; }
+
     public GameObject caster;
 
     private void Awake()
@@ -15,8 +16,30 @@ public class SkillExecutor : MonoBehaviour
         instance = this;
     }
 
+    private void Start()
+    {
+        if (caster == null)
+        {
+            PlayableBase player = FindObjectOfType<PlayableBase>();
+            if (player != null)
+            {
+                caster = player.gameObject;
+            }
+            else
+            {
+                Debug.LogError("SkillExecutor: PlayableBase를 찾을 수 없습니다.");
+            }
+        }
+    }
+
     public void OnSkillSelected(SkillData data)
     {
+        if (caster == null)
+        {
+            Debug.LogError("SkillExecutor: caster가 할당되지 않았습니다.");
+            return;
+        }
+
         Debug.Log($"스킬 선택됨: {data.skillId}");
 
         SkillBase skill = SkillFactory.CreateSkill(data);
@@ -76,5 +99,12 @@ public class SkillExecutor : MonoBehaviour
             default:
                 return false;
         }
+    }
+    public void SetCaster(GameObject casterObj)
+    {
+        if (caster != null)
+            return; // 이미 설정된 경우 무시
+
+        caster = casterObj;
     }
 }

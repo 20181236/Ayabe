@@ -27,3 +27,8 @@ public enum SkillId
     LunaSkill,
     LudoSkill
 }
+public enum AreaType
+{
+    Damage,
+    Heal
+}

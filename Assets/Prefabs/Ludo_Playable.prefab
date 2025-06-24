@@ -581,6 +581,7 @@ MonoBehaviour:
   playableType: 0
   maxHealth: 0
   currentHealth: 0
+  attackPower: 0
   attackRange: 0
   basicAttackInterval: 0
   basicAttackTimer: 0
@@ -598,7 +599,9 @@ MonoBehaviour:
   isAttacking: 0
   isBisicAttack: 0
   isSkill: 0
+  isUsingSkill: 0
   isExSkill: 0
+  isUsingExSkill: 0
   isDead: 0
   checkInAttackRenge: 0
   readyBasicAttack: 0
@@ -614,6 +617,7 @@ MonoBehaviour:
   missile: {fileID: 7664551313295523910, guid: 95a965c89dc932e4387d19860fb5a301, type: 3}
   excapeSpotTransform: {fileID: 0}
   currentState: 0
+  exSkillData: {fileID: 11400000, guid: d5b3bc2587d55294bbf4f0dc29dfc4fa, type: 2}
   grenadePrefab: {fileID: 7221321937232580668, guid: 940ba6016c2f15445a7206c262b64c81, type: 3}
 --- !u!1 &3858210144187104431
 GameObject:

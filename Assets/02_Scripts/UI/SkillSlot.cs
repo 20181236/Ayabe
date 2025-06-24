@@ -53,6 +53,9 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
 
     private void CastSkill(Vector2 targetPosition)
     {
+        if (caster == null)  // 캐스터 체크 추가
+            return;
+
         if (skillInstance == null)
             return;
 

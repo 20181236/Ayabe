@@ -15,7 +15,7 @@ public class LunaSkill : SkillBase
         // context.TargetPosition: 광역 힐 범위 중심 위치
         Vector3 center = context.TargetPosition;
 
-        // 힐 범위 내 아군 탐색 (layer 설정 필요)
+        // 힐 범위 내 아군 탐색 (layer 설정 필요)-> distance로 고칠예정
         Collider[] allies = Physics.OverlapSphere(center, skillData.skillRadius, LayerMask.GetMask("Playable"));
 
         int healedCount = 0;

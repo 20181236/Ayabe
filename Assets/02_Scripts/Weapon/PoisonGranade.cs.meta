@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: bac1c8cc8b904ab4db89f98c40f828f2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - target: {instanceID: 0}
+  - plosionEffectPrefab: {fileID: 7062806617379088084, guid: 042f70123c5471d4ca13bd38af2d9f98, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
