@@ -24559,6 +24559,7 @@ GameObject:
   - component: {fileID: 8355862849562929745}
   - component: {fileID: 1011451229951976110}
   - component: {fileID: 4060772958744875967}
+  - component: {fileID: -7080982795337294961}
   m_Layer: 0
   m_Name: PoisonEffect
   m_TagString: Untagged
@@ -24575,7 +24576,7 @@ Transform:
   m_GameObject: {fileID: 7062806617379088084}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -28.433075, y: 15.347988, z: 19.035412}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29496,3 +29497,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 7.1001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7080982795337294961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7062806617379088084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b0069ef0bf5534697a5bb343a2b6f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectType: 0
+  effectAmount: 0
+  effectInterval: 0
+  areaDuration: 0

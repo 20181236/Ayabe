@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PoisonGrenade : ProjectileBase
 {
-    public GameObject plosionEffectPrefab;
-
+    [SerializeField] public GameObject plosionEffectPrefab;
+    [SerializeField] private SkillData skillData;
     private Vector3 startPosition;
     private Vector3 targetPosition;
     private float flightTime = 1.0f; // 전체 비행 시간
@@ -32,16 +32,16 @@ public class PoisonGrenade : ProjectileBase
             float t = Mathf.Clamp01(timer / flightTime);
 
             // 수평 보간
-            Vector3 horizontalPos = Vector3.Lerp(startPosition, targetPosition, t);
+            Vector3 horizontalPosision = Vector3.Lerp(startPosition, targetPosition, t);
 
             // 높이 포물선 계산 (Parabola)
             float arc = 4 * height * t * (1 - t); // 포물선 y 보정
 
-            Vector3 finalPos = horizontalPos + Vector3.up * arc;
-            transform.position = finalPos;
+            Vector3 finalPosision = horizontalPosision + Vector3.up * arc;
+            transform.position = finalPosision;
 
             // 회전 (선택사항)
-            transform.LookAt(finalPos + Vector3.forward);
+            transform.LookAt(finalPosision + Vector3.forward);
         }
         else
         {
@@ -53,8 +53,17 @@ public class PoisonGrenade : ProjectileBase
     {
         if (plosionEffectPrefab != null)
         {
-            Instantiate(plosionEffectPrefab, transform.position +Vector3.up*2, Quaternion.identity);
+            GameObject plosion = Instantiate(plosionEffectPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+            Debug.Log("영역전개");
+
+            // Area 컴포넌트가 있으면 skillData를 전달한다
+            Area area = plosion.GetComponent<Area>();
+            if (area != null)
+            {
+                area.SetArea(skillData);
+            }
         }
+
         Debug.Log("Poison Grenade 도착!");
         Destroy(gameObject);
     }
