@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using Unity.VisualScripting;
 using static UnityEngine.GraphicsBuffer;
+using System.Collections.Generic;
 
 public abstract class PlayableBase : CharacterBase
 {
@@ -64,6 +65,9 @@ public abstract class PlayableBase : CharacterBase
     protected Vector3 exSkillTargetPosition;
 
     public SkillSlot exSkillSlot;  // UI에 연결된 ex스킬 슬롯 1개
+
+    [Header("Buff System")]
+    public List<Buff> activeBuffs = new List<Buff>();
 
     protected virtual void Awake()
     {
@@ -141,7 +145,7 @@ public abstract class PlayableBase : CharacterBase
         currentHealth = maxHealth;
         attackPower = data.attackPower;
         attackRange = data.attackRange;
-        basicAttackInterval = data.basicAttackInterval;
+        basicAttackInterval = data.AttackInterval;
         skillInterval = data.skillInterval;
         exSkillInterval = data.exSkillInterval;
         moveSpeed = data.moveSpeed;
