@@ -4,31 +4,27 @@ using UnityEngine;
 
 public class Luna_Playable : PlayableBase
 {
-    protected override void Skill()
-    {
-        if (currentTarget == null)
-            return;
+    public InterfaceBuff attackPowerBuff;
+    //protected override void Skill()
+    //{
+    //    if (attackPowerBuff == null)
+    //    {
+    //        Debug.LogWarning("공격력 버프가 설정되지 않았습니다.");
+    //        return;
+    //    }
 
-        isAttacking = true;
-        isSkill = true;
-        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
-        GameObject instantMissile = Instantiate(
-            missile,
-            transform.position + Vector3.up * 8f + Vector3.forward * 3f,
-        Quaternion.LookRotation(directionToTarget)
-        );
-        Missile missileScript = instantMissile.GetComponent<Missile>();
-        missileScript.target = currentTarget.transform;
-        Rigidbody missileRigidbody = instantMissile.GetComponent<Rigidbody>();
-        if (missileRigidbody != null)
-        {
-            missileRigidbody.velocity = directionToTarget * 20f;
-        }
-        skillTimer = 0;
-        readySkill = false;
-        isSkill = false;
-        isAttacking = false;
-        currentState = PlayableState.Idle;
-    }
+    //    Debug.Log("루나 스킬 발동! 아군 전원에게 공격력 버프 적용");
+
+    //    foreach (var ally in PlayableManager.instance.playables)
+    //    {
+    //        if (ally != null && !ally.isDead)
+    //        {
+    //            ally.AddBuff(attackPowerBuff);
+    //        }
+    //    }
+
+    //    // 스킬 쿨타임 초기화 등
+    //    skillTimer = 0;
+    //    readySkill = false;
+    //}
 }

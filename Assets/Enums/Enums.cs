@@ -84,6 +84,16 @@ public enum BuffStatType
     CriticalDamage, //치명타 데미지 증가
     HealPower,       // 치유량
 }
+public enum BuffCategory
+{
+    Buff,
+    Debuff,
+}
+public enum BuffApplyType
+{
+    Burst,
+    Tick,
+}
 public enum SkillType
 {
     Self,

@@ -23,7 +23,7 @@ public class SkillManager : MonoBehaviour
 
     private void LoadSkillsFromResources()
     {
-        SkillData[] loaded = Resources.LoadAll<SkillData>("Playable/PlayableSkillData");
+        SkillData[] loaded = Resources.LoadAll<SkillData>("PlayableData/PlayableSkillData");
         skillDatas = new List<SkillData>(loaded);
 
         foreach (var skillData in skillDatas)

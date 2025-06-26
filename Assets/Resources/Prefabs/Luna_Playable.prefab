@@ -428,6 +428,7 @@ MonoBehaviour:
   excapeSpotTransform: {fileID: 0}
   currentState: 0
   exSkillData: {fileID: 11400000, guid: 4ab41700ebabf614e8005310606dc792, type: 2}
+  exSkillSlot: {fileID: 0}
 --- !u!1 &2742480746144338800
 GameObject:
   m_ObjectHideFlags: 0

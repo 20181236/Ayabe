@@ -618,6 +618,7 @@ MonoBehaviour:
   excapeSpotTransform: {fileID: 0}
   currentState: 0
   exSkillData: {fileID: 11400000, guid: d5b3bc2587d55294bbf4f0dc29dfc4fa, type: 2}
+  exSkillSlot: {fileID: 0}
   grenadePrefab: {fileID: 7221321937232580668, guid: 940ba6016c2f15445a7206c262b64c81, type: 3}
 --- !u!1 &3858210144187104431
 GameObject:
