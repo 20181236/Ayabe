@@ -28,6 +28,10 @@ public class LudoSkill : SkillBase
 
         if (grenadeScript != null)
         {
+            // 캐스터의 공격력 가져오기
+            var caster = context.Caster.GetComponent<PlayableBase>();
+            float attackPower = caster != null ? caster.AttackPower : 0f;
+
             grenadeScript.SetTarget(context.TargetPosition);
         }
     }

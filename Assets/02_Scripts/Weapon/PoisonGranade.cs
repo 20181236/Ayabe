@@ -6,6 +6,8 @@ public class PoisonGrenade : ProjectileBase
     [SerializeField] private SkillData skillData;
     private Vector3 startPosition;
     private Vector3 targetPosition;
+    private float attackPower;
+    public float skillRatio = 1.5f; // 스킬 계수150%
     private float flightTime = 1.0f; // 전체 비행 시간
     private float timer = 0f;
     private float height = 15f; // 포물선 높이
