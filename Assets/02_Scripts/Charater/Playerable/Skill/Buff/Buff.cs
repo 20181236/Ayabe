@@ -2,19 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Buff : MonoBehaviour
+public class Buff
 {
-    //지금당장은 필요없는 클래스가 맞음 근데 나중에 CSV나 테이블 들어오면 필요할지도
-    public BuffStatType buffType;
+    //public string buffId;
+    public BuffCategory category;
+    public BuffApplyType applyType;
+    public BuffStatType targetStat;
     public float value;
     public float duration;
-    public float timeRemaining;
+    public float tickInterval;
 
-    public Buff(BuffStatType type, float value, float duration)
+    private float elapsedTime = 0f;
+    private float tickTimer = 0f;
+
+    public Buff(BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float duration, float tickInterval = 0f)
     {
-        this.buffType = type;
+        //buffId = id;
+        this.category = category;
+        this.applyType = applyType;
+        targetStat = stat;
         this.value = value;
         this.duration = duration;
-        this.timeRemaining = duration;
+        this.tickInterval = tickInterval;
+    }
+
+    public bool TickUpdate(float deltaTime, System.Action<Buff> onTick)
+    {
+        elapsedTime += deltaTime;
+
+        if (applyType == BuffApplyType.Tick)
+        {
+            tickTimer += deltaTime;
+            if (tickTimer >= tickInterval)
+            {
+                tickTimer = 0f;
+                onTick?.Invoke(this);
+            }
+        }
+
+        return elapsedTime >= duration;
     }
 }

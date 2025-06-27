@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class PlayableBase : CharacterBase
 {
@@ -409,39 +409,89 @@ public abstract class PlayableBase : CharacterBase
         }
     }
 
-    // 버프 적용 함수
-    public void AddBuffStat(BuffStatType stat, float value)
+    public void ApplyBuff(BuffData data)
     {
-        switch (stat)
-        {
-            case BuffStatType.MaxHealth:
-                buffedMaxHealth += value;
-                break;
-            case BuffStatType.AttackPower:
-                buffedAttackPower += value;
-                break;
-            case BuffStatType.AttackInterval:
-                buffedAttackInterval += value;
-                break;
-            case BuffStatType.AttackRange:
-                buffedAttackRange += value;
-                break;
-            case BuffStatType.HealPower:
-                buffedHealPower += value;
-                break;
-        }
-
-        // 최대체력 버프시 현재 체력도 같이 올려주는 로직 (필요하면)
-        if (stat == BuffStatType.MaxHealth && value > 0)
-        {
-            currentHealth += value;
-            currentHealth = Mathf.Min(currentHealth, MaxHealth);
-        }
+        Buff buff = BuffFactory.CreateBuffFromData(data);
+        activeBuffs.Add(buff);
+        StartCoroutine(BuffRoutine(buff));
+        RecalculateBuffedStats();
     }
 
-    // 버프 제거 함수
-    public void RemoveBuffStat(BuffStatType stat, float value)
+    public void RemoveBuff(Buff buffToRemove)
     {
-        AddBuffStat(stat, -value);
+        if (activeBuffs.Remove(buffToRemove))
+        {
+            RecalculateBuffedStats();
+        }
     }
+        private void RecalculateBuffedStats()
+    {
+        // 초기화
+        buffedMaxHealth = 0f;
+        buffedAttackPower = 0f;
+        buffedAttackRange = 0f;
+        buffedAttackInterval = 0f;
+        buffedHealPower = 0f;
+
+        foreach (var buff in activeBuffs)
+        {
+            // 여기서는 버프의 ApplyType이 즉시 적용(Burst)일 때만 계산한다고 가정
+            if (buff.applyType == BuffApplyType.Burst)
+            {
+                float buffValue = buff.value; // 0.1f= 10%
+
+                switch (buff.targetStat)
+                {
+                    case BuffStatType.MaxHealth:
+                        buffedMaxHealth += baseMaxHealth * buffValue;
+                        break;
+                    case BuffStatType.AttackPower:
+                        buffedAttackPower += baseAttackPower * buffValue;
+                        break;
+                    case BuffStatType.AttackRange:
+                        buffedAttackRange += baseAttackRange * buffValue;
+                        break;
+                    case BuffStatType.AttackInterval:
+                        buffedAttackInterval += baseAttackInterval * buffValue;
+                        break;
+                    case BuffStatType.HealPower:
+                        buffedHealPower += baseHealPower * buffValue;
+                        break;
+                }
+            }
+        }
+
+        // 현재 체력이 최대 체력보다 크면 맞춰서 조정
+        currentHealth = Mathf.Min(currentHealth, MaxHealth);
+    }
+
+    private IEnumerator BuffRoutine(Buff buff)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < buff.duration)
+        {
+            if (buff.applyType == BuffApplyType.Tick)
+            {
+                yield return new WaitForSeconds(buff.tickInterval);
+                OnBuffTick(buff);
+                elapsed += buff.tickInterval;
+            }
+            else
+            {
+                OnBuffTick(buff);
+                break;
+            }
+        }
+
+        activeBuffs.Remove(buff);
+        RecalculateBuffedStats();
+    }
+    protected virtual void OnBuffTick(Buff buff)
+    {
+        // 예: 틱 힐이나 데미지 처리 로직 작성
+        // buff.targetStat, buff.value 등을 참고해 적용
+        Debug.Log($"Buff Tick 발생: {buff.targetStat}, 값: {buff.value}");
+    }
+
 }
