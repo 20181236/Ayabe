@@ -19,11 +19,11 @@ public abstract class PlayableBase : CharacterBase
     public float baseHealPower;
 
     [Header("Buffed Stats")]
-    private float buffedMaxHealth;
-    private float buffedAttackPower;
-    private float buffedAttackRange;
-    private float buffedAttackInterval;
-    private float buffedHealPower;
+    public float buffedMaxHealth;
+    public float buffedAttackPower;
+    public float buffedAttackRange;
+    public float buffedAttackInterval;
+    public float buffedHealPower;
 
     [Header("Runtime Stats")]
     public float currentHealth;
@@ -237,20 +237,22 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void AttackThnking()
     {
-        if (isAttacking)
+        if (isAttacking) // 이미 공격중이면 리턴
             return;
-
         if (readyBasicAttack && !isUsingSkill && !isUsingExSkill)
         {
             BasicAttack();
+            //return;
         }
-        else if (readySkill && !isUsingSkill && !isUsingExSkill)
+        if (readySkill && !isUsingSkill && !isUsingExSkill)
         {
             Skill();
+            // return;
         }
-        else if (readyExSkill && !isUsingSkill && !isUsingExSkill)
+        if (exSkillTimer >= exSkillInterval && !isUsingSkill && !isUsingExSkill)
         {
             ExSkill();
+            //return;
         }
     }
 
@@ -424,9 +426,8 @@ public abstract class PlayableBase : CharacterBase
             RecalculateBuffedStats();
         }
     }
-        private void RecalculateBuffedStats()
+    private void RecalculateBuffedStats()
     {
-        // 초기화
         buffedMaxHealth = 0f;
         buffedAttackPower = 0f;
         buffedAttackRange = 0f;
@@ -435,63 +436,96 @@ public abstract class PlayableBase : CharacterBase
 
         foreach (var buff in activeBuffs)
         {
-            // 여기서는 버프의 ApplyType이 즉시 적용(Burst)일 때만 계산한다고 가정
-            if (buff.applyType == BuffApplyType.Burst)
-            {
-                float buffValue = buff.value; // 0.1f= 10%
+            float buffValue = buff.value;
 
-                switch (buff.targetStat)
-                {
-                    case BuffStatType.MaxHealth:
-                        buffedMaxHealth += baseMaxHealth * buffValue;
-                        break;
-                    case BuffStatType.AttackPower:
-                        buffedAttackPower += baseAttackPower * buffValue;
-                        break;
-                    case BuffStatType.AttackRange:
-                        buffedAttackRange += baseAttackRange * buffValue;
-                        break;
-                    case BuffStatType.AttackInterval:
-                        buffedAttackInterval += baseAttackInterval * buffValue;
-                        break;
-                    case BuffStatType.HealPower:
-                        buffedHealPower += baseHealPower * buffValue;
-                        break;
-                }
+            switch (buff.applyType)
+            {
+                case BuffApplyType.Burst:
+                    switch (buff.targetStat)
+                    {
+                        case BuffStatType.MaxHealth:
+                            buffedMaxHealth += baseMaxHealth * buffValue;
+                            break;
+                        case BuffStatType.AttackPower:
+                            buffedAttackPower += baseAttackPower * buffValue;
+                            break;
+                        case BuffStatType.AttackRange:
+                            buffedAttackRange += baseAttackRange * buffValue;
+                            break;
+                        case BuffStatType.AttackInterval:
+                            buffedAttackInterval += baseAttackInterval * buffValue;
+                            break;
+                        case BuffStatType.HealPower:
+                            buffedHealPower += baseHealPower * buffValue;
+                            break;
+                    }
+                    break;
+
+                case BuffApplyType.Tick:
+                    switch (buff.targetStat)
+                    {
+                        case BuffStatType.MaxHealth:
+                            buffedMaxHealth += baseMaxHealth * buffValue;
+                            break;
+                        case BuffStatType.AttackPower:
+                            buffedAttackPower += baseAttackPower * buffValue;
+                            break;
+                        case BuffStatType.AttackRange:
+                            buffedAttackRange += baseAttackRange * buffValue;
+                            break;
+                        case BuffStatType.AttackInterval:
+                            buffedAttackInterval += baseAttackInterval * buffValue;
+                            break;
+                        case BuffStatType.HealPower:
+                            buffedHealPower += baseHealPower * buffValue;
+                            break;
+                    }
+                    break;
             }
         }
 
-        // 현재 체력이 최대 체력보다 크면 맞춰서 조정
         currentHealth = Mathf.Min(currentHealth, MaxHealth);
     }
 
     private IEnumerator BuffRoutine(Buff buff)
     {
         float elapsed = 0f;
+        Debug.Log($"BuffRoutine 시작: {buff.targetStat}, applyType: {buff.applyType}");
 
-        while (elapsed < buff.duration)
+        if (buff.applyType == BuffApplyType.Tick)
         {
-            if (buff.applyType == BuffApplyType.Tick)
+            while (elapsed < buff.duration)
             {
                 yield return new WaitForSeconds(buff.tickInterval);
                 OnBuffTick(buff);
                 elapsed += buff.tickInterval;
             }
-            else
-            {
-                OnBuffTick(buff);
-                break;
-            }
+        }
+        else // Burst
+        {
+            OnBuffTick(buff);
+            yield return new WaitForSeconds(buff.duration);
         }
 
+        Debug.Log($"BuffRoutine 종료: {buff.targetStat}");
         activeBuffs.Remove(buff);
         RecalculateBuffedStats();
     }
+
+
     protected virtual void OnBuffTick(Buff buff)
     {
-        // 예: 틱 힐이나 데미지 처리 로직 작성
-        // buff.targetStat, buff.value 등을 참고해 적용
         Debug.Log($"Buff Tick 발생: {buff.targetStat}, 값: {buff.value}");
-    }
 
+        switch (buff.targetStat)
+        {
+            case BuffStatType.HealPower:
+                Heal(baseHealPower * buff.value);
+                break;
+
+            case BuffStatType.AttackPower:
+                buffedAttackPower += baseAttackPower * buff.value;
+                break;
+        }
+    }
 }

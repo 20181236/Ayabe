@@ -389,11 +389,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playableID: 0
   playableType: 0
-  maxHealth: 0
+  baseMaxHealth: 0
+  baseAttackPower: 0
+  baseAttackRange: 0
+  baseAttackInterval: 0
+  baseHealPower: 0
   currentHealth: 0
-  attackPower: 0
-  attackRange: 0
-  basicAttackInterval: 0
   basicAttackTimer: 0
   basicAttackCount: 0
   skillInterval: 0
@@ -429,6 +430,7 @@ MonoBehaviour:
   currentState: 0
   exSkillData: {fileID: 11400000, guid: 4ab41700ebabf614e8005310606dc792, type: 2}
   exSkillSlot: {fileID: 0}
+  attackBuffData: {fileID: 11400000, guid: cda6c6c13e7f9eb42acf19fcd5e99808, type: 2}
 --- !u!1 &2742480746144338800
 GameObject:
   m_ObjectHideFlags: 0

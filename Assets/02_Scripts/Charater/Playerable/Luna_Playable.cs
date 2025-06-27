@@ -4,27 +4,40 @@ using UnityEngine;
 
 public class Luna_Playable : PlayableBase
 {
-    public InterfaceBuff attackPowerBuff;
+    [SerializeField] private BuffData attackBuffData;
+
     protected override void Skill()
     {
-        if (attackPowerBuff == null)
+        Debug.LogWarning("Luna스킬사용");
+        if (attackBuffData == null)
         {
-            Debug.LogWarning("공격력 버프가 설정되지 않았습니다.");
+            Debug.LogWarning("Attack Buff Data is not assigned.");
             return;
         }
 
-        Debug.Log("루나 스킬 발동! 아군 전원에게 공격력 버프 적용");
+        isUsingSkill = true;
+        skillTimer = 0f;
+        readySkill = false;
 
+        StartCoroutine(SkillRoutine());
+    }
+
+    private IEnumerator SkillRoutine()
+    {
+        //// 애니메이션 재생 등 필요 시 처리
+        //playableAnimator.SetTrigger("doSkill");
+
+        yield return new WaitForSeconds(0.5f); // 애니메이션 캐스팅 타임 등
+
+        // 아군 전체에게 버프 적용
         foreach (var playables in PlayableManager.instance.playables)
         {
             if (playables != null && !playables.isDead)
             {
-                playables.AddBuffStat()
+                playables.ApplyBuff(attackBuffData);
             }
         }
 
-        // 스킬 쿨타임 초기화 등
-        skillTimer = 0;
-        readySkill = false;
+        isUsingSkill = false;
     }
 }
