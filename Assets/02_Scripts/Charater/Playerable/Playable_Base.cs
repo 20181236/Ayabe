@@ -200,6 +200,12 @@ public abstract class PlayableBase : CharacterBase
         if (currentTarget == null)
             return;
 
+        if (currentTarget.ObjectType == this.ObjectType)
+        {
+            currentTarget = null;
+            return;
+        }
+
         distance = Vector3.Distance(transform.position, currentTarget.transform.position);
     }
 
@@ -251,7 +257,7 @@ public abstract class PlayableBase : CharacterBase
         }
         if (exSkillTimer >= exSkillInterval && !isUsingSkill && !isUsingExSkill)
         {
-            ExSkill();
+            //ExSkill();
             //return;
         }
     }
@@ -326,8 +332,12 @@ public abstract class PlayableBase : CharacterBase
 
         foreach (var enemy in EnemyManager.instance.enemies)
         {
-            if (enemy == null)
+            if (enemy == null || enemy.isDead)
                 continue;
+
+            if (enemy.ObjectType == this.ObjectType)
+                continue;
+
             float dist = Vector3.Distance(position, enemy.transform.position);
             if (dist < minDist)
             {

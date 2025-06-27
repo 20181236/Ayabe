@@ -9,4 +9,7 @@ public class SkillContext
     public List<GameObject> Targets { get; set; }
 
     public Vector3 WorldPosition;
+
+    public float AttackPower;
+    public float HealPower;
 }
