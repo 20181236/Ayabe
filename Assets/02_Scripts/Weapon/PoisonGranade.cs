@@ -26,6 +26,11 @@ public class PoisonGrenade : ProjectileBase
         isExplosion = true;
     }
 
+    public void SetAttackPower(float power)
+    {
+        attackPower = power;
+    }
+
     private void Update()
     {
         if (timer < flightTime)
@@ -63,6 +68,7 @@ public class PoisonGrenade : ProjectileBase
             if (area != null)
             {
                 area.SetArea(skillData);
+                area.SetAttackPower(attackPower);
             }
         }
 

@@ -21,7 +21,7 @@ public enum GameLayerMask
     Playable = 6,
     Enemy = 7,
     Projectile = 8
-}
+}   
 
 /// <summary>
 /// Playable
@@ -55,25 +55,7 @@ public enum PlayableAttackState
     ExSkillAttack,
     Reload,
 }
-public enum PlayableHelath
-{
-    SoonDobu = 5000,
-    Luna = 5000,
-    Ludo = 5000,
-}
-public enum PlayableAttackRenge
-{
-    SoonDobu = 50,
-    Luna = 50,
-    Ludo = 50,
-}
 
-public enum PlayalbeBaiscSkillCoolTime
-{
-    SoonDobu = 10,
-    Luna = 5,
-    Ludo = 5,
-}
 public enum BuffStatType
 {
     MaxHealth,       // 최대 체력
@@ -93,15 +75,21 @@ public enum BuffApplyType
 {
     Burst,
     Tick,
+    Both
 }
 public enum SkillType
 {
+    Attack,
+    Heal,
+    Buff,
+    Debuff
+}
+public enum SkillTargetType
+{
     Self,
-    TargetAttack,
-    TargetHeal,
-    Area,
-    SelfHeal,
-    Buff
+    TargetUnit,
+    TeamAll,
+    Area
 }
 
 public enum CastType
@@ -158,20 +146,6 @@ public enum EnemyAttackState
     Reload,
 }
 
-public enum EnemyHealth
-{
-    Middler = 1000,
-    Thanker = 3000,
-    Boss = 5000,
-}
-
-public enum EnemyAttackRange
-{
-    Thanker = 50,
-    Middler = 50,
-    Sinper = 50,
-    Boss = 100,
-}
 
 public enum WeaponType
 {

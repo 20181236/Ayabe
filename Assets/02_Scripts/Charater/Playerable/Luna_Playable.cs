@@ -35,6 +35,7 @@ public class Luna_Playable : PlayableBase
             if (playables != null && !playables.isDead)
             {
                 playables.ApplyBuff(attackBuffData);
+                Debug.Log($"{playables.name} 버프 적용 후 공격력: {playables.AttackPower}");
             }
         }
 

@@ -13,10 +13,22 @@ MonoBehaviour:
   m_Name: SoonDoBuSkillData
   m_EditorClassIdentifier: 
   skillId: 0
-  skillType: 2
+  skillType: 1
   castType: 1
+  areaType: 1
+  weaponPrefab: {fileID: 0}
   icon: {fileID: 21300000, guid: 3260f72e5b6eec24587b9132cb1ae0a0, type: 3}
   manaCost: 0
-  renge: 5
-  skillRadius: 1
+  range: 10
+  skillRadius: 0
+  skillAngle: 0
+  damageMultiplier: 0
   healValue: 500
+  duration: 5
+  tickInterval: 1
+  effectAmount: 0
+  effectInterval: 0
+  areaDuration: 0
+  buffStatType: 6
+  buffAmount: 0.8
+  buffDuration: 5

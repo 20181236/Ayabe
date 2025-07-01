@@ -6,6 +6,7 @@ public class Area : MonoBehaviour
     private SkillData skillData;
 
     public AreaType effectType;  // 딜인지 힐인지
+    private float casterAttackPower;
     public float effectAmount; // 데미지 or 힐량
     public float effectInterval; //몇 초마다 효과 발동?
     public float areaDuration;        // 장판 지속 시간 (초)
@@ -40,9 +41,16 @@ public class Area : MonoBehaviour
         effectInterval = skillData.effectInterval;
         areaDuration = skillData.areaDuration;
     }
+    public void SetAttackPower(float power)
+    {
+        casterAttackPower = power;
+    }
 
     private void ApplyEffect()
     {
+        // 캐릭터 공격력 기반으로 딜/힐 계산
+        float scaledEffectAmount = casterAttackPower * skillData.damageMultiplier;
+
         foreach (GameObject target in targets)
         {
             if (target == null)
@@ -50,17 +58,19 @@ public class Area : MonoBehaviour
 
             // 힐 대상
             var player = target.GetComponent<PlayableBase>();
-            if (player != null)
+            if (effectType == AreaType.Heal && player != null)
             {
-                player.Heal(effectAmount);
+                player.Heal(scaledEffectAmount);
+                Debug.Log($"[Area Heal] {player.name} 이(가) {scaledEffectAmount} 만큼 회복했습니다.");
                 continue;
             }
 
             // 딜 대상
             var enemy = target.GetComponent<EnemyBase>();
-            if (enemy != null)
+            if (effectType == AreaType.Damage && enemy != null)
             {
-                enemy.ApplyDamage(effectAmount, false);
+                enemy.ApplyDamage(scaledEffectAmount, false);
+                Debug.Log($"[Area Damage] {enemy.name} 이(가) {scaledEffectAmount} 만큼 피해를 입었습니다.");
             }
         }
     }

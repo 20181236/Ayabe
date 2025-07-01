@@ -4,7 +4,7 @@ public class InputSkill : MonoBehaviour
 {
     public static InputSkill instance { get; private set; }
     public SkillPanel skillPanel;
-
+    public PlayableBase skillCaster;
     private void Awake()
     {
         if (instance == null)
@@ -25,6 +25,12 @@ public class InputSkill : MonoBehaviour
 
     private void Start()
     {
+        if (skillCaster == null)
+        {
+            skillCaster = FindObjectOfType<PlayableBase>();
+            if (skillCaster == null)
+                Debug.LogError("PlayableBase (스킬 캐스터)를 찾을 수 없습니다!");
+        }
         SkillButtonHandler[] skillButtons = FindObjectsOfType<SkillButtonHandler>();
         InitializeSkillButtons(skillButtons);
     }
@@ -57,13 +63,21 @@ public class InputSkill : MonoBehaviour
         SkillData skillData = skillPanel.GetSkillDataById(skillId);
         if (skillData != null)
         {
-            SkillExecutor.instance.OnSkillSelected(skillData);
+            if (skillCaster != null)
+            {
+                SkillExecutor.instance.OnSkillSelected(skillCaster.gameObject, skillData);
+            }
+            else
+            {
+                Debug.LogError("스킬 캐스터가 설정되어 있지 않습니다!");
+            }
         }
         else
         {
             Debug.LogWarning("SkillData가 없습니다: " + skillId);
         }
     }
+
 
     public void OnSkillButtonDrag(SkillId skillId, Vector2 pos)
     {

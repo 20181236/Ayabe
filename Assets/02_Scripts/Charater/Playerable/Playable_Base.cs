@@ -27,8 +27,6 @@ public abstract class PlayableBase : CharacterBase
 
     [Header("Runtime Stats")]
     public float currentHealth;
-
-    // 최종 계산된 스탯 (읽기 전용 프로퍼티)
     public float MaxHealth => baseMaxHealth + buffedMaxHealth;
     public float AttackPower => baseAttackPower + buffedAttackPower;
     public float AttackRange => baseAttackRange + buffedAttackRange;
@@ -107,8 +105,8 @@ public abstract class PlayableBase : CharacterBase
     {
         if (PlayableManager.instance != null)
             PlayableManager.instance.RegisterPlayable(this);
-        if (SkillExecutor.instance != null)
-            SkillExecutor.instance.SetCaster(this.gameObject);
+        //if (SkillExecutor.instance != null)
+        //    SkillExecutor.instance.SetCaster(this.gameObject);
     }
 
     protected virtual void Update()
@@ -168,14 +166,19 @@ public abstract class PlayableBase : CharacterBase
         playableType = data.playableType;
 
         baseMaxHealth = data.maxHealth;
+
         baseAttackPower = data.attackPower;
         baseAttackRange = data.attackRange;
         baseAttackInterval = data.AttackInterval;
-        skillInterval = data.skillInterval;
-        exSkillInterval = data.exSkillInterval;
+
+        baseHealPower = data.HealPower;
+
         moveSpeed = data.moveSpeed;
 
+        skillInterval = data.skillInterval;
+
         exSkillData = data.exSkillData;
+        exSkillInterval = data.exSkillInterval;
 
         if (exSkillSlot != null)
         {
@@ -291,10 +294,11 @@ public abstract class PlayableBase : CharacterBase
 
         if (bullet != null)
         {
-            // 최종 스탯인 AttackPower 사용
-            bullet.damage = AttackPower * 1.0f; // 필요하면 곱셈 비율 조정 가능
             bullet.transform.position = playableBulletFirePoint.position;
             bullet.transform.rotation = Quaternion.LookRotation(direction);
+
+            bullet.SetDamageFromStat(this.AttackPower);
+            bullet.ShooterType = this.ObjectType;
 
             Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
             if (bulletRigidbody != null)
@@ -359,9 +363,9 @@ public abstract class PlayableBase : CharacterBase
         StartCoroutine(OnDamage(isExplosion));
     }
 
-    public void Heal(float healthGain)
+    public void Heal(float amount)
     {
-        currentHealth = Mathf.Min(currentHealth + healthGain, MaxHealth);
+        currentHealth = Mathf.Min(currentHealth + amount, MaxHealth);
     }
 
     protected virtual void Die()
@@ -425,7 +429,19 @@ public abstract class PlayableBase : CharacterBase
     {
         Buff buff = BuffFactory.CreateBuffFromData(data);
         activeBuffs.Add(buff);
-        StartCoroutine(BuffRoutine(buff));
+        Debug.Log($"버프 추가됨: {buff.targetStat} / 값: {buff.value} / 타입: {buff.applyType}");
+
+        if (buff.applyType == BuffApplyType.Burst)
+        {
+            OnBuffTick(buff); // 즉시 효과 적용
+                              // 버프는 한번만 적용되므로 바로 제거
+            activeBuffs.Remove(buff);
+        }
+        else
+        {
+            StartCoroutine(BuffRoutine(buff)); // Tick 타입은 코루틴으로 관리
+        }
+
         RecalculateBuffedStats();
     }
 
@@ -525,16 +541,12 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void OnBuffTick(Buff buff)
     {
-        Debug.Log($"Buff Tick 발생: {buff.targetStat}, 값: {buff.value}");
+       // Debug.Log($"Buff Tick 발생: {buff.targetStat}, 값: {buff.value}");
 
         switch (buff.targetStat)
         {
             case BuffStatType.HealPower:
-                Heal(baseHealPower * buff.value);
-                break;
-
-            case BuffStatType.AttackPower:
-                buffedAttackPower += baseAttackPower * buff.value;
+                Heal(baseHealPower * buff.value); // 즉시 회복 효과만 여기서 처리
                 break;
         }
     }

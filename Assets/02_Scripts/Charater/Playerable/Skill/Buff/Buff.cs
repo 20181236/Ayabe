@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Buff
 {
-    //public string buffId;
     public BuffCategory category;
     public BuffApplyType applyType;
     public BuffStatType targetStat;
@@ -12,34 +11,93 @@ public class Buff
     public float duration;
     public float tickInterval;
 
-    private float elapsedTime = 0f;
-    private float tickTimer = 0f;
+    private PlayableBase owner;
 
     public Buff(BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float duration, float tickInterval = 0f)
     {
-        //buffId = id;
         this.category = category;
         this.applyType = applyType;
-        targetStat = stat;
+        this.targetStat = stat;
         this.value = value;
         this.duration = duration;
         this.tickInterval = tickInterval;
     }
 
-    public bool TickUpdate(float deltaTime, System.Action<Buff> onTick)
+    public void SetOwner(PlayableBase owner)
     {
-        elapsedTime += deltaTime;
+        this.owner = owner;
+    }
 
-        if (applyType == BuffApplyType.Tick)
+    public IEnumerator BuffCoroutine()
+    {
+        float elapsed = 0f;
+
+        // 즉시 효과 (Burst or Both)
+        if (applyType == BuffApplyType.Burst || applyType == BuffApplyType.Both)
         {
-            tickTimer += deltaTime;
-            if (tickTimer >= tickInterval)
+            if (targetStat == BuffStatType.HealPower)
             {
-                tickTimer = 0f;
-                onTick?.Invoke(this);
+                float healAmount = owner.baseHealPower * value;
+                owner.Heal(healAmount);
             }
+            // 기타 버프도 여기에 처리 가능
         }
 
-        return elapsedTime >= duration;
+        // 지속 효과 (Tick or Both)
+        while (elapsed < duration)
+        {
+            if (applyType == BuffApplyType.Tick || applyType == BuffApplyType.Both)
+            {
+                if (targetStat == BuffStatType.HealPower)
+                {
+                    float healAmount = owner.baseHealPower * value;
+                    owner.Heal(healAmount);
+                }
+                // 기타 틱 버프 처리 가능
+            }
+
+            elapsed += tickInterval;
+            yield return new WaitForSeconds(tickInterval);
+        }
+
+        // 버프 종료 시 처리 (필요하면)
     }
+    ////public string buffId;
+    //public BuffCategory category;
+    //public BuffApplyType applyType;
+    //public BuffStatType targetStat;
+    //public float value;
+    //public float duration;
+    //public float tickInterval;
+
+    //private float elapsedTime = 0f;
+    //private float tickTimer = 0f;
+
+    //public Buff(BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float duration, float tickInterval = 0f)
+    //{
+    //    //buffId = id;
+    //    this.category = category;
+    //    this.applyType = applyType;
+    //    targetStat = stat;
+    //    this.value = value;
+    //    this.duration = duration;
+    //    this.tickInterval = tickInterval;
+    //}
+
+    //public bool TickUpdate(float deltaTime, System.Action<Buff> onTick)
+    //{
+    //    elapsedTime += deltaTime;
+
+    //    if (applyType == BuffApplyType.Tick)
+    //    {
+    //        tickTimer += deltaTime;
+    //        if (tickTimer >= tickInterval)
+    //        {
+    //            tickTimer = 0f;
+    //            onTick?.Invoke(this);
+    //        }
+    //    }
+
+    //    return elapsedTime >= duration;
+    //}
 }

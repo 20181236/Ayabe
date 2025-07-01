@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LudoSkillData
   m_EditorClassIdentifier: 
   skillId: 2
-  skillType: 3
+  skillType: 0
   castType: 2
   areaType: 0
   weaponPrefab: {fileID: 7221321937232580668, guid: e2fa3772567e051488a311b6fd0b0514, type: 3}
@@ -22,7 +22,13 @@ MonoBehaviour:
   range: 5
   skillRadius: 10
   skillAngle: 0
+  damageMultiplier: 2
   healValue: 0
-  effectAmount: 50
+  duration: 0
+  tickInterval: 0
+  effectAmount: 0
   effectInterval: 1
   areaDuration: 5
+  buffStatType: 0
+  buffAmount: 0
+  buffDuration: 0

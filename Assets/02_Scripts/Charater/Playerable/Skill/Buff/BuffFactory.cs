@@ -16,4 +16,10 @@ public static class BuffFactory
             tickInterval: data.tickInterval
         );
     }
+    public static BuffData CreateRuntimeBuff(BuffStatType stat, float value, float duration, BuffApplyType applyType = BuffApplyType.Tick, float tickInterval = 1f)
+    {
+        var buff = ScriptableObject.CreateInstance<BuffData>();
+        buff.SetData(stat, value, duration, applyType, tickInterval);
+        return buff;
+    }
 }

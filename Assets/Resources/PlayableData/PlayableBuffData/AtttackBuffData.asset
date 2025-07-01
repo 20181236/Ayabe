@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AtttackBuffData
   m_EditorClassIdentifier: 
   _category: 0
-  _applyType: 0
+  _applyType: 1
   _targetStat: 1
   _value: 2
   _duration: 5
-  _tickInterval: 1
+  _tickInterval: 0

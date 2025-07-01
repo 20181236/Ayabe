@@ -21,4 +21,13 @@ public class BuffData : ScriptableObject, InterfaceBuff
     public float value => _value;
     public float duration => _duration;
     public float tickInterval => _tickInterval;
+
+    public void SetData(BuffStatType stat, float value, float duration, BuffApplyType applyType, float tickInterval)
+    {
+        _targetStat = stat;
+        _value = value;
+        _duration = duration;
+        _applyType = applyType;
+        _tickInterval = tickInterval;
+    }
 }

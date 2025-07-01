@@ -7,6 +7,7 @@ public class ProjectileBase : MonoBehaviour
     public WeaponType weaponType;
     public ObjectType ShooterType;
     public float damage;
+    protected float damageMultiplier;// 무기 고유 배수
     public float speed;
     public float rotateSpeed;
     public bool isExplosion;
@@ -22,6 +23,10 @@ public class ProjectileBase : MonoBehaviour
     }
     protected virtual void SetProjectileInfo()
     {
+    }
+    public void SetDamageFromStat(float statValue)
+    {
+        damage = statValue * damageMultiplier;
     }
 
     protected virtual void SetTargetMask()
