@@ -6,12 +6,15 @@ using UnityEngine;
 public class SkillData : ScriptableObject
 {
     public SkillId skillId;
+    public PlayableID ownerId; // 이 스킬의 주인
     public SkillType skillType;
     public CastType castType;
     public AreaType areaType;   // 장판이 딜인지 힐인지 구분
 
     public GameObject weaponPrefab;
     public Sprite icon;
+
+    public GameObject caster;
 
     public int manaCost;
 
@@ -36,12 +39,12 @@ public class SkillData : ScriptableObject
     public float buffDuration;
 }
 
-//확장, 유지보수, 가독성, 초기화    
-public enum SKILLDATA
-{
-    A, B, C, D, E, F,
-}
-public class TestData:MonoBehaviour
-{
-    public float[] a1 = new float[(int)SKILLDATA.A];
-}
+////확장, 유지보수, 가독성, 초기화    
+//public enum SKILLDATA
+//{
+//    A, B, C, D, E, F,
+//}
+//public class TestData:MonoBehaviour
+//{
+//    public float[] a1 = new float[(int)SKILLDATA.A];
+//}

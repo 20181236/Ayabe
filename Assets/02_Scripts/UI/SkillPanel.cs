@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SkillPanel : MonoBehaviour
 {
     public SkillButtonHandler[] skillButtons;
+    public List<SkillData> skillDatas;
 
     private void Start()
     {
@@ -43,5 +45,17 @@ public class SkillPanel : MonoBehaviour
                 return handler.SkillData;
         }
         return null;
+    }
+
+    public void AssignCasterToSkills(GameObject caster, List<SkillId> skills)
+    {
+        foreach (var data in skillDatas)
+        {
+            if (skills.Contains(data.skillId))
+            {
+                data.caster = caster;
+                Debug.Log($"SkillPanel: {data.skillId}의 시전자로 {caster.name} 설정");
+            }
+        }
     }
 }

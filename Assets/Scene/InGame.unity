@@ -384,9 +384,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - {fileID: 11400000, guid: f1caaef114539e344bda46f53a475516, type: 2}
   - {fileID: 11400000, guid: a42224f822e551e46855a346b8fa2f8c, type: 2}
   - {fileID: 11400000, guid: 44ca8f272ce8c1f44b8ec10983778f73, type: 2}
+  - {fileID: 11400000, guid: f1caaef114539e344bda46f53a475516, type: 2}
 --- !u!4 &125666872
 Transform:
   m_ObjectHideFlags: 0
@@ -1291,7 +1291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da648cda088f5b444ac752f08a4a5356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  caster: {fileID: 0}
 --- !u!4 &825601825
 Transform:
   m_ObjectHideFlags: 0
@@ -1442,13 +1441,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.28293306, y: -0.6480346, z: 0.28293318, w: 0.64803463}
+  m_LocalRotation: {x: 0.19684738, y: -0.64713234, z: 0.22732742, w: 0.70056623}
   m_LocalPosition: {x: 57, y: 25.2, z: -16.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 47.172, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.752, y: -84.066, z: 4.45}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1462,8 +1461,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothSpeed: 5
-  offsetX: 70.2
-  offsetY: 84.7
+  offsetX: 30
+  offsetY: 22
   offsetZ: 9.01
   minFOV: 40
   maxFOV: 60
@@ -2671,6 +2670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillPanel: {fileID: 0}
+  skillCaster: {fileID: 0}
 --- !u!114 &1381351264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2970,6 +2970,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillPanel: {fileID: 1381351264}
+  skillCaster: {fileID: 0}
 --- !u!4 &1937077841
 Transform:
   m_ObjectHideFlags: 0

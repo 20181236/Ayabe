@@ -82,10 +82,12 @@ public abstract class PlayableBase : CharacterBase
     protected SkillBase exSkill;
     protected Vector3 exSkillTargetPosition;
 
+    public List<SkillId> ownedSkills;
     public SkillSlot exSkillSlot;
 
     [Header("Buff System")]
     public List<Buff> activeBuffs = new List<Buff>();
+
 
     protected virtual void Awake()
     {
@@ -105,8 +107,8 @@ public abstract class PlayableBase : CharacterBase
     {
         if (PlayableManager.instance != null)
             PlayableManager.instance.RegisterPlayable(this);
-        //if (SkillExecutor.instance != null)
-        //    SkillExecutor.instance.SetCaster(this.gameObject);
+        //SkillPanel panel = FindObjectOfType<SkillPanel>();
+        //panel.AssignCasterToSkills(this.gameObject, ownedSkills);
     }
 
     protected virtual void Update()

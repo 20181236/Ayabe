@@ -23,6 +23,10 @@ public class EnemyManager : MonoBehaviour
         {
             enemiesID[id] = new List<EnemyBase>();
         }
+        foreach (EnemyType type in (EnemyType[])System.Enum.GetValues(typeof(EnemyType)))
+        {
+            enemiesType[type] = new List<EnemyBase>();
+        }
     }
     public void SpawnEnemy(EnemyID id, Vector3 spawnPosition)
     {
@@ -47,6 +51,7 @@ public class EnemyManager : MonoBehaviour
         {
             enemies.Add(enemy);
             enemiesID[enemy.enemyID].Add(enemy);
+            enemiesType[enemy.enemyType].Add(enemy);
         }
     }
 
@@ -56,6 +61,7 @@ public class EnemyManager : MonoBehaviour
         {
             enemies.Remove(enemy);
             enemiesID[enemy.enemyID].Remove(enemy);
+            enemiesType[enemy.enemyType].Remove(enemy);
         }
     }
     public List<EnemyBase> GetEnemies()
@@ -72,7 +78,9 @@ public class EnemyManager : MonoBehaviour
     }
     public bool HasEnemyOfType(EnemyType type)
     {
-        return enemiesType[type].Count > 0;
+        if (enemiesType.ContainsKey(type))
+            return enemiesType[type].Count > 0;
+        return false;
     }
     public bool HasBoss()
     {

@@ -6,7 +6,8 @@ public class SkillManager : MonoBehaviour
     public static SkillManager instance { get; private set; }
 
     public List<SkillData> skillDatas = new List<SkillData>();  // 자동 등록
-    private Dictionary<SkillId, SkillBase> skillInstances = new Dictionary<SkillId, SkillBase>();
+    public Dictionary<SkillId, SkillBase> skillInstances = new Dictionary<SkillId, SkillBase>();
+    public Dictionary<PlayableID, List<SkillData>> skillsByOwner = new Dictionary<PlayableID, List<SkillData>>();
 
     private void Awake()
     {
@@ -28,12 +29,17 @@ public class SkillManager : MonoBehaviour
 
         foreach (var skillData in skillDatas)
         {
+            if (!skillsByOwner.ContainsKey(skillData.ownerId))
+                skillsByOwner[skillData.ownerId] = new List<SkillData>();
+
+            skillsByOwner[skillData.ownerId].Add(skillData);
+
             var skill = SkillFactory.CreateSkill(skillData);
             if (skill != null)
                 skillInstances[skillData.skillId] = skill;
         }
 
-        Debug.Log($"[SkillManager] 자동 등록된 SkillData 개수: {skillDatas.Count}");
+        Debug.Log($"[SkillManager] 등록된 스킬 수: {skillDatas.Count}");
     }
 
     public void UseSkill(SkillId skillId, SkillContext context)

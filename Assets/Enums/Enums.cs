@@ -146,6 +146,12 @@ public enum EnemyAttackState
     Reload,
 }
 
+public enum EnemySpawnState
+{
+    None,       // 아직 적이 한 마리도 안 나옴
+    Spawned,    // 적이 한 번이라도 소환됨
+    Cleared     // 적이 모두 제거됨
+}
 
 public enum WeaponType
 {
