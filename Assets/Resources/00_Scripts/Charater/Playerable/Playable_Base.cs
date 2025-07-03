@@ -88,7 +88,6 @@ public abstract class PlayableBase : CharacterBase
     [Header("Buff System")]
     public List<Buff> activeBuffs = new List<Buff>();
 
-
     protected virtual void Awake()
     {
         rigidbodyPlayable = GetComponent<Rigidbody>();
@@ -107,8 +106,8 @@ public abstract class PlayableBase : CharacterBase
     {
         if (PlayableManager.instance != null)
             PlayableManager.instance.RegisterPlayable(this);
-        //SkillPanel panel = FindObjectOfType<SkillPanel>();
-        //panel.AssignCasterToSkills(this.gameObject, ownedSkills);
+        // SkillPanel panel = FindObjectOfType<SkillPanel>();
+        // panel.AssignCasterToSkills(this.gameObject, ownedSkills);
     }
 
     protected virtual void Update()
@@ -117,9 +116,7 @@ public abstract class PlayableBase : CharacterBase
             return;
 
         CoolTime();
-
         UpdateTargetAndDistance();
-
         CheckingAttackRenge();
 
         if (currentState == PlayableState.Chasing)
@@ -130,6 +127,7 @@ public abstract class PlayableBase : CharacterBase
             navMeshAgent.isStopped = false;
             MoveToTarget(currentTarget.transform.position);
         }
+
         if (currentState == PlayableState.Attack)
         {
             isIdle = false;
@@ -154,7 +152,7 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void Initialize()
     {
-        currentHealth = MaxHealth; // 최종 최대 체력 기준으로 초기화
+        currentHealth = MaxHealth;
         isCreate = false;
         currentState = PlayableState.Idle;
 
@@ -168,17 +166,13 @@ public abstract class PlayableBase : CharacterBase
         playableType = data.playableType;
 
         baseMaxHealth = data.maxHealth;
-
         baseAttackPower = data.attackPower;
         baseAttackRange = data.attackRange;
         baseAttackInterval = data.AttackInterval;
-
         baseHealPower = data.HealPower;
-
         moveSpeed = data.moveSpeed;
 
         skillInterval = data.skillInterval;
-
         exSkillData = data.exSkillData;
         exSkillInterval = data.exSkillInterval;
 
@@ -187,7 +181,7 @@ public abstract class PlayableBase : CharacterBase
             exSkillSlot.Setup(exSkillData, this);
         }
 
-        Initialize(); // 데이터를 설정한 뒤 스탯 초기화
+        Initialize();
     }
 
     public void SetExSkill(SkillBase skill)
@@ -234,11 +228,13 @@ public abstract class PlayableBase : CharacterBase
         {
             readyBasicAttack = true;
         }
+
         skillTimer += Time.deltaTime;
         if (skillTimer >= skillInterval)
         {
             readySkill = true;
         }
+
         exSkillTimer += Time.deltaTime;
         if (exSkillTimer >= exSkillInterval)
         {
@@ -248,22 +244,22 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void AttackThnking()
     {
-        if (isAttacking) // 이미 공격중이면 리턴
+        if (isAttacking)
             return;
+
         if (readyBasicAttack && !isUsingSkill && !isUsingExSkill)
         {
             BasicAttack();
-            //return;
         }
+
         if (readySkill && !isUsingSkill && !isUsingExSkill)
         {
             Skill();
-            // return;
         }
+
         if (exSkillTimer >= exSkillInterval && !isUsingSkill && !isUsingExSkill)
         {
             //ExSkill();
-            //return;
         }
     }
 
@@ -274,12 +270,15 @@ public abstract class PlayableBase : CharacterBase
 
         isAttacking = true;
         isBisicAttack = true;
+
         playableAnimator.SetBool("isAttack", true);
         ShootBulletAtTarget();
+
         basicAttackTimer = 0;
         readyBasicAttack = false;
         isBisicAttack = false;
         isAttacking = false;
+
         playableAnimator.SetBool("isAttack", false);
         currentState = PlayableState.Idle;
     }
@@ -357,11 +356,13 @@ public abstract class PlayableBase : CharacterBase
     public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
         currentHealth -= damage;
+
         if (currentHealth <= 0 && !isDead)
         {
             currentState = PlayableState.Dead;
             Die();
         }
+
         StartCoroutine(OnDamage(isExplosion));
     }
 
@@ -375,6 +376,7 @@ public abstract class PlayableBase : CharacterBase
         isDead = true;
         isChase = false;
         playableAnimator.SetTrigger("doDie");
+
         Destroy(gameObject, 1.8f);
         OnDestroy();
     }
@@ -395,9 +397,8 @@ public abstract class PlayableBase : CharacterBase
             if (gameObject.TryGetComponent<CharacterBase>(out var character))
             {
                 if (projectile.ShooterType == character.ObjectType)
-                {
                     return;
-                }
+
                 projectile.OnHit(gameObject);
 
                 if (projectile is Bullet bullet)
@@ -435,13 +436,12 @@ public abstract class PlayableBase : CharacterBase
 
         if (buff.applyType == BuffApplyType.Burst)
         {
-            OnBuffTick(buff); // 즉시 효과 적용
-                              // 버프는 한번만 적용되므로 바로 제거
+            OnBuffTick(buff);
             activeBuffs.Remove(buff);
         }
         else
         {
-            StartCoroutine(BuffRoutine(buff)); // Tick 타입은 코루틴으로 관리
+            StartCoroutine(BuffRoutine(buff));
         }
 
         RecalculateBuffedStats();
@@ -454,6 +454,7 @@ public abstract class PlayableBase : CharacterBase
             RecalculateBuffedStats();
         }
     }
+
     private void RecalculateBuffedStats()
     {
         buffedMaxHealth = 0f;
@@ -469,26 +470,6 @@ public abstract class PlayableBase : CharacterBase
             switch (buff.applyType)
             {
                 case BuffApplyType.Burst:
-                    switch (buff.targetStat)
-                    {
-                        case BuffStatType.MaxHealth:
-                            buffedMaxHealth += baseMaxHealth * buffValue;
-                            break;
-                        case BuffStatType.AttackPower:
-                            buffedAttackPower += baseAttackPower * buffValue;
-                            break;
-                        case BuffStatType.AttackRange:
-                            buffedAttackRange += baseAttackRange * buffValue;
-                            break;
-                        case BuffStatType.AttackInterval:
-                            buffedAttackInterval += baseAttackInterval * buffValue;
-                            break;
-                        case BuffStatType.HealPower:
-                            buffedHealPower += baseHealPower * buffValue;
-                            break;
-                    }
-                    break;
-
                 case BuffApplyType.Tick:
                     switch (buff.targetStat)
                     {
@@ -529,7 +510,7 @@ public abstract class PlayableBase : CharacterBase
                 elapsed += buff.tickInterval;
             }
         }
-        else // Burst
+        else
         {
             OnBuffTick(buff);
             yield return new WaitForSeconds(buff.duration);
@@ -540,15 +521,12 @@ public abstract class PlayableBase : CharacterBase
         RecalculateBuffedStats();
     }
 
-
     protected virtual void OnBuffTick(Buff buff)
     {
-       // Debug.Log($"Buff Tick 발생: {buff.targetStat}, 값: {buff.value}");
-
         switch (buff.targetStat)
         {
             case BuffStatType.HealPower:
-                Heal(baseHealPower * buff.value); // 즉시 회복 효과만 여기서 처리
+                Heal(baseHealPower * buff.value);
                 break;
         }
     }
