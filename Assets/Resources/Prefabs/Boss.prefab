@@ -895,7 +895,7 @@ MonoBehaviour:
   animator: {fileID: 1552273398443527664}
   enemyBulletFirePoint: {fileID: 4297665436268764774}
   currentState: 0
-  test: 0
+  headTransform: {fileID: 2690663887820057441}
   skillDuration: 2
   missileSpawnDelay: 0.1
   skillMissile: {fileID: 7664551313295523910, guid: 259f52ed5c3075442b9f459196759ae8, type: 3}

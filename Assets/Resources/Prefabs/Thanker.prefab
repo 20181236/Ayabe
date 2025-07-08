@@ -635,7 +635,9 @@ MonoBehaviour:
   isAttacking: 0
   isBisicAttack: 0
   isSkill: 0
+  isUsingSkill: 0
   isExSkill: 0
+  isUsingExSkill: 0
   isDead: 0
   checkInAttackRenge: 0
   readyBasicAttack: 0
@@ -648,7 +650,7 @@ MonoBehaviour:
   animator: {fileID: 2632422830809904678}
   enemyBulletFirePoint: {fileID: 3509512496219452002}
   currentState: 0
-  test: 0
+  headTransform: {fileID: 2589905580577655557}
 --- !u!1 &7453213600498232769
 GameObject:
   m_ObjectHideFlags: 0

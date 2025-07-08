@@ -54,7 +54,8 @@ public class EnemyBase : CharacterBase
     [HideInInspector] public EnemyState currentState;
     protected PlayableBase currentTarget;
 
-    public int test = 0;
+    public Transform headTransform; // 머리 위치
+
 
     protected virtual void Awake()
     {
@@ -322,6 +323,7 @@ public class EnemyBase : CharacterBase
     public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
         currentHealth -= damage;
+        DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
         StartCoroutine(OnDamage(isExplosion, explosionPos));
     }
 
