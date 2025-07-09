@@ -16,6 +16,16 @@ public class Boss : EnemyBase
     public Transform enemyMissileFirePoint;
     public Transform enemyExMissileFirePoint;
 
+    public BossHpBar bossHpBar; // 연결할 체력바 UI
+
+    private void Start()
+    {
+        if (bossHpBar != null)
+        {
+            bossHpBar.Show(); // 보스 등장 시 체력바 보여줌
+        }
+    }
+
     protected override void Skill()
     {
         if (!readySkill|| isUsingSkill)

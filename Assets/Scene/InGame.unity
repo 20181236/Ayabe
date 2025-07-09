@@ -447,6 +447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageTextPrefab: {fileID: 5166571402444056199, guid: f0241ef0e06c7434da5829d964f3fb66, type: 3}
+  damageImagePrefab: {fileID: 0}
   canvas: {fileID: 1680502879}
   mainCamera: {fileID: 963194227}
 --- !u!1 &430602180

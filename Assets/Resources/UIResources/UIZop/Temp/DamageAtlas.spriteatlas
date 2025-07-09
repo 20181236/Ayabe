@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DamageAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - bc005fa66b041af49bdc8376f7259727: 445502542
+    - bc005fa66b041af49bdc8376f7259727: -693629365
+    - bc005fa66b041af49bdc8376f7259727: 345598840
+    - bc005fa66b041af49bdc8376f7259727: -213592086
+    - bc005fa66b041af49bdc8376f7259727: -784649293
+    - bc005fa66b041af49bdc8376f7259727: -1063795190
+    - bc005fa66b041af49bdc8376f7259727: -1800409329
+    - bc005fa66b041af49bdc8376f7259727: -1676589361
+    - bc005fa66b041af49bdc8376f7259727: -1158249671
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 445502542, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: -693629365, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: 345598840, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: -213592086, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: -784649293, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: -1063795190, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: -1800409329, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: -1676589361, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  - {fileID: -1158249671, guid: bc005fa66b041af49bdc8376f7259727, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - damage image_6
+  - damage image_7
+  - damage image_4
+  - damage image_5
+  - damage image_2
+  - damage image_3
+  - damage image_0
+  - damage image_1
+  - damage image_8
+  m_RenderDataMap: {}
+  m_Tag: DamageAtlas
+  m_IsVariant: 0
