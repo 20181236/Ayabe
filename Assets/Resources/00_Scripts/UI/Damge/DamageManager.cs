@@ -31,7 +31,6 @@ public class DamageManager : MonoBehaviour
         var controller = instance.GetComponent<DamageText>();
         controller.Setup(damage);
     }
-
     public void ShowDamage2(Vector3 worldPosition, int damage)
     {
         Vector3 screenPosition = mainCamera.WorldToScreenPoint(worldPosition + Vector3.up * 1.5f);
@@ -40,16 +39,30 @@ public class DamageManager : MonoBehaviour
 
         RectTransform rectTransform = instance.GetComponent<RectTransform>();
 
-        Vector2 anchoredPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform,
-            screenPosition,
-            canvas.worldCamera,
-            out anchoredPos);
-
-        rectTransform.anchoredPosition = anchoredPos;
+        rectTransform.position = screenPosition;
 
         var damageImage = instance.GetComponent<DamageImage>();
-        damageImage.ShowDamage(damage);
+        damageImage.ShowDamageImage(damage, worldPosition);
     }
+
+    //public void ShowDamage2(Vector3 worldPosition, int damage)
+    //{
+    //    Vector3 screenPosition = mainCamera.WorldToScreenPoint(worldPosition + Vector3.up * 1.5f);
+
+    //    GameObject instance = Instantiate(damageImagePrefab, canvas.transform);
+
+    //    RectTransform rectTransform = instance.GetComponent<RectTransform>();
+
+    //    Vector2 anchoredPos;
+    //    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+    //        canvas.transform as RectTransform,
+    //        screenPosition,
+    //        canvas.worldCamera,
+    //        out anchoredPos);
+
+    //    rectTransform.anchoredPosition = anchoredPos;
+
+    //    var damageImage = instance.GetComponent<DamageImage>();
+    //    damageImage.ShowDamage(damage, worldPosition);
+    //}
 }

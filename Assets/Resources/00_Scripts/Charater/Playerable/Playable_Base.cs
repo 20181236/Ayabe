@@ -88,6 +88,8 @@ public abstract class PlayableBase : CharacterBase
     [Header("Buff System")]
     public List<Buff> activeBuffs = new List<Buff>();
 
+    public Transform headTransform; // 머리 위치
+
     protected virtual void Awake()
     {
         rigidbodyPlayable = GetComponent<Rigidbody>();
@@ -362,6 +364,7 @@ public abstract class PlayableBase : CharacterBase
             currentState = PlayableState.Dead;
             Die();
         }
+        DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
 
         StartCoroutine(OnDamage(isExplosion));
     }

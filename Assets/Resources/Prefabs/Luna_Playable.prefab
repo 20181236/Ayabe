@@ -394,6 +394,11 @@ MonoBehaviour:
   baseAttackRange: 0
   baseAttackInterval: 0
   baseHealPower: 0
+  buffedMaxHealth: 0
+  buffedAttackPower: 0
+  buffedAttackRange: 0
+  buffedAttackInterval: 0
+  buffedHealPower: 0
   currentHealth: 0
   basicAttackTimer: 0
   basicAttackCount: 0
@@ -429,7 +434,9 @@ MonoBehaviour:
   excapeSpotTransform: {fileID: 0}
   currentState: 0
   exSkillData: {fileID: 11400000, guid: 4ab41700ebabf614e8005310606dc792, type: 2}
+  ownedSkills: 
   exSkillSlot: {fileID: 0}
+  headTransform: {fileID: 3122717745574997453}
   attackBuffData: {fileID: 11400000, guid: cda6c6c13e7f9eb42acf19fcd5e99808, type: 2}
 --- !u!1 &2742480746144338800
 GameObject:

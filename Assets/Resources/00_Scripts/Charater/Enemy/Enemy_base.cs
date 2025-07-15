@@ -323,7 +323,7 @@ public class EnemyBase : CharacterBase
     public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
         currentHealth -= damage;
-        DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
+        DamageManager.instance.ShowDamage2(headTransform.position, Mathf.FloorToInt(damage));
         StartCoroutine(OnDamage(isExplosion, explosionPos));
     }
 

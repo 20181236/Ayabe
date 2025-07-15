@@ -25,6 +25,7 @@ public class PlayableManager : MonoBehaviour
             playablesID[id] = new List<PlayableBase>();
         }
     }
+
     public void SpawnPlayable(PlayableID id, Vector3 spawnPosition)
     {
         PlayableData data = System.Array.Find(playableDatas, d => d.playableID == id);
