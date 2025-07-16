@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8655203526029487666}
   - component: {fileID: -6343131074840719840}
   m_Layer: 8
-  m_Name: Boss Rock
+  m_Name: Boss_Rock
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
