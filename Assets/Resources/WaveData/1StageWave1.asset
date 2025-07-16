@@ -15,25 +15,25 @@ MonoBehaviour:
   enemiesInWave:
   - enemyID: 0
     enemyType: 0
-    spawnPosition: {x: 0, y: 0, z: 5}
+    spawnPosition: {x: 5, y: 0, z: 5}
     delayAfter: 0
   - enemyID: 0
     enemyType: 0
-    spawnPosition: {x: 0, y: 0, z: 10}
+    spawnPosition: {x: 10, y: 0, z: 10}
     delayAfter: 0
   - enemyID: 0
     enemyType: 0
-    spawnPosition: {x: 0, y: 0, z: 15}
+    spawnPosition: {x: 15, y: 0, z: 15}
     delayAfter: 0
   - enemyID: 0
     enemyType: 0
-    spawnPosition: {x: 0, y: 0, z: 15}
+    spawnPosition: {x: 15, y: 0, z: 15}
     delayAfter: 0
   - enemyID: 0
     enemyType: 0
-    spawnPosition: {x: 0, y: 0, z: 15}
+    spawnPosition: {x: 15, y: 0, z: 15}
     delayAfter: 0
   - enemyID: 0
     enemyType: 0
-    spawnPosition: {x: 0, y: 0, z: 15}
+    spawnPosition: {x: 15, y: 0, z: 15}
     delayAfter: 0

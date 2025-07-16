@@ -470,6 +470,7 @@ GameObject:
   - component: {fileID: 3127639583985119472}
   - component: {fileID: 2564922527090100131}
   - component: {fileID: 8086057423702833444}
+  - component: {fileID: 3084578943035297842}
   m_Layer: 6
   m_Name: Ludo_Playable
   m_TagString: Player
@@ -579,11 +580,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playableID: 0
   playableType: 0
-  maxHealth: 0
+  baseMaxHealth: 0
+  baseAttackPower: 0
+  baseAttackRange: 0
+  baseAttackInterval: 0
+  baseHealPower: 0
+  buffedMaxHealth: 0
+  buffedAttackPower: 0
+  buffedAttackRange: 0
+  buffedAttackInterval: 0
+  buffedHealPower: 0
   currentHealth: 0
-  attackPower: 0
-  attackRange: 0
-  basicAttackInterval: 0
   basicAttackTimer: 0
   basicAttackCount: 0
   skillInterval: 0
@@ -618,8 +625,23 @@ MonoBehaviour:
   excapeSpotTransform: {fileID: 0}
   currentState: 0
   exSkillData: {fileID: 11400000, guid: d5b3bc2587d55294bbf4f0dc29dfc4fa, type: 2}
+  ownedSkills: 
   exSkillSlot: {fileID: 0}
+  headTransform: {fileID: 0}
   grenadePrefab: {fileID: 7221321937232580668, guid: 940ba6016c2f15445a7206c262b64c81, type: 3}
+--- !u!114 &3084578943035297842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3410974531977784702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a62522bd3554d94bbdfb01c0534f185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
 --- !u!1 &3858210144187104431
 GameObject:
   m_ObjectHideFlags: 0

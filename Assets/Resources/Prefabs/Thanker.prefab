@@ -508,6 +508,7 @@ GameObject:
   - component: {fileID: 2898995844016275095}
   - component: {fileID: 6137310506369253759}
   - component: {fileID: 8271544076621233547}
+  - component: {fileID: -6087003418396502737}
   m_Layer: 7
   m_Name: Thanker
   m_TagString: Enemy
@@ -651,6 +652,19 @@ MonoBehaviour:
   enemyBulletFirePoint: {fileID: 3509512496219452002}
   currentState: 0
   headTransform: {fileID: 2589905580577655557}
+--- !u!114 &-6087003418396502737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7352815647744469880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a62522bd3554d94bbdfb01c0534f185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
 --- !u!1 &7453213600498232769
 GameObject:
   m_ObjectHideFlags: 0

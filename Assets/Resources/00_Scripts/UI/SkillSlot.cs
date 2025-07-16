@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+//드래그하여 시전하는 스킬 처리
 public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     public SkillData skillData;

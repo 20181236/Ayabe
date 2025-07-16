@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+//스킬 초기화 및 캐스터 지정
 public class SkillPanel : MonoBehaviour
 {
     public SkillButtonHandler[] skillButtons;

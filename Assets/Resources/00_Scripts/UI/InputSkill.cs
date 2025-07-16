@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//입력 이벤트 중개 및 스킬 실행 요청
 public class InputSkill : MonoBehaviour
 {
     public static InputSkill instance { get; private set; }
@@ -48,6 +49,7 @@ public class InputSkill : MonoBehaviour
     public void OnSkillButtonDown(SkillId skillId, Vector2 pos)
     {
         Debug.Log($"[{skillId}] 스킬 버튼 누름 at {pos}");
+        SkillEffectController.instance?.PlaySkillEffect();
     }
 
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)

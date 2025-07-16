@@ -280,6 +280,7 @@ GameObject:
   - component: {fileID: 3160820024153573427}
   - component: {fileID: 5482310726448674114}
   - component: {fileID: 7366966939161098626}
+  - component: {fileID: 8622827309091313259}
   m_Layer: 6
   m_Name: Luna_Playable
   m_TagString: Player
@@ -438,6 +439,19 @@ MonoBehaviour:
   exSkillSlot: {fileID: 0}
   headTransform: {fileID: 3122717745574997453}
   attackBuffData: {fileID: 11400000, guid: cda6c6c13e7f9eb42acf19fcd5e99808, type: 2}
+--- !u!114 &8622827309091313259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2175214197470128850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a62522bd3554d94bbdfb01c0534f185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
 --- !u!1 &2742480746144338800
 GameObject:
   m_ObjectHideFlags: 0
