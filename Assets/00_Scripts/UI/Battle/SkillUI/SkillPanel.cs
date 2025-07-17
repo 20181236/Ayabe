@@ -5,15 +5,28 @@ using UnityEngine;
 //스킬 초기화 및 캐스터 지정
 public class SkillPanel : MonoBehaviour
 {
+    public static SkillPanel instance { get; private set; }
+
     public SkillButtonHandler[] skillButtons;
     public List<SkillData> skillDatas;
 
-    private void Start()
+    private void Awake()
     {
-        AutoAssignSkills();
+        if (instance == null)
+            instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
-    private void AutoAssignSkills()
+    private void Start()
+    {
+        InitializeSkillButtons();
+    }
+
+    private void InitializeSkillButtons()
     {
         var skillDatas = SkillManager.instance.skillDatas;
 
@@ -38,7 +51,7 @@ public class SkillPanel : MonoBehaviour
         }
     }
 
-    public SkillData GetSkillDataById(SkillId skillId)
+    public SkillData GetSkillDataId(SkillId skillId)
     {
         foreach (var handler in skillButtons)
         {
@@ -48,15 +61,33 @@ public class SkillPanel : MonoBehaviour
         return null;
     }
 
-    public void AssignCasterToSkills(GameObject caster, List<SkillId> skills)
+public void SetCasterForSkills(GameObject caster, List<SkillId> skills)
+{
+    var allSkillDatas = SkillManager.instance.skillDatas;
+
+    foreach (var data in allSkillDatas)
     {
-        foreach (var data in skillDatas)
+        if (skills.Contains(data.skillId))
         {
-            if (skills.Contains(data.skillId))
+            data.caster = caster;
+            Debug.Log($"SkillPanel: {data.skillId}의 시전자로 {caster.name} 설정");
+        }
+    }
+}
+
+    public void ClearSkillsForCaster(PlayableBase caster)
+    {
+        foreach (var button in skillButtons)
+        {
+            if (button.SkillData != null && button.SkillData.caster == caster.gameObject)
             {
-                data.caster = caster;
-                Debug.Log($"SkillPanel: {data.skillId}의 시전자로 {caster.name} 설정");
+                // 스킬 데이터 해제
+                button.SetSkill(null);
+
+                // 버튼 비활성화 또는 클릭 차단
+                button.gameObject.SetActive(false);
             }
         }
     }
+
 }

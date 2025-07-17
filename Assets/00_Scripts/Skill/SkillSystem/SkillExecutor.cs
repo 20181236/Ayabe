@@ -18,11 +18,11 @@ public class SkillExecutor : MonoBehaviour
     {
         if (caster == null)
         {
-            Debug.LogError("SkillExecutor: caster가 할당되지 않았습니다.");
+            Debug.LogError("SkillExecutor: caster.");
             return;
         }
 
-        Debug.Log($"스킬 선택됨: {data.skillId}");
+        Debug.Log($": {data.skillId}");
 
         SkillBase skill = SkillFactory.CreateSkill(data);
 
@@ -31,7 +31,7 @@ public class SkillExecutor : MonoBehaviour
             Caster = caster
         };
 
-        SkillEffectController.instance.PlaySkillEffect(); // 어둡게 처리
+        SkillEffectController.instance.PlaySkillEffect();
 
         switch (data.castType)
         {
@@ -51,7 +51,7 @@ public class SkillExecutor : MonoBehaviour
                 Targeting.instance.RequestUnit(unit =>
                 {
                     context.Target = unit;
-                    ClearAllHighlights(); // 선택 후 하이라이트 제거
+                    ClearAllHighlights(); 
                     skill.Execute(context);
                 },
                 unit => FilteringTeamSkill(unit, data.skillType));
@@ -60,7 +60,6 @@ public class SkillExecutor : MonoBehaviour
 
         if (data.castType == CastType.TargetUnit)
         {
-            // 대상 유닛 미리 하이라이트 표시
             HighlightTargets(data.skillType);
         }
     }

@@ -19,7 +19,7 @@ MonoBehaviour:
   areaType: 0
   weaponPrefab: {fileID: 0}
   icon: {fileID: 21300000, guid: 47fbbf7a9c438ed4ea370ca0e59905ff, type: 3}
-  caster: {fileID: 0}
+  caster: {fileID: 2175214197470128850, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
   manaCost: 0
   range: 0
   skillRadius: 10

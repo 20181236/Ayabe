@@ -379,7 +379,7 @@ public abstract class PlayableBase : CharacterBase
         isDead = true;
         isChase = false;
         playableAnimator.SetTrigger("doDie");
-
+        SkillPanel.instance.ClearSkillsForCaster(this);
         Destroy(gameObject, 1.8f);
         OnDestroy();
     }

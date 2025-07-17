@@ -388,7 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48bfa9b7ef3f4248907e755ab34f257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playableID: 0
+  playableID: 1
   playableType: 0
   baseMaxHealth: 0
   baseAttackPower: 0

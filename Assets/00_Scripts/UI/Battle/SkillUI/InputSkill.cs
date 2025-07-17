@@ -45,6 +45,11 @@ public class InputSkill : MonoBehaviour
             button.OnSkillDrag += OnSkillButtonDrag;
         }
     }
+    public void SetSkillCaster(PlayableBase newCaster)
+    {
+        skillCaster = newCaster;
+        Debug.Log($"[InputSkill] 현재 캐스터는: {skillCaster.playableID}");
+    }
 
     public void OnSkillButtonDown(SkillId skillId, Vector2 pos)
     {
@@ -62,7 +67,7 @@ public class InputSkill : MonoBehaviour
 
         Debug.Log($"[{skillId}] 스킬 버튼 뗌 at {pos}");
 
-        SkillData skillData = skillPanel.GetSkillDataById(skillId);
+        SkillData skillData = skillPanel.GetSkillDataId(skillId);
         if (skillData != null)
         {
             if (skillCaster != null)

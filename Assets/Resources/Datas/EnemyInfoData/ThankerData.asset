@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a1aca25ed377a49b32db6090eeae4e, type: 3}
   m_Name: ThankerData
   m_EditorClassIdentifier: 
+  enemyID: 0
   enemyType: 0
   prefab: {fileID: 7352815647744469880, guid: 7a102dcde8fc34547a4d9448f5dc26c7, type: 3}
   maxHealth: 500
-  attackRange: 60
+  attackRange: 15
   basicAttackInterval: 1.5
   skillInterval: 5
   exSkillInterval: 8
