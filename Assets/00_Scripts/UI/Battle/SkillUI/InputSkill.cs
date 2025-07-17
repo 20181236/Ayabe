@@ -54,29 +54,40 @@ public class InputSkill : MonoBehaviour
 
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)
     {
-        if (skillPanel == null)
+        SkillData skillData = skillPanel.GetSkillDataById(skillId);
+        if (skillData == null) return;
+
+        if (skillCaster == null)
         {
-            Debug.LogError("skillPanel is NULL!");
+            Debug.LogError("스킬 캐스터가 설정되어 있지 않습니다!");
             return;
         }
 
-        Debug.Log($"[{skillId}] 스킬 버튼 뗌 at {pos}");
-
-        SkillData skillData = skillPanel.GetSkillDataById(skillId);
-        if (skillData != null)
+        if (skillData.castType == CastType.Instant)
         {
-            if (skillCaster != null)
-            {
-                SkillExecutor.instance.OnSkillSelected(skillCaster.gameObject, skillData);
-            }
-            else
-            {
-                Debug.LogError("스킬 캐스터가 설정되어 있지 않습니다!");
-            }
+            SkillExecutor.instance.OnSkillSelected(skillCaster.gameObject, skillData);
         }
-        else
+        else if (skillData.castType == CastType.TargetPoint)
         {
-            Debug.LogWarning("SkillData가 없습니다: " + skillId);
+            Targeting.instance.RequestPosition(skillData, targetPos =>
+            {
+                SkillExecutor.instance.ExecuteSkill(skillData, targetPos, skillCaster.gameObject);
+            });
+        }
+        else if (skillData.castType == CastType.TargetUnit)
+        {
+            Targeting.instance.RequestUnit(unit =>
+            {
+                SkillContext context = new SkillContext
+                {
+                    Caster = skillCaster.gameObject,
+                    Target = unit
+                };
+                SkillEffectController.instance.PlaySkillEffect();
+                SkillBase skill = SkillFactory.CreateSkill(skillData);
+                skill.Execute(context);
+                SkillExecutor.instance.ClearAllHighlights();
+            }, unit => SkillExecutor.instance.FilteringTeamSkill(unit, skillData.skillType));
         }
     }
 

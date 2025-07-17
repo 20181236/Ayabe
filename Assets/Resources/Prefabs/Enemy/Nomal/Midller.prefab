@@ -339,6 +339,7 @@ GameObject:
   - component: {fileID: 2451850200465814943}
   - component: {fileID: 3506899790702820262}
   - component: {fileID: 7524648621636893778}
+  - component: {fileID: 9130743159203596505}
   m_Layer: 7
   m_Name: Midller
   m_TagString: Enemy
@@ -466,7 +467,9 @@ MonoBehaviour:
   isAttacking: 0
   isBisicAttack: 0
   isSkill: 0
+  isUsingSkill: 0
   isExSkill: 0
+  isUsingExSkill: 0
   isDead: 0
   checkInAttackRenge: 0
   readyBasicAttack: 0
@@ -479,7 +482,21 @@ MonoBehaviour:
   animator: {fileID: 6460493037093374342}
   enemyBulletFirePoint: {fileID: 7023202440098054259}
   currentState: 0
-  test: 0
+  headTransform: {fileID: 0}
+--- !u!114 &9130743159203596505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4931071578747650822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a62522bd3554d94bbdfb01c0534f185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightPrefab: {fileID: 2726367930147140188, guid: 13f0250df683d7043a224be5138e16a8, type: 3}
+  highlightColor: {r: 0.04667813, g: 0.9622642, b: 0, a: 1}
 --- !u!1 &6014152868675815248
 GameObject:
   m_ObjectHideFlags: 0

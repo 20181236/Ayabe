@@ -14,6 +14,27 @@ public class SkillExecutor : MonoBehaviour
         instance = this;
     }
 
+    public void ExecuteSkill(SkillData data, Vector3 targetPosition, GameObject caster)
+    {
+        if (caster == null)
+        {
+            Debug.LogError("SkillExecutor: caster가 할당되지 않았습니다.");
+            return;
+        }
+
+        SkillBase skill = SkillFactory.CreateSkill(data);
+
+        SkillContext context = new SkillContext
+        {
+            Caster = caster,
+            TargetPosition = targetPosition
+        };
+
+        SkillEffectController.instance.PlaySkillEffect();
+
+        skill.Execute(context);
+    }
+
     public void OnSkillSelected(GameObject caster, SkillData data)
     {
         if (caster == null)
@@ -24,50 +45,25 @@ public class SkillExecutor : MonoBehaviour
 
         Debug.Log($"스킬 선택됨: {data.skillId}");
 
-        SkillBase skill = SkillFactory.CreateSkill(data);
-
-        SkillContext context = new SkillContext
+        if (data.castType == CastType.Instant)
         {
-            Caster = caster
-        };
-
-        SkillEffectController.instance.PlaySkillEffect(); // 어둡게 처리
-
-        switch (data.castType)
-        {
-            case CastType.Instant:
-                skill.Execute(context);
-                break;
-
-            case CastType.TargetPoint:
-                Targeting.instance.RequestPosition(data, pos =>
-                {
-                    context.TargetPosition = pos;
-                    skill.Execute(context);
-                });
-                break;
-
-            case CastType.TargetUnit:
-                Targeting.instance.RequestUnit(unit =>
-                {
-                    context.Target = unit;
-                    ClearAllHighlights(); // 선택 후 하이라이트 제거
-                    skill.Execute(context);
-                },
-                unit => FilteringTeamSkill(unit, data.skillType));
-                break;
+            SkillBase skill = SkillFactory.CreateSkill(data);
+            SkillContext context = new SkillContext
+            {
+                Caster = caster
+            };
+            SkillEffectController.instance.PlaySkillEffect();
+            skill.Execute(context);
         }
-
-        if (data.castType == CastType.TargetUnit)
+        else
         {
-            // 대상 유닛 미리 하이라이트 표시
-            HighlightTargets(data.skillType);
+            Debug.Log("타겟팅이 필요한 스킬입니다. InputSkill에서 위치/유닛 선택 요청하세요.");
         }
     }
 
-    private bool FilteringTeamSkill(GameObject unit, SkillType skillType)
+    public bool FilteringTeamSkill(GameObject unit, SkillType skillType)
     {
-        var character = unit.GetComponent<CharacterBase>();
+        var character = unit.GetComponent<CharacterBase>(); 
         if (character == null)
             return false;
 
@@ -83,7 +79,7 @@ public class SkillExecutor : MonoBehaviour
         }
     }
 
-    private void HighlightTargets(SkillType skillType)
+    public void HighlightTargets(SkillType skillType)
     {
         Debug.Log($"HighlightTargets called with skillType: {skillType}");
 
@@ -104,7 +100,7 @@ public class SkillExecutor : MonoBehaviour
         }
     }
 
-    private void ClearAllHighlights()
+    public void ClearAllHighlights()
     {
         HighlightEffect[] allHighlights = FindObjectsOfType<HighlightEffect>();
         foreach (var highlight in allHighlights)
