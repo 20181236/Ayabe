@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class HighlightEffect : MonoBehaviour
 {
-    public GameObject highlightPrefab;
-    private GameObject highlightInstance;
-
     private Renderer[] renderers;
     private Color[] originalColors;
 
@@ -26,18 +23,12 @@ public class HighlightEffect : MonoBehaviour
 
     public void SetHighlight(bool enable)
     {
-        if (enable && highlightInstance == null)
+        for (int i = 0; i < renderers.Length; i++)
         {
-            highlightInstance = Instantiate(highlightPrefab, transform);
-            highlightInstance.transform.localPosition = Vector3.zero; // ¹ß ¹Ø À§Ä¡
-        }
-        else if (!enable && highlightInstance == null)
-        {
-            Debug.LogWarning("Highlight prefab is missing!");
-        }
-        else if (!enable && highlightInstance != null)
-        {
-            Destroy(highlightInstance);
+            if (!renderers[i].material.HasProperty("_Color"))
+                continue;
+
+            renderers[i].material.color = enable ? highlightColor : originalColors[i];
         }
     }
 }

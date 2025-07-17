@@ -9,7 +9,7 @@ public class SkillEffectController : MonoBehaviour
     public static SkillEffectController instance;
 
     public Image darkOverlay;
-    public float slowDuration = 0.3f;
+    public float slowDuration = 0.5f;
     public float slowTimeScale = 0.2f;
 
     private void Awake()
@@ -43,7 +43,7 @@ public class SkillEffectController : MonoBehaviour
             while (time < 0.1f)
             {
                 time += Time.unscaledDeltaTime;
-                color.a = Mathf.Lerp(0f, 0.3f, time / 0.1f);
+                color.a = Mathf.Lerp(0f, 0.6f, time / 0.1f);
                 darkOverlay.color = color;
                 yield return null;
             }
@@ -62,7 +62,7 @@ public class SkillEffectController : MonoBehaviour
             while (time < 0.1f)
             {
                 time += Time.unscaledDeltaTime;
-                color.a = Mathf.Lerp(0.3f, 0f, time / 0.1f);
+                color.a = Mathf.Lerp(0.6f, 0f, time / 0.1f);
                 darkOverlay.color = color;
                 yield return null;
             }

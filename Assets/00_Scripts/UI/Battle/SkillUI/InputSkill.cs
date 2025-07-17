@@ -54,40 +54,29 @@ public class InputSkill : MonoBehaviour
 
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)
     {
-        SkillData skillData = skillPanel.GetSkillDataById(skillId);
-        if (skillData == null) return;
-
-        if (skillCaster == null)
+        if (skillPanel == null)
         {
-            Debug.LogError("스킬 캐스터가 설정되어 있지 않습니다!");
+            Debug.LogError("skillPanel is NULL!");
             return;
         }
 
-        if (skillData.castType == CastType.Instant)
+        Debug.Log($"[{skillId}] 스킬 버튼 뗌 at {pos}");
+
+        SkillData skillData = skillPanel.GetSkillDataById(skillId);
+        if (skillData != null)
         {
-            SkillExecutor.instance.OnSkillSelected(skillCaster.gameObject, skillData);
-        }
-        else if (skillData.castType == CastType.TargetPoint)
-        {
-            Targeting.instance.RequestPosition(skillData, targetPos =>
+            if (skillCaster != null)
             {
-                SkillExecutor.instance.ExecuteSkill(skillData, targetPos, skillCaster.gameObject);
-            });
-        }
-        else if (skillData.castType == CastType.TargetUnit)
-        {
-            Targeting.instance.RequestUnit(unit =>
+                SkillExecutor.instance.OnSkillSelected(skillCaster.gameObject, skillData);
+            }
+            else
             {
-                SkillContext context = new SkillContext
-                {
-                    Caster = skillCaster.gameObject,
-                    Target = unit
-                };
-                SkillEffectController.instance.PlaySkillEffect();
-                SkillBase skill = SkillFactory.CreateSkill(skillData);
-                skill.Execute(context);
-                SkillExecutor.instance.ClearAllHighlights();
-            }, unit => SkillExecutor.instance.FilteringTeamSkill(unit, skillData.skillType));
+                Debug.LogError("스킬 캐스터가 설정되어 있지 않습니다!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("SkillData가 없습니다: " + skillId);
         }
     }
 

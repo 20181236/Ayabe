@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Targeting : MonoBehaviour
@@ -17,8 +16,6 @@ public class Targeting : MonoBehaviour
 
     public GameObject positionIndicatorPrefab;
     private GameObject positionIndicatorInstance;
-
-    [SerializeField] private LayerMask characterLayer;
 
     // SkillData 연결
     private SkillData currentSkillData;
@@ -41,7 +38,7 @@ public class Targeting : MonoBehaviour
         }
     }
 
-    // 위치 선택 요청 (기본)
+    //  기존 위치 요청 방식
     public void RequestPosition(Action<Vector3> callback)
     {
         onPositionSelected = callback;
@@ -52,14 +49,13 @@ public class Targeting : MonoBehaviour
             positionIndicatorInstance.SetActive(true);
     }
 
-    // SkillData 기반 위치 선택 요청
+    //  SkillData 기반 위치 요청
     public void RequestPosition(SkillData skillData, Action<Vector3> callback)
     {
         currentSkillData = skillData;
-        RequestPosition(callback);
+        RequestPosition(callback); // 기본 로직 재활용
     }
 
-    // 유닛 선택 요청
     public void RequestUnit(Action<GameObject> callback, Func<GameObject, bool> filter = null)
     {
         onUnitSelected = callback;
@@ -70,10 +66,10 @@ public class Targeting : MonoBehaviour
         if (positionIndicatorInstance != null)
             positionIndicatorInstance.SetActive(false);
 
-        SkillRangeVisualizer.Hide();
+        SkillRangeVisualizer.Hide(); // 유닛 선택 시 시각화 끄기
     }
 
-    private void UpdatePositionIndicator(Vector2 screenPosition)
+    public void UpdatePositionIndicator(Vector2 screenPosition)
     {
         if (!isSelectingPosition || positionIndicatorInstance == null)
             return;
@@ -87,37 +83,12 @@ public class Targeting : MonoBehaviour
             if (currentSkillData != null)
             {
                 SkillRangeVisualizer.Show(currentSkillData.skillRadius, pos);
-
-                // Physics OverlapSphere 기반 하이라이트
-                HighlightUnitsInRadius(pos, currentSkillData);
             }
         }
         else
         {
             positionIndicatorInstance.SetActive(false);
             SkillRangeVisualizer.Hide();
-            ClearAllHighlights();
-        }
-    }
-
-    private void HighlightUnitsInRadius(Vector3 center, SkillData data)
-    {
-        ClearAllHighlights();
-
-        Collider[] hitColliders = Physics.OverlapSphere(center, data.skillRadius, characterLayer);
-
-        foreach (var collider in hitColliders)
-        {
-            GameObject obj = collider.gameObject;
-            var highlight = obj.GetComponent<HighlightEffect>();
-            if (highlight == null)
-                continue;
-
-            bool isValid = SkillExecutor.instance.FilteringTeamSkill(obj, data.skillType);
-            if (isValid)
-            {
-                highlight.SetHighlight(true);
-            }
         }
     }
 
@@ -136,18 +107,8 @@ public class Targeting : MonoBehaviour
         if (positionIndicatorInstance != null)
             positionIndicatorInstance.SetActive(false);
 
-        SkillRangeVisualizer.Hide();
-        ClearAllHighlights();
+        SkillRangeVisualizer.Hide(); // 시각화 숨기기
         ResetSelection();
-    }
-
-    private void ClearAllHighlights()
-    {
-        HighlightEffect[] allHighlights = FindObjectsOfType<HighlightEffect>();
-        foreach (var highlight in allHighlights)
-        {
-            highlight.SetHighlight(false);
-        }
     }
 
     private void ResetSelection()
