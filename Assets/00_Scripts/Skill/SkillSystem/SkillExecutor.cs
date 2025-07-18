@@ -40,7 +40,7 @@ public class SkillExecutor : MonoBehaviour
                 break;
 
             case CastType.TargetPoint:
-                Targeting.instance.RequestPosition(data, pos =>
+                Targeting.instance.StartPositionTargeting(data, pos =>
                 {
                     context.TargetPosition = pos;
                     skill.Execute(context);
@@ -48,7 +48,7 @@ public class SkillExecutor : MonoBehaviour
                 break;
 
             case CastType.TargetUnit:
-                Targeting.instance.RequestUnit(unit =>
+                Targeting.instance.StartUnitTargeting(unit =>
                 {
                     context.Target = unit;
                     ClearAllHighlights(); 

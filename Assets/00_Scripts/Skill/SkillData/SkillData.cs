@@ -14,7 +14,7 @@ public class SkillData : ScriptableObject
     public GameObject weaponPrefab;
     public Sprite icon;
 
-    public GameObject caster;
+    //public GameObject caster;
 
     public int manaCost;
 
