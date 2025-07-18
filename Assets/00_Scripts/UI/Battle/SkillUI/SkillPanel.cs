@@ -61,19 +61,19 @@ public class SkillPanel : MonoBehaviour
         return null;
     }
 
-public void SetCasterForSkills(GameObject caster, List<SkillId> skills)
-{
-    var allSkillDatas = SkillManager.instance.skillDatas;
-
-    foreach (var data in allSkillDatas)
+    public void SetCasterForSkills(GameObject caster, List<SkillId> skills)
     {
-        if (skills.Contains(data.skillId))
+        var allSkillDatas = SkillManager.instance.skillDatas;
+
+        foreach (var data in allSkillDatas)
         {
-            data.caster = caster;
-            Debug.Log($"SkillPanel: {data.skillId}의 시전자로 {caster.name} 설정");
+            if (skills.Contains(data.skillId))
+            {
+                data.caster = caster;
+                Debug.Log($"SkillPanel: {data.skillId}의 시전자로 {caster.name} 설정");
+            }
         }
     }
-}
 
     public void ClearSkillsForCaster(PlayableBase caster)
     {

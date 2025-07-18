@@ -16,6 +16,7 @@ public class SkillExecutor : MonoBehaviour
 
     public void OnSkillSelected(GameObject caster, SkillData data)
     {
+
         if (caster == null)
         {
             Debug.LogError("SkillExecutor: caster.");
@@ -25,11 +26,17 @@ public class SkillExecutor : MonoBehaviour
         Debug.Log($": {data.skillId}");
 
         SkillBase skill = SkillFactory.CreateSkill(data);
-
-        SkillContext context = new SkillContext
+        var context = new SkillContext
         {
-            Caster = caster
+            Caster = caster,
+            Target = null,
+            TargetPosition = Vector3.zero, // or targeting system »ç¿ë
+            AttackPower = caster.GetComponent<PlayableBase>()?.AttackPower ?? 0f
         };
+        //SkillContext context = new SkillContext
+        //{
+        //    Caster = caster
+        //};
 
         SkillEffectController.instance.PlaySkillEffect();
 

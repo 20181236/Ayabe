@@ -20,6 +20,7 @@ public class LudoSkill : SkillBase
         // context.TargetPosition: 수류탄 떨어질 중심 위치
         Vector3 center = context.TargetPosition;
         //수류탄 불러와서 시전하는애 앞에 생성하고
+
         GameObject poisonGrenade = GameObject.Instantiate(
             poisonGrenadePrefab,
             context.Caster.transform.position,

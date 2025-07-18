@@ -94,3 +94,4 @@ public class SkillManager : MonoBehaviour
                allowedSkills.Contains(skillId);
     }
 }
+    
