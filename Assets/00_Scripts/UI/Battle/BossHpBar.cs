@@ -8,7 +8,7 @@ public class BossHpBar : MonoBehaviour
 
     private void Start()
     {
-        hpBarUI.SetActive(false); // ÃÊ±â¿¡´Â ¼û±è
+        hpBarUI.SetActive(false);
     }
     private void Update()
     {

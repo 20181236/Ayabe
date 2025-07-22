@@ -89,5 +89,24 @@ public class SkillPanel : MonoBehaviour
             }
         }
     }
+    public void UpdateAllManaFills(float currentMana)
+    {
+        foreach (var button in skillButtons)
+        {
+            if (button.SkillData != null)
+                button.UpdateManaFill((int)currentMana);  // int·Î ¹Ù²ã ³Ñ±è
+        }
+    }
+    private void OnEnable()
+    {
+        if (ManaManager.instance != null)
+            ManaManager.instance.OnManaChanged += UpdateAllManaFills;
+    }
+
+    private void OnDisable()
+    {
+        if (ManaManager.instance != null)
+            ManaManager.instance.OnManaChanged -= UpdateAllManaFills;
+    }
 
 }
