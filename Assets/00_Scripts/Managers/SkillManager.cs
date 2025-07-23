@@ -40,7 +40,13 @@ public class SkillManager : MonoBehaviour
     private void LoadSkillsFromResources()
     {
         SkillData[] loaded = Resources.LoadAll<SkillData>(ResourcePaths.SkillDataPath);
+        Debug.Log($"[SkillManager] Resources에서 로드된 SkillData 수: {loaded.Length}");
         skillDatas = new List<SkillData>(loaded);
+
+        foreach (var data in loaded)
+        {
+            Debug.Log($"로드된 스킬: {data.skillId}, 소유자: {data.ownerId}");
+        }
 
         foreach (var skillData in skillDatas)
         {
@@ -52,11 +58,9 @@ public class SkillManager : MonoBehaviour
             var skill = SkillFactory.CreateSkill(skillData);
             if (skill != null)
                 skillInstances[skillData.skillId] = skill;
-            Debug.Log($"SkillData 로드됨: {skillData.skillId}, 마나 소모: {skillData.manaCost}, 반경: {skillData.skillRadius}");
         }
 
         Debug.Log($"[SkillManager] 등록된 스킬 수: {skillDatas.Count}");
-
     }
 
     public void UseSkill(SkillId skillId, SkillContext context)

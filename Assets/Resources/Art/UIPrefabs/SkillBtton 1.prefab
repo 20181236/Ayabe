@@ -134,3 +134,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconImage: {fileID: 0}
+  manaFillImage: {fileID: 0}
+  skillButton: {fileID: 0}

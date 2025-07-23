@@ -9,7 +9,6 @@ using UnityEngine.UI;
 //드래그하여 시전하는 스킬 처리
 public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-
     public SkillData skillData;
     private PlayableBase caster;
     private SkillBase skillInstance;
@@ -55,16 +54,14 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
 
     private void CastSkill(Vector2 targetPosition)
     {
-        if (caster == null || skillInstance == null || Camera.main == null)
+        if (caster == null)
             return;
-        Debug.Log($"[CastSkill] 스킬 시도: {skillData.skillId}, 마나코스트: {skillData.manaCost}");
-        // 마나 검사
-        if (!ManaManager.instance.CanUseMana(skillData.manaCost))
-        {
-            Debug.Log("[CastSkill] 마나 부족으로 스킬 시전 실패");
+
+        if (skillInstance == null)
             return;
-        }
-        Debug.Log("[CastSkill] 마나 소모 성공, 스킬 실행");
+
+        if (Camera.main == null)
+            return;
 
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(targetPosition.x, targetPosition.y, 10f));
 
@@ -90,6 +87,5 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
         };
 
         skillInstance.Execute(context);
-        ManaManager.instance.UseMana(skillData.manaCost); // 확실하게 사용
     }
 }

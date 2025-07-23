@@ -28,28 +28,27 @@ public class SkillPanel : MonoBehaviour
 
     private void InitializeSkillButtons()
     {
-        var skillDatas = SkillManager.instance.skillDatas;
+        var managerSkills = SkillManager.instance.skillDatas;
+        Debug.Log($"[SkillPanel] SkillManager에서 가져온 스킬 수: {managerSkills.Count}");
 
         for (int i = 0; i < skillButtons.Length; i++)
         {
-            if (i < skillDatas.Count)
+            if (i < managerSkills.Count)
             {
-                skillButtons[i].SetSkill(skillDatas[i]);
-                var handler = skillButtons[i];
+                Debug.Log($"[SkillPanel] 슬롯 {i} 에 {managerSkills[i].skillId} 할당 시도");
+                skillButtons[i].SetSkill(managerSkills[i]);
 
-                // 대리자 할당
-                handler.OnSkillDown = InputSkill.instance.OnSkillButtonDown;
-                handler.OnSkillUp = InputSkill.instance.OnSkillButtonUp;
-                handler.OnSkillDrag = InputSkill.instance.OnSkillButtonDrag;
-
-                Debug.Log($"SkillPanel: 슬롯 {i} 에 {skillDatas[i].skillId} 할당");
+                skillButtons[i].OnSkillDown = InputSkill.instance.OnSkillButtonDown;
+                skillButtons[i].OnSkillUp = InputSkill.instance.OnSkillButtonUp;
+                skillButtons[i].OnSkillDrag = InputSkill.instance.OnSkillButtonDrag;
             }
             else
             {
-                Debug.LogWarning($"SkillPanel: 슬롯 {i} 는 비어 있음 (skillDatas 부족)");
+                Debug.LogWarning($"[SkillPanel] 슬롯 {i} 는 비어 있음");
             }
         }
     }
+
 
     public SkillData GetSkillDataId(SkillId skillId)
     {
@@ -88,25 +87,6 @@ public class SkillPanel : MonoBehaviour
                 button.gameObject.SetActive(false);
             }
         }
-    }
-    public void UpdateAllManaFills(float currentMana)
-    {
-        foreach (var button in skillButtons)
-        {
-            if (button.SkillData != null)
-                button.UpdateManaFill((int)currentMana);  // int로 바꿔 넘김
-        }
-    }
-    private void OnEnable()
-    {
-        if (ManaManager.instance != null)
-            ManaManager.instance.OnManaChanged += UpdateAllManaFills;
-    }
-
-    private void OnDisable()
-    {
-        if (ManaManager.instance != null)
-            ManaManager.instance.OnManaChanged -= UpdateAllManaFills;
     }
 
 }

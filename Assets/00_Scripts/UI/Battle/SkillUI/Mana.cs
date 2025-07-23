@@ -8,21 +8,12 @@ public class UIMana : MonoBehaviour
     [SerializeField] private TextMeshPro currentManaText;
 
     private float targetFill = 1f;
-    private float fillSpeed = 15f;
+    private float fillSpeed = 5f; 
 
-    private void Update()
-    {
-        image.fillAmount = Mathf.Lerp(image.fillAmount, targetFill, Time.deltaTime * fillSpeed);
-    }
     private void OnEnable()
     {
         if (ManaManager.instance != null)
-        {
             ManaManager.instance.OnManaChanged += HandleManaChanged;
-            targetFill = (float)ManaManager.instance.CurrentMana / ManaManager.instance.maxMana;
-            image.fillAmount = targetFill;
-            currentManaText.text = ManaManager.instance.CurrentMana.ToString();
-        }
     }
 
     private void OnDisable()
@@ -34,11 +25,10 @@ public class UIMana : MonoBehaviour
     private void HandleManaChanged(float ratio)
     {
         targetFill = ratio;
-        if (ManaManager.instance != null)
-        {
-            currentManaText.text = ManaManager.instance.CurrentMana.ToString();
-        }
     }
 
-
+    private void Update()
+    {
+        image.fillAmount = Mathf.Lerp(image.fillAmount, targetFill, Time.deltaTime * fillSpeed);
+    }
 }

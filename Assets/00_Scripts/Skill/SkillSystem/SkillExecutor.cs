@@ -16,7 +16,7 @@ public class SkillExecutor : MonoBehaviour
 
     public void OnSkillSelected(GameObject caster, SkillData data)
     {
-        Debug.Log($"[SkillExecutor] OnSkillSelected called with skill: {data.skillId}, caster: {caster.name}");
+
         if (caster == null)
         {
             Debug.LogError("SkillExecutor: caster.");
