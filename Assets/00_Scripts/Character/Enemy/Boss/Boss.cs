@@ -18,8 +18,11 @@ public class Boss : EnemyBase
 
     public BossHpBar bossHpBar; // 연결할 체력바 UI
 
-    private void Start()
+    protected override void Start()
     {
+        if (EnemyManager.instance != null)
+            EnemyManager.instance.RegisterEnemy(this);
+
         if (bossHpBar != null)
         {
             bossHpBar.Show(); // 보스 등장 시 체력바 보여줌

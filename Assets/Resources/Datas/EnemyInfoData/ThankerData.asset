@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyID: 0
   enemyType: 0
   prefab: {fileID: 7352815647744469880, guid: 7a102dcde8fc34547a4d9448f5dc26c7, type: 3}
-  maxHealth: 500
+  maxHealth: 800
   attackRange: 15
   basicAttackInterval: 1.5
   skillInterval: 5

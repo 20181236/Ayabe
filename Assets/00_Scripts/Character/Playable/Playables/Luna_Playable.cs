@@ -8,10 +8,10 @@ public class Luna_Playable : PlayableBase
 
     protected override void Skill()
     {
-        Debug.LogWarning("Luna스킬사용");
+        Debug.Log("Luna스킬사용");
         if (attackBuffData == null)
         {
-            Debug.LogWarning("Attack Buff Data is not assigned.");
+            Debug.Log("Attack Buff Data is not assigned.");
             return;
         }
 

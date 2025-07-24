@@ -15,7 +15,7 @@ public class SenseiCamera : MonoBehaviour
     public Camera cam;
 
     public float baseFOV = 60f;    // ±âº» FOV °ª
-    public float maxFOV = 90f;     
+    public float maxFOV = 90f;
     public float fovSmoothSpeed = 2f;
 
     private void Start()

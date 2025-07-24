@@ -281,6 +281,7 @@ public class EnemyBase : CharacterBase
         isDead = true;
         isChase = false;
         animator.SetTrigger("doDie");
+        WaveManager.instance.NotifyEnemyKilled();
         OnDestroy();
     }
 

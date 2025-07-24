@@ -9,12 +9,23 @@ public class WaveManager : MonoBehaviour
     public WaveData[] waves;
     private int currentWaveIndex = 0;
 
+    public int TotalEnemyCount { get; private set; } = 0;
+    public int RemainingEnemyCount { get; private set; } = 0;
+    
+   [SerializeField] private EnemyNokori enemyNokori; // 여기로 직접 연결
+
     private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        CountTotalEnemies();
+        enemyNokori.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
     }
 
     public void StartFirstWave()
@@ -35,6 +46,20 @@ public class WaveManager : MonoBehaviour
     public bool IsAllWaveSpawned()
     {
         return currentWaveIndex >= waves.Length;
+    }
+    private void CountTotalEnemies()
+    {
+        foreach (var wave in waves)
+        {
+            TotalEnemyCount += wave.enemiesInWave.Length;
+        }
+        RemainingEnemyCount = TotalEnemyCount;
+    }
+
+    public void NotifyEnemyKilled()
+    {
+        RemainingEnemyCount--;
+        enemyNokori.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
     }
 }
 
