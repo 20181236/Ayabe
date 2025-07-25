@@ -278,6 +278,8 @@ public class EnemyBase : CharacterBase
 
     protected virtual void Die()
     {
+        if (isDead)
+            return;
         isDead = true;
         isChase = false;
         animator.SetTrigger("doDie");
@@ -323,6 +325,8 @@ public class EnemyBase : CharacterBase
 
     public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
+        if (isDead)
+            return;
         currentHealth -= damage;
         DamageManager.instance.ShowDamage2(headTransform.position, Mathf.FloorToInt(damage));
         StartCoroutine(OnDamage(isExplosion, explosionPos));

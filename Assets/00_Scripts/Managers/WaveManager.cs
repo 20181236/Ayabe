@@ -12,7 +12,7 @@ public class WaveManager : MonoBehaviour
     public int TotalEnemyCount { get; private set; } = 0;
     public int RemainingEnemyCount { get; private set; } = 0;
     
-   [SerializeField] private EnemyNokori enemyNokori; // 여기로 직접 연결
+   [SerializeField] private EnemyRemain enemyRemain; // 여기로 직접 연결
 
     private void Awake()
     {
@@ -25,7 +25,8 @@ public class WaveManager : MonoBehaviour
     private void Start()
     {
         CountTotalEnemies();
-        enemyNokori.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
+        Debug.Log($"[WaveManager] Start - Remaining: {RemainingEnemyCount}, Total: {TotalEnemyCount}");
+        enemyRemain.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
     }
 
     public void StartFirstWave()
@@ -59,7 +60,7 @@ public class WaveManager : MonoBehaviour
     public void NotifyEnemyKilled()
     {
         RemainingEnemyCount--;
-        enemyNokori.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
+        enemyRemain.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
     }
 }
 

@@ -6,6 +6,9 @@ public class InputSkill : MonoBehaviour
     public static InputSkill instance { get; private set; }
     public SkillPanel skillPanel;
     public PlayableBase skillCaster;
+
+    [SerializeField] private CutIn cutIn;
+
     private void Awake()
     {
         if (instance == null)
@@ -75,6 +78,17 @@ public class InputSkill : MonoBehaviour
         Debug.Log($"[{skillId}] 스킬 버튼 뗌 at {pos}, caster: {skillData.caster.name}");
 
         SkillExecutor.instance.OnSkillSelected(skillData.caster, skillData);
+
+        // 컷인 연출
+        if (cutIn != null)
+        {
+            Debug.Log("[InputSkill] cutIn.Play() 호출합니다.");
+            cutIn.Play(skillData.skillCutIn, skillData.cutInText);
+        }
+        else
+        {
+            Debug.LogWarning("[InputSkill] CutIn이 null입니다!");
+        }
     }
 
     public void OnSkillButtonDrag(SkillId skillId, Vector2 pos)

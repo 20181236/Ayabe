@@ -15,10 +15,13 @@ public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandl
     public Action<SkillId, Vector2> OnSkillUp;
     public Action<SkillId, Vector2> OnSkillDrag;
 
+    public SkillPanel skillPanel;
+
     void Awake()
     {
         if (iconImage == null)
             iconImage = GetComponentInChildren<Image>();
+        skillPanel = FindObjectOfType<SkillPanel>();
     }
 
     public void SetSkill(SkillData data)

@@ -14,4 +14,16 @@ public class UIManager : MonoBehaviour
         else
             Destroy(gameObject);
     }
+    private void Start()
+    {
+
+    }
+    private void Update()
+    {
+        
+    }
+    private void LateUpdate()
+    {
+        
+    }
 }

@@ -25,7 +25,7 @@ MonoBehaviour:
     enemyType: 0
     spawnPosition: {x: 50, y: 0, z: 0}
     delayAfter: 0
-  - enemyID: 1
-    enemyType: 1
+  - enemyID: 0
+    enemyType: 0
     spawnPosition: {x: 50, y: 0, z: 0}
     delayAfter: 0

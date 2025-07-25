@@ -13,6 +13,8 @@ public class PlayableManager : MonoBehaviour
     public Dictionary<PlayableType, List<PlayableBase>> playablesType = new Dictionary<PlayableType, List<PlayableBase>>();
     public PlayableData[] playableDatas; // 에디터에 드래그해서 연결할 수 있게
 
+    public PlayableBase currentPlayable;
+
     private void Awake()
     {
         if (instance == null)
@@ -58,6 +60,9 @@ public class PlayableManager : MonoBehaviour
             playables.Add(playable);
             playablesID[playable.playableID].Add(playable);
         }
+
+        if (currentPlayable == null)
+            currentPlayable = playable; // leader
     }
 
     public void UnregisterPlayable(PlayableBase playable)
@@ -83,5 +88,9 @@ public class PlayableManager : MonoBehaviour
     public bool HasPlayable(PlayableID id)
     {
         return playablesID[id].Count > 0;
+    }
+    public void SetCurrentPlayable(PlayableBase playable)
+    {
+        currentPlayable = playable;
     }
 }

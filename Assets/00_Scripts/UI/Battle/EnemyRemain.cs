@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class EnemyNokori : MonoBehaviour
+public class EnemyRemain : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI enemyCountText;
 
     public void UpdateEnemyCount(int current, int total)
     {
-        enemyCountText.text = $"³²Àº Àû: {current} / {total}";
+        enemyCountText.text = $"{current} / {total}";
     }
 }
