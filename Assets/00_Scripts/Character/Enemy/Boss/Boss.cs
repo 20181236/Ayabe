@@ -20,12 +20,28 @@ public class Boss : EnemyBase
 
     protected override void Start()
     {
-        if (EnemyManager.instance != null)
-            EnemyManager.instance.RegisterEnemy(this);
+        base.Start();
 
+        if (bossHpBar == null)
+        {
+            bossHpBar = FindObjectOfType<BossHpBar>();
+
+            if (bossHpBar == null)
+            {
+                Debug.LogError("BossHpBar가 씬에 존재하지 않습니다.");
+                return;
+            }
+        }
+
+        bossHpBar.Show();
+        bossHpBar.SetHP((int)GetCurrentHealth(), (int)GetMaxHealth());
+    }
+
+    protected override void Update()
+    {
         if (bossHpBar != null)
         {
-            bossHpBar.Show(); // 보스 등장 시 체력바 보여줌
+            bossHpBar.SetHP((int)GetCurrentHealth(), (int)GetMaxHealth());
         }
     }
 

@@ -6,6 +6,7 @@ using System.Collections;
 public class CutIn : MonoBehaviour
 {
     public RectTransform cutInContainer;
+
     public Image skillImage;
     public TextMeshProUGUI skillText;
 
@@ -38,7 +39,7 @@ public class CutIn : MonoBehaviour
     private IEnumerator PlayRoutine()
     {
 
-        Vector2 from = originalPosition + Vector2.left * slideDistance;
+        Vector2 from = originalPosition + Vector2.left * slideDistance * 2f;
         Vector2 to = originalPosition;
 
         // 시작 위치 설정

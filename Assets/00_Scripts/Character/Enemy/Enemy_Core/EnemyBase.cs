@@ -56,6 +56,8 @@ public class EnemyBase : CharacterBase
 
     public Transform headTransform; // 머리 위치
 
+    public float GetMaxHealth() => maxHealth;
+    public float GetCurrentHealth() => currentHealth;
 
     protected virtual void Awake()
     {
