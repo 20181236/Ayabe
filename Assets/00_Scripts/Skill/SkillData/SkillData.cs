@@ -17,6 +17,8 @@ public class SkillData : ScriptableObject
     public Sprite skillCutIn;
     public string cutInText;
 
+    public string skillTooltipText;
+
     public GameObject caster;
 
     public int manaCost;
@@ -32,9 +34,9 @@ public class SkillData : ScriptableObject
     public float tickInterval; 
 
     //장판
-    public float effectAmount;               // 딜 혹은 힐량 (healValue 대신 통합 가능)
+    public float effectAmount;        // 딜 혹은 힐량 (healValue 대신 통합 가능)
     public float effectInterval;       //주기
-    public float areaDuration;        // 장판 지속 시간
+    public float areaDuration;      // 장판 지속 시간
 
     //버프형
     public BuffStatType buffStatType; 

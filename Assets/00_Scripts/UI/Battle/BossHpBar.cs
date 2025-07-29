@@ -6,18 +6,24 @@ using TMPro;
 
 public class BossHpBar : MonoBehaviour
 {
+    public GameObject hpBarContainer;
+
+    public Image nextHPBar, currentHPBar, delayHPBar;
     public TextMeshProUGUI hpText;
 
-    //public GameObject hpBarUI;
-    public Image nextHPBar, currentHPBar;
-
-    public int hpSingleBar = 20;
+    public int hpSingleBar = 100;
 
     public int maxHP;
     public int currentHP;
 
+    private Coroutine delayCoroutine;
+
     public List<Color> colors = new List<Color>();
 
+    private void Awake()
+    {
+        Hide();
+    }
     private void Start()
     {
         //hpBarUI.SetActive(false); // 초기에는 숨김
@@ -25,22 +31,37 @@ public class BossHpBar : MonoBehaviour
     private void Update()
     {
         Refresh();
+        //UpdateDelayBar();
     }
 
     public void Show()
     {
-        //hpBarUI.SetActive(true);  // 보스 등장 시 보여줌
+        if (hpBarContainer != null)
+        {
+            hpBarContainer.SetActive(true);  // 이 한 줄이면 자식들도 모두 켜짐
+        }
     }
 
     public void Hide()
     {
-        //hpBarUI.SetActive(false); // 보스죽고 게임 끝날때
+        if (hpBarContainer != null)
+        {
+            hpBarContainer.SetActive(false); // 이 한 줄이면 자식들도 모두 꺼짐
+        }
     }
+
     public void SetHP(int current, int max)
     {
         currentHP = current;
         maxHP = max;
         Refresh();
+
+
+        if (delayCoroutine != null)
+        {
+            StopCoroutine(delayCoroutine);
+        }
+        delayCoroutine = StartCoroutine(AnimateDelayBar());
     }
 
     public void Refresh()
@@ -53,7 +74,6 @@ public class BossHpBar : MonoBehaviour
         if (hpText != null)
             hpText.text = $"{currentHP} / {maxHP}";
 
-        Debug.Log($"Base Width: {nextHPBar.rectTransform.sizeDelta.x}, Ratio: {GetHPRationInSingleBar(currentHP)}, Result Width: {currentHPBar.rectTransform.sizeDelta.x}");
     }
 
     public float GetHPRationInSingleBar(int targetHP)
@@ -100,5 +120,58 @@ public class BossHpBar : MonoBehaviour
             result = colors[index % colors.Count];
         }
         return result;
+    }
+
+    //private void UpdateDelayBar()
+    //{
+    //    float currentWidth = currentHPBar.rectTransform.sizeDelta.x;
+    //    float delayWidth = delayHPBar.rectTransform.sizeDelta.x;
+
+    //    if (delayWidth > currentWidth)
+    //    {
+    //        float distance = delayWidth - currentWidth;
+
+    //        // 줄어드는 속도를 distance 비례로 조정 (단, 최소 200, 최대 1500 픽셀/초)
+    //        float speed = Mathf.Clamp(distance * 5f, 200f, 1500f);
+
+    //        float newWidth = Mathf.MoveTowards(delayWidth, currentWidth, speed * Time.deltaTime);
+    //        delayHPBar.rectTransform.sizeDelta = new Vector2(newWidth, delayHPBar.rectTransform.sizeDelta.y);
+    //    }
+    //    else
+    //    {
+    //        delayHPBar.rectTransform.sizeDelta = new Vector2(currentWidth, delayHPBar.rectTransform.sizeDelta.y);
+    //    }
+    //    //    float currentWidth = currentHPBar.rectTransform.sizeDelta.x;
+    //    //    float delayWidth = delayHPBar.rectTransform.sizeDelta.x;
+
+    //    //    if (delayWidth > currentWidth)
+    //    //    {
+    //    //        float newWidth = Mathf.MoveTowards(delayWidth, currentWidth, delaySpeed * Time.deltaTime);
+    //    //        delayHPBar.rectTransform.sizeDelta = new Vector2(newWidth, delayHPBar.rectTransform.sizeDelta.y);
+    //    //    }
+    //    //    else
+    //    //    {
+    //    //        // 만약 즉시 따라붙게 하고 싶다면 아래 줄 유지
+    //    //        delayHPBar.rectTransform.sizeDelta = new Vector2(currentWidth, delayHPBar.rectTransform.sizeDelta.y);
+    //    //    }
+    //}
+    private IEnumerator AnimateDelayBar()
+    {
+        float currentWidth = delayHPBar.rectTransform.sizeDelta.x;
+        float targetWidth = currentHPBar.rectTransform.sizeDelta.x;
+
+        while (currentWidth > targetWidth)
+        {
+            float distance = currentWidth - targetWidth;
+            float speed = Mathf.Clamp(distance * 5f, 200f, 1500f);
+
+            currentWidth = Mathf.MoveTowards(currentWidth, targetWidth, speed * Time.deltaTime);
+            delayHPBar.rectTransform.sizeDelta = new Vector2(currentWidth, delayHPBar.rectTransform.sizeDelta.y);
+
+            yield return null;
+        }
+
+        delayHPBar.rectTransform.sizeDelta = new Vector2(targetWidth, delayHPBar.rectTransform.sizeDelta.y);
+        delayCoroutine = null;
     }
 }

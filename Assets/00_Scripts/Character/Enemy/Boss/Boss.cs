@@ -39,9 +39,19 @@ public class Boss : EnemyBase
 
     protected override void Update()
     {
+        //if (bossHpBar != null)
+        //{
+        //    bossHpBar.SetHP((int)GetCurrentHealth(), (int)GetMaxHealth());
+        //}
+    }
+    public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
+    {
+        base.ApplyDamage(damage, isExplosion, explosionPos);
+
+        // base에서 currentHealth가 줄어든 이후에 반영
         if (bossHpBar != null)
         {
-            bossHpBar.SetHP((int)GetCurrentHealth(), (int)GetMaxHealth());
+            bossHpBar.SetHP(Mathf.FloorToInt(currentHealth), Mathf.FloorToInt(maxHealth));
         }
     }
 
@@ -79,7 +89,7 @@ public class Boss : EnemyBase
         isUsingSkill = false;
         skillTimer = 0f;
         readySkill = false;     
-    }
+    }   
     protected override void ExSkill()
     {
         if (!readySkill || isUsingExSkill)
@@ -90,5 +100,14 @@ public class Boss : EnemyBase
         skillDurationTimer = 0f;
         isUsingExSkill = false;
         readyExSkill = false;
+    }
+    protected override void Die()
+    {
+        if (bossHpBar != null)
+        {
+            bossHpBar.Hide();
+        }
+
+        base.Die();
     }
 }

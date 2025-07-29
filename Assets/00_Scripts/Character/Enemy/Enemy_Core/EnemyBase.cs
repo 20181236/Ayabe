@@ -278,23 +278,6 @@ public class EnemyBase : CharacterBase
         return nearest;
     }
 
-    protected virtual void Die()
-    {
-        if (isDead)
-            return;
-        isDead = true;
-        isChase = false;
-        animator.SetTrigger("doDie");
-        WaveManager.instance.NotifyEnemyKilled();
-        OnDestroy();
-    }
-
-    public void OnDestroy()
-    {
-        if (EnemyManager.instance != null)
-            EnemyManager.instance.UnregisterEnemy(this);
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<ProjectileBase>(out var projectile))
@@ -325,15 +308,69 @@ public class EnemyBase : CharacterBase
         return reactVec;
     }
 
+    //public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
+    //{
+    //    if (isDead)
+    //        return;
+
+    //    currentHealth -= damage;
+
+    //    DamageManager.instance.ShowDamage2(headTransform.position, Mathf.FloorToInt(damage));
+
+    //    StartCoroutine(OnDamage(isExplosion, explosionPos));
+    //}
     public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
         if (isDead)
             return;
+
         currentHealth -= damage;
         DamageManager.instance.ShowDamage2(headTransform.position, Mathf.FloorToInt(damage));
-        StartCoroutine(OnDamage(isExplosion, explosionPos));
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            StartCoroutine(OnDamage(isExplosion, explosionPos));
+        }
     }
 
+    //IEnumerator OnDamage(bool isExplosion, Vector3? explosionPos)
+    //{
+    //    foreach (MeshRenderer mesh in meshs)
+    //        mesh.material.color = Color.red;
+
+    //    yield return new WaitForSeconds(0.1f);
+
+    //    if (currentHealth > 0)
+    //    {
+    //        foreach (MeshRenderer mesh in meshs)
+    //            mesh.material.color = Color.white;
+
+    //        Vector3 finalVec;
+
+    //        if (isExplosion && explosionPos.HasValue)
+    //            finalVec = HitByExplosion(explosionPos.Value) + Vector3.up * 3f;
+    //        else
+    //            finalVec = Vector3.up * 1f;
+
+    //        rigidbodyEnemy.freezeRotation = false;
+    //        rigidbodyEnemy.AddForce(finalVec * 5f, ForceMode.Impulse);
+
+    //        if (isExplosion)
+    //            rigidbodyEnemy.AddTorque(finalVec * 15f, ForceMode.Impulse);
+    //    }
+    //    else
+    //    {
+    //        currentState = EnemyState.Dead;
+    //        Die();
+    //        foreach (MeshRenderer mesh in meshs)
+    //            mesh.material.color = Color.gray;
+    //        Destroy(gameObject, 1.8f);
+    //    }
+    //}
     IEnumerator OnDamage(bool isExplosion, Vector3? explosionPos)
     {
         foreach (MeshRenderer mesh in meshs)
@@ -341,31 +378,47 @@ public class EnemyBase : CharacterBase
 
         yield return new WaitForSeconds(0.1f);
 
-        if (currentHealth > 0)
-        {
-            foreach (MeshRenderer mesh in meshs)
-                mesh.material.color = Color.white;
+        foreach (MeshRenderer mesh in meshs)
+            mesh.material.color = Color.white;
 
-            Vector3 finalVec;
+        Vector3 finalVec;
 
-            if (isExplosion && explosionPos.HasValue)
-                finalVec = HitByExplosion(explosionPos.Value) + Vector3.up * 3f;
-            else
-                finalVec = Vector3.up * 1f;
-
-            rigidbodyEnemy.freezeRotation = false;
-            rigidbodyEnemy.AddForce(finalVec * 5f, ForceMode.Impulse);
-
-            if (isExplosion)
-                rigidbodyEnemy.AddTorque(finalVec * 15f, ForceMode.Impulse);
-        }
+        if (isExplosion && explosionPos.HasValue)
+            finalVec = HitByExplosion(explosionPos.Value) + Vector3.up * 3f;
         else
-        {
-            currentState = EnemyState.Dead;
-            Die();
-            foreach (MeshRenderer mesh in meshs)
-                mesh.material.color = Color.gray;
-            Destroy(gameObject, 1.8f);
-        }
+            finalVec = Vector3.up * 1f;
+
+        rigidbodyEnemy.freezeRotation = false;
+        rigidbodyEnemy.AddForce(finalVec * 5f, ForceMode.Impulse);
+
+        if (isExplosion)
+            rigidbodyEnemy.AddTorque(finalVec * 15f, ForceMode.Impulse);
     }
+    protected virtual void Die()
+    {
+        if (isDead)
+            return;
+
+        isDead = true;
+        isChase = false;
+        animator.SetTrigger("doDie");
+
+        WaveManager.instance.NotifyEnemyKilled();
+
+        foreach (MeshRenderer mesh in meshs)
+            mesh.material.color = Color.gray;
+
+        currentState = EnemyState.Dead;
+
+        OnDestroy();
+    }
+
+    public void OnDestroy()
+    {
+        if (EnemyManager.instance != null)
+            EnemyManager.instance.UnregisterEnemy(this);
+
+        Destroy(gameObject, 1.8f);
+    }
+
 }
