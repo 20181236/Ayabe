@@ -14,7 +14,7 @@ public class SkillData : ScriptableObject
     public GameObject weaponPrefab;
     public Sprite icon;
 
-    public Sprite skillCutIn;
+    public Sprite skillCutInImage;
     public string cutInText;
 
     public string skillTooltipText;

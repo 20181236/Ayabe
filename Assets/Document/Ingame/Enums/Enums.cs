@@ -126,7 +126,6 @@ public enum EnemyType
     Normal,
     Elite,
     Boss,
-
 }
 
 public enum EnemyState

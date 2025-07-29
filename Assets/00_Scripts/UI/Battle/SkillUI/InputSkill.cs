@@ -83,7 +83,7 @@ public class InputSkill : MonoBehaviour
         if (cutIn != null)
         {
             Debug.Log("[InputSkill] cutIn.Play() 호출합니다.");
-            cutIn.Play(skillData.skillCutIn, skillData.cutInText);
+            cutIn.Play(skillData);
         }
         else
         {

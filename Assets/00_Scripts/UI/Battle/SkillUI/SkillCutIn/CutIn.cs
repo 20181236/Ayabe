@@ -23,11 +23,12 @@ public class CutIn : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Play(Sprite image, string text)
+    public void Play(SkillData skillData)
     {
         Debug.Log("[CutIn] Play »£√‚µ ");
-        skillImage.sprite = image;
-        skillText.text = text;
+
+        skillImage.sprite = skillData.skillCutInImage;
+        skillText.text = skillData.cutInText;
 
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
