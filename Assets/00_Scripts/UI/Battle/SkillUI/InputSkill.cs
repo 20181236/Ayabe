@@ -8,6 +8,7 @@ public class InputSkill : MonoBehaviour
     public PlayableBase skillCaster;
 
     [SerializeField] private CutIn cutIn;
+    [SerializeField] private SkillToolTip skillToolTip;
 
     private void Awake()
     {
@@ -57,12 +58,18 @@ public class InputSkill : MonoBehaviour
     public void OnSkillButtonDown(SkillId skillId, Vector2 pos)
     {
         Debug.Log($"[{skillId}] 스킬 버튼 누름 at {pos}");
+
+        SkillData skillData = skillPanel.GetSkillDataId(skillId);
+
+        skillToolTip.Show(skillData);
+
         SkillEffectController.instance?.PlaySkillEffect();
     }
 
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)
     {
         SkillData skillData = skillPanel.GetSkillDataId(skillId);
+
         if (skillData == null)
         {
             Debug.LogWarning("SkillData가 없습니다: " + skillId);

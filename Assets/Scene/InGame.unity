@@ -1559,6 +1559,8 @@ Transform:
   - {fileID: 489704512}
   - {fileID: 825601825}
   - {fileID: 1873087677}
+  - {fileID: 914283781}
+  - {fileID: 647690116}
   m_Father: {fileID: 1075597506}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &546896603
@@ -1636,6 +1638,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546896603}
   m_CullTransparentMesh: 1
+--- !u!1 &647690115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 647690116}
+  - component: {fileID: 647690117}
+  m_Layer: 0
+  m_Name: ToolTip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &647690116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647690115}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 536901138}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &647690117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647690115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acdbfe56f5a0cd146957b14b1fd7ece4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillToolTipIcon: {fileID: 350743710}
+  skillToolTipText: {fileID: 1827679327}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1741,7 +1789,6 @@ GameObject:
   - component: {fileID: 720231431}
   - component: {fileID: 720231432}
   - component: {fileID: 720231433}
-  - component: {fileID: 720231434}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -1789,24 +1836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyCountText: {fileID: 1390431295}
---- !u!114 &720231434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720231430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e85b8ccf73dec0d46836d3028ae44356, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cutInContainer: {fileID: 1804937041}
-  skillImage: {fileID: 546896605}
-  skillText: {fileID: 450462208}
-  slideDistance: 500
-  slideDuration: 0.4
-  displayDuration: 1.5
 --- !u!1 &808695709
 GameObject:
   m_ObjectHideFlags: 0
@@ -2064,6 +2093,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 912490371}
   m_CullTransparentMesh: 1
+--- !u!1 &914283780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914283781}
+  - component: {fileID: 914283782}
+  m_Layer: 0
+  m_Name: CutIn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914283781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914283780}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 536901138}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &914283782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914283780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85b8ccf73dec0d46836d3028ae44356, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cutInContainer: {fileID: 1804937041}
+  skillImage: {fileID: 546896605}
+  skillText: {fileID: 450462208}
+  slideDistance: 500
+  slideDuration: 0.4
+  displayDuration: 1.5
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2965,7 +3044,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPanel: {fileID: 1381351264}
   skillCaster: {fileID: 0}
-  cutIn: {fileID: 720231434}
+  cutIn: {fileID: 0}
+  skillToolTip: {fileID: 0}
 --- !u!114 &1381351264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3117,6 +3197,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1390431293}
   m_CullTransparentMesh: 1
+--- !u!1 &1436910092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1436910093}
+  m_Layer: 5
+  m_Name: SkillTollTipContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1436910093
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436910092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2008793873}
+  m_Father: {fileID: 1448084393}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1439104591
 GameObject:
   m_ObjectHideFlags: 0
@@ -3185,7 +3301,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2008793873}
+  - {fileID: 1436910093}
   m_Father: {fileID: 49250070}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -3919,6 +4035,7 @@ MonoBehaviour:
   skillPanel: {fileID: 1381351264}
   skillCaster: {fileID: 0}
   cutIn: {fileID: 0}
+  skillToolTip: {fileID: 0}
 --- !u!4 &1937077841
 Transform:
   m_ObjectHideFlags: 0
@@ -3959,14 +4076,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008793872}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 350743709}
   - {fileID: 1827679326}
-  m_Father: {fileID: 1448084393}
+  m_Father: {fileID: 1436910093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}

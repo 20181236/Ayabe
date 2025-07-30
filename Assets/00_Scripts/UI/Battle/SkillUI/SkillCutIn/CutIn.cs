@@ -16,11 +16,13 @@ public class CutIn : MonoBehaviour
 
     private Coroutine currentCoroutine;
     private Vector2 originalPosition;
+    private Vector2 hiddenPosition = new Vector2(-1000f, -1000f);  // 화면 밖 적당한 위치 고정되어있어서 좋지않음
 
     private void Awake()
     {
         cutInContainer.anchoredPosition = originalPosition;
-        gameObject.SetActive(false);
+        cutInContainer.anchoredPosition = hiddenPosition;  // 처음엔 숨김
+        //gameObject.SetActive(false);
     }
 
     public void Play(SkillData skillData)
@@ -33,6 +35,7 @@ public class CutIn : MonoBehaviour
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 
+        cutInContainer.anchoredPosition = hiddenPosition;
         gameObject.SetActive(true);
         currentCoroutine = StartCoroutine(PlayRoutine());
     }
@@ -57,7 +60,7 @@ public class CutIn : MonoBehaviour
         // 슬라이드 아웃
         yield return StartCoroutine(Slide(cutInContainer, to, from, slideDuration));
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     private IEnumerator Slide(RectTransform target, Vector2 from, Vector2 to, float duration)

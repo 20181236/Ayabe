@@ -17,7 +17,8 @@ public class SkillData : ScriptableObject
     public Sprite skillCutInImage;
     public string cutInText;
 
-    public string skillTooltipText;
+    public Sprite skillToolTipIcon;
+    public string skillToolTipText;
 
     public GameObject caster;
 
