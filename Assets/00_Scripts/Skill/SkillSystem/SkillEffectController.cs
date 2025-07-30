@@ -9,8 +9,10 @@ public class SkillEffectController : MonoBehaviour
     public static SkillEffectController instance;
 
     public Image darkOverlay;
-    public float slowDuration = 0.3f;
+    public float fadeDuration = 0.1f;
     public float slowTimeScale = 0.2f;
+
+    private Coroutine currentEffectCoroutine = null;
 
     private void Awake()
     {
@@ -20,53 +22,56 @@ public class SkillEffectController : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void PlaySkillEffect()
+    public void StartSkillEffect()
     {
-        StartCoroutine(SkillEffectCoroutine());
+        if (currentEffectCoroutine != null)
+            StopCoroutine(currentEffectCoroutine);
+
+        currentEffectCoroutine = StartCoroutine(SkillEffectCoroutine(true));
     }
 
-    private IEnumerator SkillEffectCoroutine()
+    public void EndSkillEffect()
     {
-        // 시간 느려짐
-        Time.timeScale = slowTimeScale;
-        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        if (currentEffectCoroutine != null)
+            StopCoroutine(currentEffectCoroutine);
 
-        // 화면 어두워짐
-        if (darkOverlay != null)
+        currentEffectCoroutine = StartCoroutine(SkillEffectCoroutine(false));
+    }
+
+    private IEnumerator SkillEffectCoroutine(bool enable)
+    {
+        float startAlpha = enable ? 0f : 0.3f;
+        float endAlpha = enable ? 0.3f : 0f;
+        float time = 0f;
+
+        // 시간 느려짐은 켜기만 하거나 끄기만 함
+        if (enable)
         {
-            Color color = darkOverlay.color;
-            color.a = 0f;
-            darkOverlay.color = color;
-            darkOverlay.gameObject.SetActive(true);
-
-            float time = 0f;
-            while (time < 0.1f)
-            {
-                time += Time.unscaledDeltaTime;
-                color.a = Mathf.Lerp(0f, 0.3f, time / 0.1f);
-                darkOverlay.color = color;
-                yield return null;
-            }
+            Time.timeScale = slowTimeScale;
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = 0.02f;
         }
 
-        yield return new WaitForSecondsRealtime(slowDuration);
-
-        // 복원
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = 0.02f;
-
         if (darkOverlay != null)
         {
-            float time = 0f;
+            darkOverlay.gameObject.SetActive(true);
             Color color = darkOverlay.color;
-            while (time < 0.1f)
+
+            while (time < fadeDuration)
             {
                 time += Time.unscaledDeltaTime;
-                color.a = Mathf.Lerp(0.3f, 0f, time / 0.1f);
+                color.a = Mathf.Lerp(startAlpha, endAlpha, time / fadeDuration);
                 darkOverlay.color = color;
                 yield return null;
             }
-            darkOverlay.gameObject.SetActive(false);
+
+            if (!enable)
+                darkOverlay.gameObject.SetActive(false);
         }
     }
 }
+

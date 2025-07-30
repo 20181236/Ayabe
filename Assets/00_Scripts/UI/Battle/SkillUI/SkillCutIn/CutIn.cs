@@ -27,7 +27,7 @@ public class CutIn : MonoBehaviour
 
     public void Play(SkillData skillData)
     {
-        Debug.Log("[CutIn] Play »£√‚µ ");
+        Debug.Log($"[CutIn] Play »£√‚µ  for {skillData.skillId}");
 
         skillImage.sprite = skillData.skillCutInImage;
         skillText.text = skillData.cutInText;

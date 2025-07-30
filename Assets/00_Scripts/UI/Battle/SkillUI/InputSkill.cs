@@ -4,11 +4,14 @@ using UnityEngine;
 public class InputSkill : MonoBehaviour
 {
     public static InputSkill instance { get; private set; }
+
     public SkillPanel skillPanel;
     public PlayableBase skillCaster;
 
-    [SerializeField] private CutIn cutIn;
     [SerializeField] private SkillToolTip skillToolTip;
+
+    private bool isSelectingSkill = false;  // 스킬 선택 모드 상태
+    private SkillData selectedSkill = null; // 현재 선택된 스킬
 
     private void Awake()
     {
@@ -61,9 +64,60 @@ public class InputSkill : MonoBehaviour
 
         SkillData skillData = skillPanel.GetSkillDataId(skillId);
 
-        skillToolTip.Show(skillData);
+        if (skillData == null) 
+            return;
 
-        SkillEffectController.instance?.PlaySkillEffect();
+        if (!isSelectingSkill)
+        {
+            // 선택 모드가 아니면 선택 모드 진입
+            EnterSkillSelectMode(skillData);
+        }
+        else
+        {
+            if (selectedSkill == skillData)
+            {
+                // 같은 스킬을 눌렀으면 실행 (추후 구현)
+                ExecuteSkill(skillData, pos);
+            }
+            else
+            {
+                // 다른 스킬 선택으로 변경
+                EnterSkillSelectMode(skillData);
+            }
+        }
+    }
+    private void EnterSkillSelectMode(SkillData skillData)
+    {
+        isSelectingSkill = true;
+        selectedSkill = skillData;
+
+        Debug.Log($"스킬 선택 모드 진입: {skillData.skillId}");
+
+        SkillEffectController.instance.StartSkillEffect();
+
+        skillToolTip.Show(skillData);
+    }
+    public void ExitSkillSelectMode()
+    {
+        isSelectingSkill = false;
+        selectedSkill = null;
+
+        Debug.Log("스킬 선택 모드 종료 = 실행됨");
+
+        SkillEffectController.instance.EndSkillEffect();
+
+        skillToolTip.Hide();
+    }
+    private void ExecuteSkill(SkillData skillData, Vector2 pos)
+    {
+        Debug.Log($"스킬 실행 요청: {skillData.skillId} at {pos}");
+
+        // 스킬 실행 요청 전달
+        SkillExecutor.instance.OnSkillSelected(skillData.caster, skillData);
+
+        ExitSkillSelectMode();
+
+
     }
 
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)
@@ -85,17 +139,6 @@ public class InputSkill : MonoBehaviour
         Debug.Log($"[{skillId}] 스킬 버튼 뗌 at {pos}, caster: {skillData.caster.name}");
 
         SkillExecutor.instance.OnSkillSelected(skillData.caster, skillData);
-
-        // 컷인 연출
-        if (cutIn != null)
-        {
-            Debug.Log("[InputSkill] cutIn.Play() 호출합니다.");
-            cutIn.Play(skillData);
-        }
-        else
-        {
-            Debug.LogWarning("[InputSkill] CutIn이 null입니다!");
-        }
     }
 
     public void OnSkillButtonDrag(SkillId skillId, Vector2 pos)
