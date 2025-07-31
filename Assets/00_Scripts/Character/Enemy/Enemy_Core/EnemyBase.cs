@@ -403,7 +403,8 @@ public class EnemyBase : CharacterBase
         isChase = false;
         animator.SetTrigger("doDie");
 
-        WaveManager.instance.NotifyEnemyKilled();
+        //WaveManager.instance.NotifyEnemyKilled();
+        StageManager.instance.NotifyEnemyKilled();
 
         foreach (MeshRenderer mesh in meshs)
             mesh.material.color = Color.gray;

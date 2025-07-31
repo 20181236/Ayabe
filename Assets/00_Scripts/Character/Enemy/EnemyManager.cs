@@ -38,9 +38,11 @@ public class EnemyManager : MonoBehaviour
     public void SpawnEnemy(EnemyID id, Vector3 spawnPosition)
     {
         EnemyData data = System.Array.Find(enemyDatas, d => d.enemyID == id);
+
         if (data != null)
         {
             EnemyBase enemy = EnemyFactory.CreateEnemy(data, spawnPosition);
+
             if (enemy != null)
             {
                 RegisterEnemy(enemy);

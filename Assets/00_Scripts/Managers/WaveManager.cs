@@ -8,12 +8,7 @@ public class WaveManager : MonoBehaviour
 
     public WaveData[] waves;
     private int currentWaveIndex = 0;
-
-    public int TotalEnemyCount { get; private set; } = 0;
-    public int RemainingEnemyCount { get; private set; } = 0;
-    
-   [SerializeField] private EnemyRemain enemyRemain; // 여기로 직접 연결
-
+   
     private void Awake()
     {
         if (instance == null)
@@ -24,14 +19,16 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        CountTotalEnemies();
-        Debug.Log($"[WaveManager] Start - Remaining: {RemainingEnemyCount}, Total: {TotalEnemyCount}");
-        enemyRemain.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
+
+    }
+    public void SetupWaves(WaveData[] newWaves)
+    {
+        waves = newWaves;
+        currentWaveIndex = 0;
     }
 
     public void StartFirstWave()
     {
-        currentWaveIndex = 0;
         StartWave();
     }
 
@@ -48,19 +45,9 @@ public class WaveManager : MonoBehaviour
     {
         return currentWaveIndex >= waves.Length;
     }
-    private void CountTotalEnemies()
+    public WaveData[] GetWaves()
     {
-        foreach (var wave in waves)
-        {
-            TotalEnemyCount += wave.enemiesInWave.Length;
-        }
-        RemainingEnemyCount = TotalEnemyCount;
-    }
-
-    public void NotifyEnemyKilled()
-    {
-        RemainingEnemyCount--;
-        enemyRemain.UpdateEnemyCount(RemainingEnemyCount, TotalEnemyCount);
+        return waves;
     }
 }
 
