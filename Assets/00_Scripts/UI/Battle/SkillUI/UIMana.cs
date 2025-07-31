@@ -1,11 +1,11 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIMana : MonoBehaviour
 {
     [SerializeField] private Image image;
-    [SerializeField] private TextMeshPro currentManaText;
+    [SerializeField] private TextMeshProUGUI currentManaText;
 
     private float targetFill = 1f;
     private float fillSpeed = 5f; 
@@ -25,6 +25,12 @@ public class UIMana : MonoBehaviour
     private void HandleManaChanged(float ratio)
     {
         targetFill = ratio;
+
+        if (currentManaText != null)
+        {
+            int current = Mathf.RoundToInt(ratio * ManaManager.instance.maxMana);
+            currentManaText.text = $"{current}";
+        }
     }
 
     private void Update()

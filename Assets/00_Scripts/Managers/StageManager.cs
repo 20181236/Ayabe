@@ -20,9 +20,11 @@ public class StageManager : MonoBehaviour
 
     private int totalEnemyCount = 0;
     private int remainingEnemyCount = 0;
-    
+
     private float stageTimer;
     private bool isTimeOver = false;
+    [SerializeField] private LimitTime limitTime;
+
 
     private void Awake()
     {
@@ -36,10 +38,10 @@ public class StageManager : MonoBehaviour
     {
         waveManager.SetupWaves(stageData.waves);
 
-        SetState(new StageStartState(this));
         CountTotalEnemies();
         enemyRemain.UpdateEnemyCount(remainingEnemyCount, totalEnemyCount);
 
+        //SetState(new StageStartState(this));
 
         if (stageData != null)
             stageTimer = stageData.timeLimit;
@@ -52,18 +54,11 @@ public class StageManager : MonoBehaviour
     private void Update()
     {
         currentState?.Update();
-
-        if (!isStageClear && !isTimeOver)
-        {
-            stageTimer -= Time.deltaTime;
-
-            if (stageTimer <= 0f)
-            {
-                stageTimer = 0f;
-                isTimeOver = true;
-                OnStageFailed();
-            }
-        }
+        UpdateStageTimer();
+    }
+    private void LateUpdate()
+    {
+        
     }
 
     public void SetState(InterfaceGameState newState)
@@ -93,11 +88,16 @@ public class StageManager : MonoBehaviour
 
         while (!isStageClear)
         {
+            if (isTimeOver)
+            {
+                OnStageFailed();
+                yield break;
+            }
+
             bool allWaveSpawned = waveManager.IsAllWaveSpawned();
             bool noEnemyRemain = !EnemyManager.instance.HasEnemy();
             bool bossDead = !EnemyManager.instance.HasBoss();
 
-            // 보스를 잡았으면 조건 즉시 만족
             if (hasBoss && bossDead)
             {
                 isBossClear = true;
@@ -106,7 +106,6 @@ public class StageManager : MonoBehaviour
                 yield break;
             }
 
-            // 보스가 없는 스테이지라면 전체 적 제거 시 클리어
             if (!hasBoss && allWaveSpawned && noEnemyRemain)
             {
                 isEnemyAllClear = true;
@@ -115,7 +114,6 @@ public class StageManager : MonoBehaviour
                 yield break;
             }
 
-            // 잡몹만 남았고 다음 웨이브 가능하면 진행
             if (!allWaveSpawned && noEnemyRemain)
             {
                 waveManager.StartWave();
@@ -125,17 +123,30 @@ public class StageManager : MonoBehaviour
         }
     }
 
+
     private void OnStageClear()
     {
-        Debug.Log("스테이지 클리어!");
-        // 결과창 등 추가
     }
 
     private void OnStageFailed()
     {
-        Debug.Log("Stage Failed: Time Over");
-        //SetState(new StageFailState(this)); // 새로운 실패 상태 클래스 필요 
+        Debug.Log("TimeOver");
+    }
+
+    private void UpdateStageTimer()
+    {
+        if (isStageClear || isTimeOver) return;
+
+        stageTimer -= Time.deltaTime;
+
+        limitTime?.UpdateTimeDisplay(stageTimer);
+
+        if (stageTimer <= 0f)
+        {
+            stageTimer = 0f;
+            isTimeOver = true;
+            OnStageFailed();
+        }
     }
 
 }
-

@@ -38,7 +38,7 @@ public class BossHpBar : MonoBehaviour
     {
         if (hpBarContainer != null)
         {
-            hpBarContainer.SetActive(true);  // 이 한 줄이면 자식들도 모두 켜짐
+            hpBarContainer.SetActive(true);
         }
     }
 

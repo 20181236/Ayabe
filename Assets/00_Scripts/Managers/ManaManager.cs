@@ -43,7 +43,7 @@ public class ManaManager : MonoBehaviour
     {
         currentMana = Mathf.Max(currentMana - cost, 0);
         Debug.Log($"[UseMana] 마나 사용, 남은 마나: {currentMana}");
-        OnManaChanged?.Invoke(currentMana);
+        OnManaChanged?.Invoke((float)currentMana);
     }
 
     public void RestoreMana(int amount)

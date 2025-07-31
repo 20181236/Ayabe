@@ -25,15 +25,3 @@ MonoBehaviour:
     enemyType: 0
     spawnPosition: {x: 15, y: 0, z: 15}
     delayAfter: 0
-  - enemyID: 0
-    enemyType: 0
-    spawnPosition: {x: 15, y: 0, z: 15}
-    delayAfter: 0
-  - enemyID: 0
-    enemyType: 0
-    spawnPosition: {x: 15, y: 0, z: 15}
-    delayAfter: 0
-  - enemyID: 0
-    enemyType: 0
-    spawnPosition: {x: 15, y: 0, z: 15}
-    delayAfter: 0
