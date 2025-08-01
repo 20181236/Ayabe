@@ -23,10 +23,7 @@ public class LudoSkill : SkillBase
 
         Vector3 spawnPos = context.Caster.transform.position + context.Caster.transform.forward * 1.0f;
 
-        GameObject poisonGrenade = GameObject.Instantiate(
-            poisonGrenadePrefab,
-            spawnPos,
-            Quaternion.identity);
+        GameObject poisonGrenade = GameObject.Instantiate(poisonGrenadePrefab, spawnPos, Quaternion.identity);
 
         PoisonGrenade grenadeScript = poisonGrenade.GetComponent<PoisonGrenade>();
 
@@ -37,8 +34,51 @@ public class LudoSkill : SkillBase
 
             grenadeScript.SetTarget(context.TargetPosition);
             grenadeScript.SetAttackPower(attackPower);
+
+            // 시전자 정보 전달
+            grenadeScript.InitializeShooter(context.Caster);
+
+            // 게임 시간이 멈췄을 때만 시전자의 투사체가 멈추지 않도록 설정
+            bool isTimePaused = Time.timeScale == 0f;
+            //grenadeScript.SetIgnoreTimeScale(isTimePaused);
+            if (isTimePaused)
+            {
+                grenadeScript.SetIgnoreTimeScale(true);
+                Debug.Log("SetIgnoreTimeScale(true) 호출됨");
+            }
+            else
+            {
+                Debug.Log("SetIgnoreTimeScale(true) 호출 안됨, timeScale: " + Time.timeScale);
+            }
         }
     }
+
+    //public override void Execute(SkillContext context)
+    //{
+    //    if (context.Caster == null)
+    //    {
+    //        Debug.LogError("Execute 실패: context.Caster가 null입니다.");
+    //        return;
+    //    }
+
+    //    Vector3 spawnPos = context.Caster.transform.position + context.Caster.transform.forward * 1.0f;
+
+    //    GameObject poisonGrenade = GameObject.Instantiate(
+    //        poisonGrenadePrefab,
+    //        spawnPos,
+    //        Quaternion.identity);
+
+    //    PoisonGrenade grenadeScript = poisonGrenade.GetComponent<PoisonGrenade>();
+
+    //    if (grenadeScript != null)
+    //    {
+    //        var casterStats = context.Caster.GetComponent<PlayableBase>();
+    //        float attackPower = casterStats != null ? casterStats.AttackPower : 0f;
+
+    //        grenadeScript.SetTarget(context.TargetPosition);
+    //        grenadeScript.SetAttackPower(attackPower);
+    //    }
+    //}
     //public override void Execute(SkillContext context)
     //{
     //    Debug.Log("스킬 시전자: " + context.Caster?.name);

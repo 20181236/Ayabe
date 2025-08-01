@@ -37,6 +37,18 @@ public class SkillEffectController : MonoBehaviour
 
         currentEffectCoroutine = StartCoroutine(SkillEffectCoroutine(false));
     }
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        Time.fixedDeltaTime = 0f; // 멈춤이니 0으로 설정해도 무방합니다.
+                                  // 필요하면 화면 어두워짐 등 이펙트도 여기서 실행
+    }
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+        // 어두워짐 해제 등 이펙트 해제도 여기서
+    }
 
     private IEnumerator SkillEffectCoroutine(bool enable)
     {
@@ -44,7 +56,6 @@ public class SkillEffectController : MonoBehaviour
         float endAlpha = enable ? 0.3f : 0f;
         float time = 0f;
 
-        // 시간 느려짐은 켜기만 하거나 끄기만 함
         if (enable)
         {
             Time.timeScale = slowTimeScale;
@@ -73,5 +84,5 @@ public class SkillEffectController : MonoBehaviour
                 darkOverlay.gameObject.SetActive(false);
         }
     }
-}
 
+}

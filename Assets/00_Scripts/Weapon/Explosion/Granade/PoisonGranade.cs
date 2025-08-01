@@ -12,6 +12,8 @@ public class PoisonGrenade : ProjectileBase
     private float timer = 0f;
     private float height = 15f; // 포물선 높이
 
+    private bool ignoreTimeScale = false;  // 추가
+
     public void SetTarget(Vector3 target)
     {
         startPosition = transform.position;
@@ -30,24 +32,31 @@ public class PoisonGrenade : ProjectileBase
     {
         attackPower = power;
     }
-
-    private void Update()
+    public void SetIgnoreTimeScale(bool ignore)
     {
+        ignoreTimeScale = ignore;
+    }
+
+    protected override void Update()
+    {
+        // base.Update();
+
+        float delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+        timer += delta;
+        Debug.Log($"PoisonGrenade Update - ignoreTimeScale: {ignoreTimeScale}, delta: {delta}, timer: {timer}");
+        Debug.Log($"Time.deltaTime: {Time.deltaTime}, Time.unscaledDeltaTime: {Time.unscaledDeltaTime}, timeScale: {Time.timeScale}");
+
+
         if (timer < flightTime)
         {
-            timer += Time.deltaTime;
             float t = Mathf.Clamp01(timer / flightTime);
 
-            // 수평 보간
             Vector3 horizontalPosision = Vector3.Lerp(startPosition, targetPosition, t);
-
-            // 높이 포물선 계산 (Parabola)
-            float arc = 4 * height * t * (1 - t); // 포물선 y 보정
+            float arc = 4 * height * t * (1 - t);
 
             Vector3 finalPosision = horizontalPosision + Vector3.up * arc;
             transform.position = finalPosision;
 
-            // 회전 (선택사항)
             transform.LookAt(finalPosision + Vector3.forward);
         }
         else
@@ -55,6 +64,31 @@ public class PoisonGrenade : ProjectileBase
             OnArrive();
         }
     }
+
+    //private void Update()
+    //{
+    //    if (timer < flightTime)
+    //    {
+    //        timer += Time.deltaTime;
+    //        float t = Mathf.Clamp01(timer / flightTime);
+
+    //        수평 보간
+    //        Vector3 horizontalPosision = Vector3.Lerp(startPosition, targetPosition, t);
+
+    //        높이 포물선 계산(Parabola)
+    //        float arc = 4 * height * t * (1 - t); // 포물선 y 보정
+
+    //        Vector3 finalPosision = horizontalPosision + Vector3.up * arc;
+    //        transform.position = finalPosision;
+
+    //        회전(선택사항)
+    //        transform.LookAt(finalPosision + Vector3.forward);
+    //    }
+    //    else
+    //    {
+    //        OnArrive();
+    //    }
+    //}
 
     private void OnArrive()
     {

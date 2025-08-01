@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     public Image iconImage;
+
     private SkillData skillData;
 
     public SkillData SkillData => skillData;

@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillExecutor : MonoBehaviour
@@ -105,7 +108,9 @@ public class SkillExecutor : MonoBehaviour
                 SkillEffectController.instance.EndSkillEffect();
                 skill.Execute(context);
                 ManaManager.instance.UseMana(data.manaCost);
+                SkillEffectController.instance.PauseGame();
                 cutIn.Play(data);
+                StartCoroutine(RestoreTimeAfterDelay(2f));
                 break;
 
             case CastType.TargetPoint:
@@ -116,7 +121,9 @@ public class SkillExecutor : MonoBehaviour
                     SkillEffectController.instance.EndSkillEffect();
                     skill.Execute(context);
                     ManaManager.instance.UseMana(data.manaCost);
+                    SkillEffectController.instance.PauseGame();
                     cutIn.Play(data);
+                    StartCoroutine(RestoreTimeAfterDelay(2f));
                 });
                 break;
 
@@ -129,7 +136,9 @@ public class SkillExecutor : MonoBehaviour
                     SkillEffectController.instance.EndSkillEffect();
                     skill.Execute(context);
                     ManaManager.instance.UseMana(data.manaCost);
+                    SkillEffectController.instance.PauseGame() ;
                     cutIn.Play(data);
+                    StartCoroutine(RestoreTimeAfterDelay(2f));
                 },
                 unit => FilteringTeamSkill(unit, data.skillType));
                 break;
@@ -183,5 +192,11 @@ public class SkillExecutor : MonoBehaviour
         {
             highlight.SetHighlight(false);
         }
+    }
+    private IEnumerator RestoreTimeAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        SkillEffectController.instance.ResumeGame();
+        SkillEffectController.instance.EndSkillEffect();
     }
 }
