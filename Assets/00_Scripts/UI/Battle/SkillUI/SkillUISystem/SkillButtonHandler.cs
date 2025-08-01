@@ -17,11 +17,18 @@ public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandl
 
     public SkillPanel skillPanel;
 
+    [SerializeField] private Image manaFillOverlay;
+
     void Awake()
     {
         if (iconImage == null)
             iconImage = GetComponentInChildren<Image>();
         skillPanel = FindObjectOfType<SkillPanel>();
+    }
+
+    private void Update()
+    {
+        UpdateManaOverlay();
     }
 
     public void SetSkill(SkillData data)
@@ -52,6 +59,13 @@ public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandl
     {
         if (skillData == null)
             return;
+
+        if (!ManaManager.instance.CanUseMana(skillData.manaCost))
+        {
+            Debug.Log("[SkillButtonHandler] 마나 부족으로 스킬 사용 불가");
+            return;
+        }
+
         OnSkillDown?.Invoke(skillData.skillId, eventData.position);
     }
 
@@ -59,6 +73,14 @@ public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandl
     {
         if (skillData == null)
             return;
+
+        if (!ManaManager.instance.CanUseMana(skillData.manaCost))
+        {
+            Debug.Log("[SkillButtonHandler] 마나 부족으로 스킬 사용 불가");
+            return;
+        }
+
+
         OnSkillUp?.Invoke(skillData.skillId, eventData.position);
     }
 
@@ -67,5 +89,17 @@ public class SkillButtonHandler : MonoBehaviour, IPointerDownHandler, IDragHandl
         if (skillData == null)
             return;
         OnSkillDrag?.Invoke(skillData.skillId, eventData.position);
+    }
+
+    private void UpdateManaOverlay()
+    {
+        if (skillData == null || manaFillOverlay == null || ManaManager.instance == null)
+            return;
+
+        int currentMana = ManaManager.instance.GetCurrentMana();
+        int cost = skillData.manaCost;
+
+        float fillRatio = 1f - Mathf.Clamp01((float)currentMana / cost);
+        manaFillOverlay.fillAmount = fillRatio;
     }
 }

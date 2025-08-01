@@ -104,6 +104,7 @@ public class SkillExecutor : MonoBehaviour
                 InputSkill.instance.ExitSkillSelectMode();
                 SkillEffectController.instance.EndSkillEffect();
                 skill.Execute(context);
+                ManaManager.instance.UseMana(data.manaCost);
                 cutIn.Play(data);
                 break;
 
@@ -114,6 +115,7 @@ public class SkillExecutor : MonoBehaviour
                     InputSkill.instance.ExitSkillSelectMode();
                     SkillEffectController.instance.EndSkillEffect();
                     skill.Execute(context);
+                    ManaManager.instance.UseMana(data.manaCost);
                     cutIn.Play(data);
                 });
                 break;
@@ -126,12 +128,14 @@ public class SkillExecutor : MonoBehaviour
                     InputSkill.instance.ExitSkillSelectMode();
                     SkillEffectController.instance.EndSkillEffect();
                     skill.Execute(context);
+                    ManaManager.instance.UseMana(data.manaCost);
                     cutIn.Play(data);
                 },
                 unit => FilteringTeamSkill(unit, data.skillType));
                 break;
         }
     }
+
 
     private bool FilteringTeamSkill(GameObject unit, SkillType skillType)
     {

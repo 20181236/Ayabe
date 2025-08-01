@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -131,6 +130,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1657357406}
     m_Modifications:
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillMethod
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillOrigin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillClockwise
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2386149429435328494, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -2636,7 +2655,7 @@ Transform:
   m_GameObject: {fileID: 991481200}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 3, y: -8.7, z: 59.5}
+  m_LocalPosition: {x: 3, y: 1.5, z: 39.4}
   m_LocalScale: {x: 791.04, y: 1, z: 55.79}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4964,6 +4983,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1657357406}
     m_Modifications:
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillMethod
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillOrigin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillClockwise
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2386149429435328494, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -5080,6 +5119,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1657357406}
     m_Modifications:
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillMethod
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillOrigin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_FillClockwise
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339934259084954190, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2386149429435328494, guid: d72f0f5d498d12d448eb21d5da1e3c7d, type: 3}
       propertyPath: m_Pivot.x
       value: 1

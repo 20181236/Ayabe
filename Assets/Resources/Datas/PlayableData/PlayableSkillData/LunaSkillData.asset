@@ -24,7 +24,7 @@ MonoBehaviour:
   skillToolTipIcon: {fileID: 21300000, guid: 5c9c20cb297884e1d9779377a976b16b, type: 3}
   skillToolTipText: LunaSkillTest
   caster: {fileID: 2175214197470128850, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
-  manaCost: 1
+  manaCost: 4
   range: 0
   skillRadius: 10
   skillAngle: 0
