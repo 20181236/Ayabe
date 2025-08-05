@@ -117,7 +117,6 @@ public class InputSkill : MonoBehaviour
 
         ExitSkillSelectMode();
 
-
     }
 
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)
