@@ -39,7 +39,7 @@ public class SkillEffectController : MonoBehaviour
     }
     public void PauseGame()
     {
-        Time.timeScale = 0f;
+        Time.timeScale = 0.01f;
         Time.fixedDeltaTime = 0f; // 멈춤이니 0으로 설정해도 무방합니다.
                                   // 필요하면 화면 어두워짐 등 이펙트도 여기서 실행
     }

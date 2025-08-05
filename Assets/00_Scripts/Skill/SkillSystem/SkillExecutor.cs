@@ -110,7 +110,7 @@ public class SkillExecutor : MonoBehaviour
                 ManaManager.instance.UseMana(data.manaCost);
                 SkillEffectController.instance.PauseGame();
                 cutIn.Play(data);
-                StartCoroutine(RestoreTimeAfterDelay(2f));
+                StartCoroutine(RestoreTimeAfterDelay(1f));
                 break;
 
             case CastType.TargetPoint:
@@ -123,7 +123,7 @@ public class SkillExecutor : MonoBehaviour
                     ManaManager.instance.UseMana(data.manaCost);
                     SkillEffectController.instance.PauseGame();
                     cutIn.Play(data);
-                    StartCoroutine(RestoreTimeAfterDelay(2f));
+                    StartCoroutine(RestoreTimeAfterDelay(1f));
                 });
                 break;
 

@@ -5,8 +5,9 @@ public class LunaSkill : SkillBase
 {
     private float skillRadius;
 
-    public LunaSkill(SkillData data) : base(data)
+    public override void Initialize(SkillData data)
     {
+        base.Initialize(data);
         skillRadius = data.skillRadius;
     }
 

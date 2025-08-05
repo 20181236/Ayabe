@@ -1,104 +1,79 @@
+using System.Collections;
 using UnityEngine;
 
 public class PoisonGrenade : ProjectileBase
 {
-    [SerializeField] public GameObject plosionEffectPrefab;
+    [SerializeField] private GameObject plosionEffectPrefab;
     [SerializeField] private SkillData skillData;
+
     private Vector3 startPosition;
     private Vector3 targetPosition;
     private float attackPower;
-    public float skillRatio = 1.5f; // 스킬 계수150%
-    private float flightTime = 1.0f; // 전체 비행 시간
-    private float timer = 0f;
-    private float height = 15f; // 포물선 높이
 
-    private bool ignoreTimeScale = false;  // 추가
+    public float skillRatio = 1.5f; // 스킬 계수 (예: 150%)
+    private float maximumHeight = 15f; // 포물선 최고 높이
+    private float flightDuration = 1.0f; // 실제 시간 기준 총 비행 시간 (초)
 
     public void SetTarget(Vector3 target)
     {
         startPosition = transform.position;
         targetPosition = target;
     }
-    protected override void SetProjectileInfo()
-    {
-        base.SetProjectileInfo();
-        damage = 100;
-        speed = 50f;
-        rotateSpeed = 10f;
-        isExplosion = true;
-    }
 
     public void SetAttackPower(float power)
     {
         attackPower = power;
     }
-    public void SetIgnoreTimeScale(bool ignore)
+
+    protected override void SetProjectileInfo()
     {
-        ignoreTimeScale = ignore;
+        base.SetProjectileInfo();
+        damage = 100;         // 기본 데미지
+        speed = 50f;          // 필요 시 사용
+        rotateSpeed = 10f;    // 필요 시 사용
+        isExplosion = true;
     }
 
-    protected override void Update()
+    private void Start()
     {
-        // base.Update();
-
-        float delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-        timer += delta;
-        Debug.Log($"PoisonGrenade Update - ignoreTimeScale: {ignoreTimeScale}, delta: {delta}, timer: {timer}");
-        Debug.Log($"Time.deltaTime: {Time.deltaTime}, Time.unscaledDeltaTime: {Time.unscaledDeltaTime}, timeScale: {Time.timeScale}");
-
-
-        if (timer < flightTime)
-        {
-            float t = Mathf.Clamp01(timer / flightTime);
-
-            Vector3 horizontalPosision = Vector3.Lerp(startPosition, targetPosition, t);
-            float arc = 4 * height * t * (1 - t);
-
-            Vector3 finalPosision = horizontalPosision + Vector3.up * arc;
-            transform.position = finalPosision;
-
-            transform.LookAt(finalPosision + Vector3.forward);
-        }
-        else
-        {
-            OnArrive();
-        }
+        StartCoroutine(ParabolaMoveCoroutine());
     }
 
-    //private void Update()
-    //{
-    //    if (timer < flightTime)
-    //    {
-    //        timer += Time.deltaTime;
-    //        float t = Mathf.Clamp01(timer / flightTime);
+    private IEnumerator ParabolaMoveCoroutine()
+    {
+        float elapsedTime = 0f;
 
-    //        수평 보간
-    //        Vector3 horizontalPosision = Vector3.Lerp(startPosition, targetPosition, t);
+        while (elapsedTime < flightDuration)
+        {
+            float progressRatio = elapsedTime / flightDuration;
 
-    //        높이 포물선 계산(Parabola)
-    //        float arc = 4 * height * t * (1 - t); // 포물선 y 보정
+            // 선형 보간 위치 (수평 이동)
+            Vector3 horizontalPosition = Vector3.Lerp(startPosition, targetPosition, progressRatio);
 
-    //        Vector3 finalPosision = horizontalPosision + Vector3.up * arc;
-    //        transform.position = finalPosision;
+            // 포물선 높이 계산
+            float verticalOffset = 4f * maximumHeight * progressRatio * (1f - progressRatio);
 
-    //        회전(선택사항)
-    //        transform.LookAt(finalPosision + Vector3.forward);
-    //    }
-    //    else
-    //    {
-    //        OnArrive();
-    //    }
-    //}
+            Vector3 currentPosition = horizontalPosition + Vector3.up * verticalOffset;
+            transform.position = currentPosition;
+
+            // 시각적 회전 (선택 사항)
+            transform.LookAt(currentPosition + Vector3.forward);
+
+            yield return null;
+            elapsedTime += Time.unscaledDeltaTime; // 타임스케일 무시하고 실제 시간 기준으로 진행
+        }
+
+        OnArrive();
+    }
 
     private void OnArrive()
     {
         if (plosionEffectPrefab != null)
         {
-            GameObject plosion = Instantiate(plosionEffectPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+            GameObject explosion = Instantiate(plosionEffectPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
             Debug.Log("영역전개");
 
-            // Area 컴포넌트가 있으면 skillData를 전달한다
-            Area area = plosion.GetComponent<Area>();
+            Area area = explosion.GetComponent<Area>();
             if (area != null)
             {
                 area.SetArea(skillData);

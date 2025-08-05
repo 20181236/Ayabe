@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public abstract class SkillBase : InterfaceSkill
+public abstract class SkillBase : MonoBehaviour, InterfaceSkill
 {
     protected SkillData skillData;
 
-    public SkillBase(SkillData data)
+    public virtual void Initialize(SkillData data)
     {
         skillData = data;
     }

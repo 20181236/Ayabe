@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class SoonDoBuSkill : SkillBase
 {
-    public SoonDoBuSkill(SkillData data) : base(data) { }
+    public override void Initialize(SkillData data)
+    {
+        base.Initialize(data);
+    }
 
     public override void Execute(SkillContext context)
     {

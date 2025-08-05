@@ -212,6 +212,11 @@ public abstract class PlayableBase : CharacterBase
 
     protected virtual void CheckingAttackRenge()
     {
+        if (currentTarget == null)
+        {
+            currentState = PlayableState.Idle;
+            return;
+        }
         currentState = (distance <= AttackRange) ? PlayableState.Attack : PlayableState.Chasing;
     }
 
