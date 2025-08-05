@@ -6,36 +6,25 @@ public static class SkillFactory
 {
     public static SkillBase CreateSkill(SkillData data)
     {
-        SkillBase skillInstance = null;
+        SkillBase skill = null;
 
         switch (data.skillId)
         {
             case SkillId.SoonDoBuSkill:
-                skillInstance = InstantiateSkillComponent<SoonDoBuSkill>();
+                skill = new SoonDoBuSkill();
                 break;
             case SkillId.LunaSkill:
-                skillInstance = InstantiateSkillComponent<LunaSkill>();
+                skill = new LunaSkill();
                 break;
             case SkillId.LudoSkill:
-                skillInstance = InstantiateSkillComponent<LudoSkill>();
+                skill = new LudoSkill();
                 break;
             default:
-                Debug.LogWarning("Unknown skillId: " + data.skillId);
-                break;
+                Debug.LogWarning($"[SkillFactory] Unknown skillId: {data.skillId}");
+                return null;
         }
 
-        if (skillInstance != null)
-        {
-            skillInstance.Initialize(data); 
-        }
-
-        return skillInstance;
-    }
-
-    private static T InstantiateSkillComponent<T>() where T : SkillBase
-    {
-        GameObject skillGameObject = new GameObject(typeof(T).Name);
-        return skillGameObject.AddComponent<T>();
+        skill.Initialize(data); // 여기서 초기화
+        return skill;
     }
 }
-

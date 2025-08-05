@@ -55,12 +55,13 @@ public class InputSkill : MonoBehaviour
     public void SetSkillCaster(PlayableBase newCaster)
     {
         skillCaster = newCaster;
-        Debug.Log($"[InputSkill] 현재 캐스터는: {skillCaster.playableID}");
+        Debug.Log($"[InputSkill] 현재 캐스터 변경됨: {skillCaster.name} (ID: {skillCaster.playableID})");
     }
 
     public void OnSkillButtonDown(SkillId skillId, Vector2 pos)
     {
         Debug.Log($"[{skillId}] 스킬 버튼 누름 at {pos}");
+        Debug.Log($"[InputSkill] OnSkillButtonDown 호출 - 스킬ID: {skillId}, 포지션: {pos}");
 
         SkillData skillData = skillPanel.GetSkillDataId(skillId);
 
@@ -108,15 +109,30 @@ public class InputSkill : MonoBehaviour
 
         skillToolTip.Hide();
     }
+
+    private PlayableBase FindCasterByOwnerId(PlayableID ownerId)
+    {
+        var allCasters = FindObjectsOfType<PlayableBase>();
+        foreach (var caster in allCasters)
+        {
+            if (caster.playableID == ownerId)
+                return caster;
+        }
+        return null;
+    }
+
     private void ExecuteSkill(SkillData skillData, Vector2 pos)
     {
-        Debug.Log($"스킬 실행 요청: {skillData.skillId} at {pos}");
+        if (skillCaster == null)
+        {
+            Debug.LogError("[InputSkill] skillCaster가 설정되지 않았습니다!");
+            return;
+        }
 
-        // 스킬 실행 요청 전달
-        SkillExecutor.instance.OnSkillSelected(skillData.caster, skillData);
+        Debug.Log($"[InputSkill] SkillExecutor에 스킬 실행 요청 - 캐스터: {skillCaster.name}, 스킬: {skillData.skillId}");
+        SkillExecutor.instance.OnSkillSelected(skillCaster.gameObject, skillData);
 
         ExitSkillSelectMode();
-
     }
 
     public void OnSkillButtonUp(SkillId skillId, Vector2 pos)
@@ -129,16 +145,16 @@ public class InputSkill : MonoBehaviour
             return;
         }
 
-        if (skillData.caster == null)
+        PlayableBase caster = FindCasterByOwnerId(skillData.ownerId);
+        if (caster == null)
         {
-            Debug.LogError($"[InputSkill] SkillData {skillId}의 caster가 설정되지 않았습니다!");
+            Debug.LogError("[InputSkill] 캐스터를 찾을 수 없습니다!");
             return;
         }
 
-        Debug.Log($"[{skillId}] 스킬 버튼 뗌 at {pos}, caster: {skillData.caster.name}");
-
-        SkillExecutor.instance.OnSkillSelected(skillData.caster, skillData);
+        SkillExecutor.instance.OnSkillSelected(caster.gameObject, skillData);
     }
+
 
     public void OnSkillButtonDrag(SkillId skillId, Vector2 pos)
     {

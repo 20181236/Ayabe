@@ -21,7 +21,7 @@ public class SkillData : ScriptableObject
     public Sprite skillToolTipIcon;
     public string skillToolTipText;
 
-    public GameObject caster;
+    //public GameObject caster;
 
     public GameObject castEffectPrefab;
 

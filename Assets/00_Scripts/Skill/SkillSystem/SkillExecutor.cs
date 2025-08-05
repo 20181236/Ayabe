@@ -92,6 +92,9 @@ public class SkillExecutor : MonoBehaviour
             return;
         }
 
+        Debug.Log($"[SkillExecutor] OnSkillSelected 호출 - 캐스터: {caster.name}, 스킬: {data.skillId}");
+
+
         SkillBase skill = SkillFactory.CreateSkill(data);
         var context = new SkillContext
         {
@@ -100,6 +103,8 @@ public class SkillExecutor : MonoBehaviour
             TargetPosition = Vector3.zero,
             AttackPower = caster.GetComponent<PlayableBase>()?.AttackPower ?? 0f
         };
+
+        Debug.Log($"[SkillExecutor] SkillContext 생성 - 캐스터 이름: {context.Caster.name}");
 
         switch (data.castType)
         {

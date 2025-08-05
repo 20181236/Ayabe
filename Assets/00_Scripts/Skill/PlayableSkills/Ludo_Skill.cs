@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LudoSkill : SkillBase
@@ -18,78 +17,100 @@ public class LudoSkill : SkillBase
     {
         if (context.Caster == null)
         {
-            Debug.LogError("LudoSkill 실행 실패: Caster가 null입니다.");
+            Debug.LogError("[LudoSkill] 실행 실패: Caster가 null입니다.");
             return;
         }
-        else
+
+        Debug.Log($"[LudoSkill] 캐스터 이름: {context.Caster.name}");
+        Debug.Log($"[LudoSkill] 캐스터 위치: {context.Caster.transform.position}");
+        Debug.Log($"[LudoSkill] 타겟 위치: {context.TargetPosition}");
+
+        HandleAnimation(context.Caster);
+        SpawnGrenade(context);
+        SpawnCastEffect(context);
+    }
+
+    private void HandleAnimation(GameObject caster)
+    {
+        var playable = caster.GetComponent<PlayableBase>();
+        if (playable?.playableAnimator == null)
         {
-            Debug.Log("Caster: " + context.Caster.name);
+            Debug.LogWarning("[LudoSkill] PlayableBase 또는 Animator가 없습니다.");
+            return;
         }
 
-        Debug.Log($"[Execute] 캐스터 이름: {context.Caster.name}");
+        Animator animator = playable.playableAnimator;
+        animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        animator.SetTrigger("doSkill");
+        Debug.Log("[LudoSkill] 스킬 애니메이션 트리거 실행됨");
 
-        Vector3 casterPos = context.Caster.transform.position;
-        Debug.Log($"[Execute] 캐스터 위치: {casterPos}");  // 캐스터 좌표 찍기
+        SkillExecutor.instance.StartCoroutine(LogCurrentAnimationState(animator));
+    }
 
-        Debug.Log($"[Execute] 타겟 위치: {context.TargetPosition}");
-
-        var playableBase = context.Caster.GetComponent<PlayableBase>();
-        if (playableBase != null && playableBase.playableAnimator != null)
+    private void SpawnGrenade(SkillContext context)
+    {
+        if (poisonGrenadePrefab == null)
         {
-            var animator = playableBase.playableAnimator;
-            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-            animator.SetTrigger("doSkill");
-            Debug.Log("애니메이션실행됨");
-            SkillExecutor.instance.StartCoroutine(LogCurrentAnimationState(animator));
-        }
-        else
-        {
-            Debug.LogWarning("PlayableBase 또는 animator를 찾을 수 없습니다.");
+            Debug.LogError("[LudoSkill] poisonGrenadePrefab이 설정되지 않았습니다.");
+            return;
         }
 
         Vector3 spawnPosition = context.Caster.transform.position + context.Caster.transform.forward * 1.0f;
-
         GameObject grenadeObject = GameObject.Instantiate(poisonGrenadePrefab, spawnPosition, Quaternion.identity);
-        PoisonGrenade grenadeScript = grenadeObject.GetComponent<PoisonGrenade>();
 
-        if (grenadeScript != null)
+        if (!grenadeObject.TryGetComponent(out PoisonGrenade grenade))
         {
-            PlayableBase casterStats = context.Caster.GetComponent<PlayableBase>();
-            float casterAttackPower = casterStats != null ? casterStats.AttackPower : 0f;
-
-            grenadeScript.SetTarget(context.TargetPosition);
-            grenadeScript.SetAttackPower(casterAttackPower);
-            grenadeScript.InitializeShooter(context.Caster);
-
-            bool isTimePaused = Mathf.Approximately(Time.timeScale, 0f);
-            if (isTimePaused)
-            {
-                grenadeScript.SetIgnoreTimeScale(true);
-            }
+            Debug.LogError("[LudoSkill] PoisonGrenade 컴포넌트를 찾을 수 없습니다.");
+            return;
         }
 
-        if (skillData.castEffectPrefab != null)
-        {
-            Debug.Log($"캐스터 위치: {context.Caster.transform.position}");
-            GameObject effect = GameObject.Instantiate(skillData.castEffectPrefab, context.Caster.transform.position+ Vector3.up * 1f, Quaternion.identity);
-            Debug.Log($"이펙트 생성됨: {effect.name}, 위치: {effect.transform.position}");
-            SkillExecutor.instance.StartCoroutine(DestroyAfterRealtime(effect, 1.5f));
-        }
-        Debug.Log("이펙트 프리팹: " + skillData.castEffectPrefab);
+        float attackPower = context.Caster.GetComponent<PlayableBase>()?.AttackPower ?? 0f;
 
+        grenade.SetTarget(context.TargetPosition);
+        grenade.SetAttackPower(attackPower);
+        grenade.InitializeShooter(context.Caster);
+
+        if (Mathf.Approximately(Time.timeScale, 0f))
+        {
+            grenade.SetIgnoreTimeScale(true);
+        }
+
+        Debug.Log("[LudoSkill] 포이즌 그레네이드 생성 및 설정 완료");
     }
+
+    private void SpawnCastEffect(SkillContext context)
+    {
+        if (skillData.castEffectPrefab == null)
+        {
+            Debug.Log("[LudoSkill] castEffectPrefab이 설정되지 않음");
+            return;
+        }
+
+        Vector3 effectPos = context.Caster.transform.position + Vector3.up * 1f;
+        GameObject effect = GameObject.Instantiate(skillData.castEffectPrefab, effectPos, Quaternion.identity);
+
+        Debug.Log($"[LudoSkill] 이펙트 생성됨: {effect.name} at {effectPos}");
+
+        SkillExecutor.instance.StartCoroutine(DestroyAfterRealtime(effect, 1.5f));
+    }
+
     private IEnumerator LogCurrentAnimationState(Animator animator)
     {
-        yield return null;  // 한 프레임 기다리기
+        yield return null;  // 1프레임 대기 후 애니메이션 상태 출력
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log($"현재 애니메이션 상태 이름 해시: {stateInfo.fullPathHash}, 길이: {stateInfo.length}, 진행 시간: {stateInfo.normalizedTime}");
+        Debug.Log($"[LudoSkill] 애니메이션 상태: 해시={stateInfo.fullPathHash}, 길이={stateInfo.length}, 진행률={stateInfo.normalizedTime}");
     }
+
     public static IEnumerator DestroyAfterRealtime(GameObject target, float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
         if (target != null)
+        {
             GameObject.Destroy(target);
+            Debug.Log($"[LudoSkill] {target.name} 오브젝트 파괴됨");
+        }
     }
 }
+
 

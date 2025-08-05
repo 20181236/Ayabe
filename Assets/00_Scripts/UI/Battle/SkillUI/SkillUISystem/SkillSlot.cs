@@ -22,6 +22,7 @@ public class SkillSlot : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
         skillData = data;
         this.caster = caster;
         skillIcon.sprite = data.icon;
+
         skillInstance = SkillFactory.CreateSkill(data);
     }
 

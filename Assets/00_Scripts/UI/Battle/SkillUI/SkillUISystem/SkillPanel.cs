@@ -10,6 +10,8 @@ public class SkillPanel : MonoBehaviour
     public SkillButtonHandler[] skillButtons;
     public List<SkillData> skillDatas;
 
+    private Dictionary<SkillId, PlayableBase> skillCasterMap = new Dictionary<SkillId, PlayableBase>();
+
     private void Awake()
     {
         if (instance == null)
@@ -64,21 +66,21 @@ public class SkillPanel : MonoBehaviour
     {
         var allSkillDatas = SkillManager.instance.skillDatas;
 
-        foreach (var data in allSkillDatas)
-        {
-            if (skills.Contains(data.skillId))
-            {
-                data.caster = caster;
-                Debug.Log($"SkillPanel: {data.skillId}의 시전자로 {caster.name} 설정");
-            }
-        }
+        //foreach (var data in allSkillDatas)
+        //{
+        //    //if (skills.Contains(data.skillId))
+        //    //{
+        //    //    data.caster = caster;
+        //    //    Debug.Log($"SkillPanel: {data.skillId}의 시전자로 {caster.name} 설정");
+        //    //}
+        //}
     }
 
     public void ClearSkillsForCaster(PlayableBase caster)
     {
         foreach (var button in skillButtons)
         {
-            if (button.SkillData != null && button.SkillData.caster == caster.gameObject)
+            if (button.SkillData != null && caster.ownedSkills.Contains(button.SkillData.skillId))
             {
                 // 스킬 데이터 해제
                 button.SetSkill(null);
