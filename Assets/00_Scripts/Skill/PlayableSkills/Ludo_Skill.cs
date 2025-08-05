@@ -26,6 +26,13 @@ public class LudoSkill : SkillBase
             Debug.Log("Caster: " + context.Caster.name);
         }
 
+        Debug.Log($"[Execute] 캐스터 이름: {context.Caster.name}");
+
+        Vector3 casterPos = context.Caster.transform.position;
+        Debug.Log($"[Execute] 캐스터 위치: {casterPos}");  // 캐스터 좌표 찍기
+
+        Debug.Log($"[Execute] 타겟 위치: {context.TargetPosition}");
+
         var playableBase = context.Caster.GetComponent<PlayableBase>();
         if (playableBase != null && playableBase.playableAnimator != null)
         {
@@ -60,6 +67,16 @@ public class LudoSkill : SkillBase
                 grenadeScript.SetIgnoreTimeScale(true);
             }
         }
+
+        if (skillData.castEffectPrefab != null)
+        {
+            Debug.Log($"캐스터 위치: {context.Caster.transform.position}");
+            GameObject effect = GameObject.Instantiate(skillData.castEffectPrefab, context.Caster.transform.position+ Vector3.up * 1f, Quaternion.identity);
+            Debug.Log($"이펙트 생성됨: {effect.name}, 위치: {effect.transform.position}");
+            SkillExecutor.instance.StartCoroutine(DestroyAfterRealtime(effect, 1.5f));
+        }
+        Debug.Log("이펙트 프리팹: " + skillData.castEffectPrefab);
+
     }
     private IEnumerator LogCurrentAnimationState(Animator animator)
     {
@@ -67,6 +84,12 @@ public class LudoSkill : SkillBase
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         Debug.Log($"현재 애니메이션 상태 이름 해시: {stateInfo.fullPathHash}, 길이: {stateInfo.length}, 진행 시간: {stateInfo.normalizedTime}");
+    }
+    public static IEnumerator DestroyAfterRealtime(GameObject target, float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        if (target != null)
+            GameObject.Destroy(target);
     }
 }
 

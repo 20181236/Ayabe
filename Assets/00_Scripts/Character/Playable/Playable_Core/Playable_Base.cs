@@ -538,4 +538,8 @@ public abstract class PlayableBase : CharacterBase
                 break;
         }
     }
+    public Vector3 GetCasterPosition()
+    {
+        return transform.position;
+    }
 }

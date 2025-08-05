@@ -158,3 +158,11 @@ public enum WeaponType
     Mssile,
     Grenada
 }
+
+public enum EffectId
+{
+    None,
+    SoonDoBu_CastEffect,
+    Luna_CastEffect,
+    Ludo_CastEffect,
+}

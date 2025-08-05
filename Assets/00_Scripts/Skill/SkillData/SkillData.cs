@@ -10,6 +10,7 @@ public class SkillData : ScriptableObject
     public SkillType skillType;
     public CastType castType;
     public AreaType areaType;   // 장판이 딜인지 힐인지 구분
+    public EffectId castEffectId;
 
     public GameObject weaponPrefab;
     public Sprite icon;
@@ -21,6 +22,8 @@ public class SkillData : ScriptableObject
     public string skillToolTipText;
 
     public GameObject caster;
+
+    public GameObject castEffectPrefab;
 
     public int manaCost;
 

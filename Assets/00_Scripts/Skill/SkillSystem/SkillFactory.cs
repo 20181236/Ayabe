@@ -26,7 +26,7 @@ public static class SkillFactory
 
         if (skillInstance != null)
         {
-            skillInstance.Initialize(data);  // 생성자 대신 초기화 메서드 호출
+            skillInstance.Initialize(data); 
         }
 
         return skillInstance;
