@@ -4,7 +4,7 @@ using UnityEngine;
 public class LudoSkill : SkillBase
 {
     private float skillRadius;
-    public GameObject poisonGrenadePrefab;
+    private GameObject poisonGrenadePrefab;
 
     public override void Initialize(SkillData data)
     {
@@ -25,26 +25,12 @@ public class LudoSkill : SkillBase
         Debug.Log($"[LudoSkill] 캐스터 위치: {context.Caster.transform.position}");
         Debug.Log($"[LudoSkill] 타겟 위치: {context.TargetPosition}");
 
+        // 공통 이펙트, 애니메이션 처리
+        SpawnCastEffect(context.Caster);
         HandleAnimation(context.Caster);
+
+        // 포이즌 그레네이드 생성 및 설정
         SpawnGrenade(context);
-        SpawnCastEffect(context);
-    }
-
-    private void HandleAnimation(GameObject caster)
-    {
-        var playable = caster.GetComponent<PlayableBase>();
-        if (playable?.playableAnimator == null)
-        {
-            Debug.LogWarning("[LudoSkill] PlayableBase 또는 Animator가 없습니다.");
-            return;
-        }
-
-        Animator animator = playable.playableAnimator;
-        animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-        animator.SetTrigger("doSkill");
-        Debug.Log("[LudoSkill] 스킬 애니메이션 트리거 실행됨");
-
-        SkillExecutor.instance.StartCoroutine(LogCurrentAnimationState(animator));
     }
 
     private void SpawnGrenade(SkillContext context)
@@ -77,57 +63,4 @@ public class LudoSkill : SkillBase
 
         Debug.Log("[LudoSkill] 포이즌 그레네이드 생성 및 설정 완료");
     }
-
-    private void SpawnCastEffect(SkillContext context)
-    {
-        if (skillData.castEffectPrefab == null)
-        {
-            Debug.Log("[LudoSkill] castEffectPrefab이 설정되지 않음");
-            return;
-        }
-
-        Vector3 effectPos = context.Caster.transform.position + Vector3.up * 1f;
-        GameObject effect = GameObject.Instantiate(skillData.castEffectPrefab, effectPos, Quaternion.identity);
-
-        //// 파티클 시스템이 있다면 타임스케일 무시하도록 설정
-        //var particleSystem = effect.GetComponent<ParticleSystem>();
-        //if (particleSystem != null)
-        //{
-        //    var main = particleSystem.main;
-        //    main.useUnscaledTime = true;
-        //    particleSystem.Play();
-        //}
-        ParticleSystem[] particleSystems = effect.GetComponentsInChildren<ParticleSystem>(true);
-        foreach (var ps in particleSystems)
-        {
-            var main = ps.main;
-            main.useUnscaledTime = true;
-            ps.Play();
-        }
-
-
-        Debug.Log($"[LudoSkill] 이펙트 생성됨: {effect.name} at {effectPos}");
-
-        SkillExecutor.instance.StartCoroutine(DestroyAfterRealtime(effect, 1.5f));
-    }
-
-    private IEnumerator LogCurrentAnimationState(Animator animator)
-    {
-        yield return null;  // 1프레임 대기 후 애니메이션 상태 출력
-
-        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log($"[LudoSkill] 애니메이션 상태: 해시={stateInfo.fullPathHash}, 길이={stateInfo.length}, 진행률={stateInfo.normalizedTime}");
-    }
-
-    public static IEnumerator DestroyAfterRealtime(GameObject target, float delay)
-    {
-        yield return new WaitForSecondsRealtime(delay);
-        if (target != null)
-        {
-            GameObject.Destroy(target);
-            Debug.Log($"[LudoSkill] {target.name} 오브젝트 파괴됨");
-        }
-    }
 }
-
-

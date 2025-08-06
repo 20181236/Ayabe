@@ -15,6 +15,13 @@ public class SoonDoBuSkill : SkillBase
             return;
         }
 
+        if (context.Caster != null)
+        {
+            // 공통 이펙트 & 애니메이션 호출
+            SpawnCastEffect(context.Caster);
+            HandleAnimation(context.Caster);
+        }
+
         var playable = context.Target.GetComponent<PlayableBase>();
         if (playable != null && !playable.isDead)
         {

@@ -24,7 +24,7 @@ MonoBehaviour:
   cutInText: AllHeal250
   skillToolTipIcon: {fileID: 21300000, guid: 5c9c20cb297884e1d9779377a976b16b, type: 3}
   skillToolTipText: LunaSkillTest
-  castEffectPrefab: {fileID: 0}
+  castEffectPrefab: {fileID: 158789456559184324, guid: 87167b19fb4a32a4e8e4f2c5f40a40b3, type: 3}
   manaCost: 4
   range: 0
   skillRadius: 10

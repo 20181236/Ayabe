@@ -4,8 +4,10 @@ public static class ResourcePaths
 
     public const string SkillPrefabRoot = "Prefabs/Skills/";
 
+    public const string SoonDuBuEffectPath = "Art/Effect/Luna_CastEffect/ExplosionSlash";
+    public const string LunaCastEffectPath = "Art/Effect/Luna_CastEffect/ShinySlash";
     public const string LudoCastEffectPath = "Art/Effect/Ludo_CastEffect/DoubleSlash";
-    public const string LunaCastEffectPath = "Art/Effect/Luna_CastEffect";
+ 
 
 
     public static string GetSkillPrefabPath(SkillId id)
