@@ -22,5 +22,5 @@ MonoBehaviour:
   HealPower: 0
   skillInterval: 10
   exSkillInterval: 3
-  moveSpeed: 0
+  moveSpeed: 10
   exSkillData: {fileID: 11400000, guid: 4ab41700ebabf614e8005310606dc792, type: 2}

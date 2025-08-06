@@ -17,13 +17,14 @@ MonoBehaviour:
   skillType: 3
   castType: 2
   areaType: 0
+  castEffectId: 2
   weaponPrefab: {fileID: 0}
   icon: {fileID: 21300000, guid: 47fbbf7a9c438ed4ea370ca0e59905ff, type: 3}
   skillCutInImage: {fileID: 21300000, guid: ff108e4c79a535c45ace10eaa3c82242, type: 3}
   cutInText: AllHeal250
   skillToolTipIcon: {fileID: 21300000, guid: 5c9c20cb297884e1d9779377a976b16b, type: 3}
   skillToolTipText: LunaSkillTest
-  caster: {fileID: 2175214197470128850, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
+  castEffectPrefab: {fileID: 0}
   manaCost: 4
   range: 0
   skillRadius: 10

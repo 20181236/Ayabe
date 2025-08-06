@@ -161,7 +161,11 @@ public abstract class PlayableBase : CharacterBase
         isIdle = true;
         readyBasicAttack = false;
         isUsingSkill = false;
+
+        if (navMeshAgent != null)
+            navMeshAgent.speed = moveSpeed;
     }
+
 
     public virtual void SetData(PlayableData data)
     {
@@ -178,6 +182,9 @@ public abstract class PlayableBase : CharacterBase
         exSkillData = data.exSkillData;
         exSkillInterval = data.exSkillInterval;
 
+        if (navMeshAgent != null)
+            navMeshAgent.speed = moveSpeed;
+
         if (exSkillSlot != null)
         {
             exSkillSlot.Setup(exSkillData, this);
@@ -185,6 +192,7 @@ public abstract class PlayableBase : CharacterBase
 
         Initialize();
     }
+
 
     public void SetExSkill(SkillBase skill)
     {
