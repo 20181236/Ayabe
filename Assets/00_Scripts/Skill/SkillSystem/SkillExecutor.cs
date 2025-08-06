@@ -28,62 +28,6 @@ public class SkillExecutor : MonoBehaviour
         }
     }
 
-    //public void OnSkillSelected(GameObject caster, SkillData data)
-    //{
-
-    //    if (caster == null)
-    //    {
-    //        Debug.LogError("SkillExecutor: caster.");
-    //        return;
-    //    }
-
-    //    Debug.Log($": {data.skillId}");
-
-    //    SkillBase skill = SkillFactory.CreateSkill(data);
-    //    var context = new SkillContext
-    //    {
-    //        Caster = caster,
-    //        Target = null,
-    //        TargetPosition = Vector3.zero, // or targeting system »ç¿ë
-    //        AttackPower = caster.GetComponent<PlayableBase>()?.AttackPower ?? 0f
-    //    };
-    //    //SkillContext context = new SkillContext
-    //    //{
-    //    //    Caster = caster
-    //    //};
-
-    //    //SkillEffectController.instance.EndSkillEffect();
-
-    //    switch (data.castType)
-    //    {
-    //        case CastType.Instant:
-    //            skill.Execute(context);
-    //            break;
-
-    //        case CastType.TargetPoint:
-    //            Targeting.instance.StartPositionTargeting(data, pos =>
-    //            {
-    //                context.TargetPosition = pos;
-    //                skill.Execute(context);
-    //            });
-    //            break;
-
-    //        case CastType.TargetUnit:
-    //            Targeting.instance.StartUnitTargeting(unit =>
-    //            {
-    //                context.Target = unit;
-    //                ClearAllHighlights(); 
-    //                skill.Execute(context);
-    //            },
-    //            unit => FilteringTeamSkill(unit, data.skillType));
-    //            break;
-    //    }
-
-    //    if (data.castType == CastType.TargetUnit)
-    //    {
-    //        HighlightTargets(data.skillType);
-    //    }
-    //}
     public void OnSkillSelected(GameObject caster, SkillData data)
     {
         if (caster == null)
@@ -109,47 +53,37 @@ public class SkillExecutor : MonoBehaviour
         switch (data.castType)
         {
             case CastType.Instant:
-                InputSkill.instance.ExitSkillSelectMode();
-                SkillEffectController.instance.EndSkillEffect();
-                skill.Execute(context);
-                ManaManager.instance.UseMana(data.manaCost);
-                SkillEffectController.instance.PauseGame();
-                cutIn.Play(data);
-                StartCoroutine(RestoreTimeAfterDelay(1f));
+                ExecuteSkill(skill, context, data);
                 break;
 
             case CastType.TargetPoint:
-                Targeting.instance.StartPositionTargeting(data, pos =>
-                {
+                Targeting.instance.StartPositionTargeting(data, pos => {
                     context.TargetPosition = pos;
-                    InputSkill.instance.ExitSkillSelectMode();
-                    SkillEffectController.instance.EndSkillEffect();
-                    skill.Execute(context);
-                    ManaManager.instance.UseMana(data.manaCost);
-                    SkillEffectController.instance.PauseGame();
-                    cutIn.Play(data);
-                    StartCoroutine(RestoreTimeAfterDelay(1f));
+                    ExecuteSkill(skill, context, data);
                 });
                 break;
 
             case CastType.TargetUnit:
-                Targeting.instance.StartUnitTargeting(unit =>
-                {
+                Targeting.instance.StartUnitTargeting(unit => {
                     context.Target = unit;
                     ClearAllHighlights();
-                    InputSkill.instance.ExitSkillSelectMode();
-                    SkillEffectController.instance.EndSkillEffect();
-                    skill.Execute(context);
-                    ManaManager.instance.UseMana(data.manaCost);
-                    SkillEffectController.instance.PauseGame() ;
-                    cutIn.Play(data);
-                    StartCoroutine(RestoreTimeAfterDelay(2f));
-                },
-                unit => FilteringTeamSkill(unit, data.skillType));
+                    ExecuteSkill(skill, context, data, 2f);
+                }, unit => FilteringTeamSkill(unit, data.skillType));
                 break;
+
         }
     }
 
+    private void ExecuteSkill(SkillBase skill, SkillContext context, SkillData data, float delay = 1f)
+    {
+        InputSkill.instance.ExitSkillSelectMode();
+        SkillEffectController.instance.EndSkillEffect();
+        skill.Execute(context);
+        ManaManager.instance.UseMana(data.manaCost);
+        SkillEffectController.instance.PauseGame();
+        cutIn.Play(data);
+        StartCoroutine(RestoreTimeAfterDelay(delay));
+    }
 
     private bool FilteringTeamSkill(GameObject unit, SkillType skillType)
     {
@@ -169,26 +103,26 @@ public class SkillExecutor : MonoBehaviour
         }
     }
 
-    private void HighlightTargets(SkillType skillType)
-    {
-        Debug.Log($"HighlightTargets called with skillType: {skillType}");
+    //private void HighlightTargets(SkillType skillType)
+    //{
+    //    Debug.Log($"HighlightTargets called with skillType: {skillType}");
 
-        CharacterBase[] allCharacters = FindObjectsOfType<CharacterBase>();
-        foreach (var character in allCharacters)
-        {
-            GameObject gameoObject = character.gameObject;
-            var highlight = gameoObject.GetComponent<HighlightEffect>();
-            if (highlight == null)
-            {
-                Debug.Log($"No HighlightEffect found on {gameoObject.name}");
-                continue;
-            }
+    //    CharacterBase[] allCharacters = FindObjectsOfType<CharacterBase>();
+    //    foreach (var character in allCharacters)
+    //    {
+    //        GameObject gameoObject = character.gameObject;
+    //        var highlight = gameoObject.GetComponent<HighlightEffect>();
+    //        if (highlight == null)
+    //        {
+    //            Debug.Log($"No HighlightEffect found on {gameoObject.name}");
+    //            continue;
+    //        }
 
-            bool shouldHighlight = FilteringTeamSkill(gameoObject, skillType);
-            Debug.Log($"{gameoObject.name} shouldHighlight: {shouldHighlight}");
-            highlight.SetHighlight(shouldHighlight);
-        }
-    }
+    //        bool shouldHighlight = FilteringTeamSkill(gameoObject, skillType);
+    //        Debug.Log($"{gameoObject.name} shouldHighlight: {shouldHighlight}");
+    //        highlight.SetHighlight(shouldHighlight);
+    //    }
+    //}
 
     private void ClearAllHighlights()
     {

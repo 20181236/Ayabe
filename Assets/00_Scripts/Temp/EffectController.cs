@@ -42,16 +42,6 @@ public class EffectController : MonoBehaviour
 
     private string GetEffectPath(EffectId effectId)
     {
-        switch (effectId)
-        {
-            case EffectId.Ludo_CastEffect:
-                return  "Art/Effect/Ludo_CastEffect/Buff_03a";
-            case EffectId.Luna_CastEffect:
-                return "Art/Effect/Luna_CastEffect";
-            // 추가 이펙트 경로 계속 작성
-            default:
-                Debug.LogWarning($"[EffectController] No path mapped for effectId: {effectId}");
-                return null;
-        }
+        return ResourcePaths.GetEffectPath(effectId);
     }
 }

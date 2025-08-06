@@ -89,6 +89,23 @@ public class LudoSkill : SkillBase
         Vector3 effectPos = context.Caster.transform.position + Vector3.up * 1f;
         GameObject effect = GameObject.Instantiate(skillData.castEffectPrefab, effectPos, Quaternion.identity);
 
+        //// 파티클 시스템이 있다면 타임스케일 무시하도록 설정
+        //var particleSystem = effect.GetComponent<ParticleSystem>();
+        //if (particleSystem != null)
+        //{
+        //    var main = particleSystem.main;
+        //    main.useUnscaledTime = true;
+        //    particleSystem.Play();
+        //}
+        ParticleSystem[] particleSystems = effect.GetComponentsInChildren<ParticleSystem>(true);
+        foreach (var ps in particleSystems)
+        {
+            var main = ps.main;
+            main.useUnscaledTime = true;
+            ps.Play();
+        }
+
+
         Debug.Log($"[LudoSkill] 이펙트 생성됨: {effect.name} at {effectPos}");
 
         SkillExecutor.instance.StartCoroutine(DestroyAfterRealtime(effect, 1.5f));
