@@ -18,14 +18,26 @@ public class ToolTip : MonoBehaviour
 
     public void SetToolTip(SkillData skillData)
     {
-        ToolTipIcon.sprite = skillData.skillToolTipIcon;
-        ToolTipText.text = skillData.skillToolTipText;
+        string text = skillData.skillToolTipText;
+        Sprite icon = skillData.skillToolTipIcon;
+        ApplyToolTip(text, icon);
+    }
 
-        string text = ToolTipText.text;
+    ////
+    //public void SetToolTip(ResultData resultData)
+    //{
+    //    string text = resultData.resultText;
+    //    Sprite icon = resultData.resultIcon;
+    //    ApplyToolTip(text, icon);
+    //}
+
+    private void ApplyToolTip(string rawText, Sprite icon)
+    {
+        ToolTipIcon.sprite = icon;
+
         // 숫자를 빨간색으로 강조
-        text = Regex.Replace(text, @"\d+", "<color=#FF5555>$0</color>");
-
-        ToolTipText.text = text;
+        string coloredText = Regex.Replace(rawText, @"\d+", "<color=#FF5555>$0</color>");
+        ToolTipText.text = coloredText;
     }
 
     public void Show(SkillData skillData)
