@@ -77,10 +77,10 @@ public class SkillExecutor : MonoBehaviour
     private void ExecuteSkill(SkillBase skill, SkillContext context, SkillData data, float delay = 1f)
     {
         InputSkill.instance.ExitSkillSelectMode();
-        SkillEffectController.instance.EndSkillEffect();
+        ScreenAndTimeEffectController.instance.EndEffect();
         skill.Execute(context);
         ManaManager.instance.UseMana(data.manaCost);
-        SkillEffectController.instance.PauseGame();
+        ScreenAndTimeEffectController.instance.PauseGame();
         cutIn.Play(data);
         StartCoroutine(RestoreTimeAfterDelay(delay));
     }
@@ -135,7 +135,7 @@ public class SkillExecutor : MonoBehaviour
     private IEnumerator RestoreTimeAfterDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
-        SkillEffectController.instance.ResumeGame();
-        SkillEffectController.instance.EndSkillEffect();
+        ScreenAndTimeEffectController.instance.ResumeGame();
+        ScreenAndTimeEffectController.instance.EndEffect();
     }
 }

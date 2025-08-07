@@ -8,7 +8,7 @@ public class InputSkill : MonoBehaviour
     public SkillPanel skillPanel;
     public PlayableBase skillCaster;
 
-    [SerializeField] private SkillToolTip skillToolTip;
+    [SerializeField] private ToolTip skillToolTip;
 
     private bool isSelectingSkill = false;  // 스킬 선택 모드 상태
     private SkillData selectedSkill = null; // 현재 선택된 스킬
@@ -94,7 +94,7 @@ public class InputSkill : MonoBehaviour
 
         Debug.Log($"스킬 선택 모드 진입: {skillData.skillId}");
 
-        SkillEffectController.instance.StartSkillEffect();
+        ScreenAndTimeEffectController.instance.StartEffect();
 
         skillToolTip.Show(skillData);
     }
@@ -105,7 +105,7 @@ public class InputSkill : MonoBehaviour
 
         Debug.Log("스킬 선택 모드 종료 = 실행됨");
 
-        SkillEffectController.instance.EndSkillEffect();
+        ScreenAndTimeEffectController.instance.EndEffect();
 
         skillToolTip.Hide();
     }

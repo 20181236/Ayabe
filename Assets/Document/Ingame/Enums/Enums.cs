@@ -1,3 +1,26 @@
+public enum GameLayerMask
+{
+    Default = 0,
+    TransparentFX = 1,
+    IgnoreRaycast = 2,
+    Water = 4,
+    UI = 5,
+    Playable = 6,
+    Enemy = 7,
+    Projectile = 8
+}
+
+public enum StageState
+{
+    None,
+    Starting,
+    Playing,
+    Paused,
+    End,
+    Victory,
+    Defeat,
+}
+
 public enum AnimatorType
 {
     isWalk,
@@ -10,18 +33,6 @@ public enum ObjectType
     Enemy,
     Neutral
 }
-
-public enum GameLayerMask
-{
-    Default = 0,
-    TransparentFX = 1,
-    IgnoreRaycast = 2,
-    Water = 4,
-    UI = 5,
-    Playable = 6,
-    Enemy = 7,
-    Projectile = 8
-}   
 
 /// <summary>
 /// Playable
