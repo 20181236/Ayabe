@@ -77,11 +77,16 @@ public class SkillExecutor : MonoBehaviour
     private void ExecuteSkill(SkillBase skill, SkillContext context, SkillData data, float delay = 1f)
     {
         InputSkill.instance.ExitSkillSelectMode();
-        ScreenAndTimeEffectController.instance.EndEffect();
+
+        //ScreenAndTimeEffectController.instance.EndEffect();
+
         skill.Execute(context);
         ManaManager.instance.UseMana(data.manaCost);
-        ScreenAndTimeEffectController.instance.PauseGame();
+
+        // ScreenAndTimeEffectController.instance.PauseGame();
+        ScreenAndTimeEffectController.instance.SetTemporarySpeed(0.2f); // 예: 슬로우 모션
         cutIn.Play(data);
+
         StartCoroutine(RestoreTimeAfterDelay(delay));
     }
 

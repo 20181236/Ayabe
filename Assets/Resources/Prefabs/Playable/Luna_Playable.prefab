@@ -439,6 +439,7 @@ MonoBehaviour:
   ownedSkills: 
   exSkillSlot: {fileID: 0}
   headTransform: {fileID: 5466355036713873269}
+  healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
   attackBuffData: {fileID: 11400000, guid: cda6c6c13e7f9eb42acf19fcd5e99808, type: 2}
 --- !u!114 &8622827309091313259
 MonoBehaviour:

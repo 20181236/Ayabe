@@ -1114,6 +1114,7 @@ MonoBehaviour:
   ownedSkills: 
   exSkillSlot: {fileID: 0}
   headTransform: {fileID: 8808336068082448820}
+  healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
 --- !u!114 &-5558029291031771613
 MonoBehaviour:
   m_ObjectHideFlags: 0

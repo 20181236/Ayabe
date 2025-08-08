@@ -14,12 +14,42 @@ public class ScreenAndTimeEffectController : MonoBehaviour
     private Coroutine currentEffectCoroutine = null;
     private Coroutine fadeCoroutine = null;
 
+    public float gameSpeed = 1f;         // 현재 게임 배속
+    private float savedGameSpeed = 1f;   // 스킬 연출 전 저장한 배속
+
     private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
+    }
+
+    // 일반 배속 변경 (버튼에서 호출)
+    public void SetGameSpeed(float speed)
+    {
+        gameSpeed = speed;
+        ApplyTimeScale(gameSpeed);
+    }
+
+    // 임시 배속 변경 (스킬 연출용)
+    public void SetTemporarySpeed(float tempSpeed)
+    {
+        savedGameSpeed = gameSpeed;  // 현재 배속 저장
+        ApplyTimeScale(tempSpeed);
+    }
+
+    // 저장된 배속으로 복귀
+    public void RestoreSavedSpeed()
+    {
+        ApplyTimeScale(savedGameSpeed);
+    }
+
+    // 내부 적용 함수
+    private void ApplyTimeScale(float speed)
+    {
+        Time.timeScale = speed;
+        Time.fixedDeltaTime = 0.02f * speed;
     }
 
     //기존 호출용 - 시간 슬로우 + 페이드인
@@ -43,29 +73,28 @@ public class ScreenAndTimeEffectController : MonoBehaviour
     //시간 멈춤용
     public void PauseGame()
     {
-        Time.timeScale = 0.01f;
-        Time.fixedDeltaTime = 0f;
+        savedGameSpeed = gameSpeed;
+        ApplyTimeScale(0.01f);
     }
 
     public void ResumeGame()
     {
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = 0.02f;
+        RestoreSavedSpeed();
     }
 
-    //시간만 느리게
-    public void SlowTime()
-    {
-        Time.timeScale = slowTimeScale;
-        Time.fixedDeltaTime = 0.02f * slowTimeScale;
-    }
+    ////시간만 느리게
+    //public void SlowTime()
+    //{
+    //    Time.timeScale = slowTimeScale;
+    //    Time.fixedDeltaTime = 0.02f * slowTimeScale;
+    //}
 
-    //시간만 원래대로
-    public void RestoreTime()
-    {
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = 0.02f;
-    }
+    ////시간만 원래대로
+    //public void RestoreTime()
+    //{
+    //    Time.timeScale = 1f;
+    //    Time.fixedDeltaTime = 0.02f;
+    //}
 
     //외부에서 직접 호출 가능한 시각 효과(Fade)
     public void FadeInOverlay()
@@ -115,12 +144,12 @@ public class ScreenAndTimeEffectController : MonoBehaviour
     {
         if (enable)
         {
-            SlowTime();
+            SetTemporarySpeed(slowTimeScale);
             FadeInOverlay();
         }
         else
         {
-            RestoreTime();
+            RestoreSavedSpeed();
             FadeOutOverlay();
         }
 

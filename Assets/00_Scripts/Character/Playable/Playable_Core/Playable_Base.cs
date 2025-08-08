@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class PlayableBase : CharacterBase
+public abstract class PlayableBase : CharacterBase, InterfaceHealth
 {
     public override ObjectType ObjectType => ObjectType.Playable;
 
@@ -28,6 +28,7 @@ public abstract class PlayableBase : CharacterBase
     [Header("Runtime Stats")]
     public float currentHealth;
     public float MaxHealth => baseMaxHealth + buffedMaxHealth;
+    public float CurrentHealth => currentHealth;
     public float AttackPower => baseAttackPower + buffedAttackPower;
     public float AttackRange => baseAttackRange + buffedAttackRange;
     public float AttackInterval => baseAttackInterval + buffedAttackInterval;
@@ -90,6 +91,9 @@ public abstract class PlayableBase : CharacterBase
 
     public Transform headTransform; // 머리 위치
 
+    [SerializeField] private HealthBarController healthBarPrefab;
+    private HealthBarController healthBarInstance;
+
     protected virtual void Awake()
     {
         rigidbodyPlayable = GetComponent<Rigidbody>();
@@ -110,6 +114,21 @@ public abstract class PlayableBase : CharacterBase
             PlayableManager.instance.RegisterPlayable(this);
         // SkillPanel panel = FindObjectOfType<SkillPanel>();
         // panel.AssignCasterToSkills(this.gameObject, ownedSkills);
+
+        // 체력바 프리팹이 할당되어 있고, 인스턴스가 아직 없으면 생성
+        if (healthBarPrefab != null && healthBarInstance == null)
+        {
+            GameObject canvas = GameObject.Find("HPBarCanvas");
+            if (canvas != null)
+            {
+                healthBarInstance = Instantiate(healthBarPrefab, canvas.transform);
+                healthBarInstance.Setup(headTransform, MaxHealth);
+            }
+            else
+            {
+                Debug.LogError("HPBarCanvas를 찾을 수 없습니다.");
+            }
+        }
     }
 
     protected virtual void Update()
@@ -379,20 +398,32 @@ public abstract class PlayableBase : CharacterBase
         }
         DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
 
+        healthBarInstance.SetHealth(currentHealth);
+
         StartCoroutine(OnDamage(isExplosion));
     }
 
     public void Heal(float amount)
     {
         currentHealth = Mathf.Min(currentHealth + amount, MaxHealth);
+        healthBarInstance.SetHealth(currentHealth);
     }
 
     protected virtual void Die()
     {
         isDead = true;
         isChase = false;
+
         playableAnimator.SetTrigger("doDie");
+
         SkillPanel.instance.ClearSkillsForCaster(this);
+
+        if (healthBarInstance != null)
+        {
+            Destroy(healthBarInstance.gameObject);
+            healthBarInstance = null;
+        }
+
         Destroy(gameObject, 1.8f);
         OnDestroy();
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBase : CharacterBase
+public class EnemyBase : CharacterBase, InterfaceHealth
 {
     public override ObjectType ObjectType => ObjectType.Enemy;
     [Header("Enemy Settings")]
@@ -56,8 +56,11 @@ public class EnemyBase : CharacterBase
 
     public Transform headTransform; // 머리 위치
 
-    public float GetMaxHealth() => maxHealth;
-    public float GetCurrentHealth() => currentHealth;
+    [SerializeField] private HealthBarController healthBarPrefab;
+    private HealthBarController healthBarInstance;
+
+    public float MaxHealth => maxHealth;
+    public float CurrentHealth => currentHealth;
 
     protected virtual void Awake()
     {
@@ -73,6 +76,20 @@ public class EnemyBase : CharacterBase
     {
         if (EnemyManager.instance != null)
             EnemyManager.instance.RegisterEnemy(this);
+
+        if (healthBarPrefab != null && healthBarInstance == null)
+        {
+            GameObject canvas = GameObject.Find("HPBarCanvas");
+            if (canvas != null)
+            {
+                healthBarInstance = Instantiate(healthBarPrefab, canvas.transform);
+                healthBarInstance.Setup(headTransform, MaxHealth);
+            }
+            else
+            {
+                Debug.LogError("HPBarCanvas를 찾을 수 없습니다.");
+            }
+        }
     }
 
     protected virtual void Update()
@@ -327,6 +344,12 @@ public class EnemyBase : CharacterBase
         currentHealth -= damage;
         DamageManager.instance.ShowDamage2(headTransform.position, Mathf.FloorToInt(damage));
 
+        // 체력바 업데이트
+        if (healthBarInstance != null)
+        {
+            healthBarInstance.SetHealth(currentHealth);
+        }
+
         if (currentHealth <= 0)
         {
             Die();
@@ -410,6 +433,12 @@ public class EnemyBase : CharacterBase
             mesh.material.color = Color.gray;
 
         currentState = EnemyState.Dead;
+
+        if (healthBarInstance != null)
+        {
+            Destroy(healthBarInstance.gameObject);
+            healthBarInstance = null;
+        }
 
         OnDestroy();
     }

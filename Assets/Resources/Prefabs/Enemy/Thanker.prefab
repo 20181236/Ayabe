@@ -653,6 +653,7 @@ MonoBehaviour:
   enemyBulletFirePoint: {fileID: 3509512496219452002}
   currentState: 0
   headTransform: {fileID: 2589905580577655557}
+  healthBarPrefab: {fileID: 5824188954962644920, guid: 20396b553790ba0448f356fab053f230, type: 3}
 --- !u!114 &-6087003418396502737
 MonoBehaviour:
   m_ObjectHideFlags: 0
