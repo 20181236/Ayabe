@@ -56,8 +56,8 @@ public class EnemyBase : CharacterBase, InterfaceHealth
 
     public Transform headTransform; // 머리 위치
 
-    [SerializeField] private HealthBarController healthBarPrefab;
-    private HealthBarController healthBarInstance;
+    [SerializeField] protected HealthBarController healthBarPrefab;
+    protected HealthBarController healthBarInstance;
 
     public float MaxHealth => maxHealth;
     public float CurrentHealth => currentHealth;

@@ -18,9 +18,6 @@ public class Boss : EnemyBase
 
     public BossHpBar bossHpBar; // 연결할 체력바 UI
 
-    [SerializeField] protected HealthBarController healthBarPrefab=null;
-    protected HealthBarController healthBarInstance=null;
-
     protected override void Start()
     {
         base.Start();
@@ -38,6 +35,8 @@ public class Boss : EnemyBase
 
         bossHpBar.Show();
         bossHpBar.SetHP((int)CurrentHealth, (int)MaxHealth);
+
+        healthBarPrefab = null; healthBarInstance=null;
     }
 
     protected override void Update()
