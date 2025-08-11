@@ -9,13 +9,18 @@ public class HealthBarController : MonoBehaviour
     [SerializeField] private Camera mainCamera; // 메인 카메라
     [SerializeField] private Image fillImage;   // 체력바 이미지 (Fill Amount 조절용)
 
+    [SerializeField] private Transform buffIconContainer; // 버프 아이콘 부모
+    [SerializeField] private GameObject buffIconPrefab;   // 버프 아이콘 프리팹
+
     private float maxHealth;
     private float currentHealth;
 
-
     private RectTransform rectTransform;
 
-    [SerializeField] private Vector3 offset = new Vector3(0, 5f, 0);    
+    [SerializeField] private Vector3 offset = new Vector3(0, 5f, 0);
+
+    // 현재 표시 중인 버프 아이콘 목록
+    private Dictionary<string, GameObject> activeBuffIcons = new Dictionary<string, GameObject>();
 
     private void Awake()
     {
@@ -73,5 +78,26 @@ public class HealthBarController : MonoBehaviour
         {
             fillImage.fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
         }
+    }
+
+    // 버프 아이콘 추가
+    public void AddBuffIcon(string buffId, Sprite iconSprite)
+    {
+        if (activeBuffIcons.ContainsKey(buffId))
+            return;
+
+        GameObject icon = Instantiate(buffIconPrefab, buffIconContainer);
+        icon.GetComponent<Image>().sprite = iconSprite;
+        activeBuffIcons.Add(buffId, icon);
+    }
+
+    // 버프 아이콘 제거
+    public void RemoveBuffIcon(string buffId)
+    {
+        if (!activeBuffIcons.ContainsKey(buffId))
+            return;
+
+        Destroy(activeBuffIcons[buffId]);
+        activeBuffIcons.Remove(buffId);
     }
 }

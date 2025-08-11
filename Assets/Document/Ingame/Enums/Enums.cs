@@ -67,6 +67,25 @@ public enum PlayableAttackState
     Reload,
 }
 
+public enum BuffID
+{
+    Luna_AttackBuff
+}
+
+//이 버프가 어떤 계열 아이콘·중첩 규칙을 공유하는지
+public enum BuffGroup
+{
+    Attack,        // 공격력 계열
+    AttackSpeed,   // 공격 속도 계열
+    Defense,       // 방어력/피해 감소 계열
+    Crit,          // 치명타 계열
+    Heal,          // 회복 계열
+    MoveSpeed,     // 이동 속도 계열
+    Range,         // 사거리 계열
+    Special        // 특수 계열 (잡효과)
+}
+
+//이 버프가 실제로 영향을 주는 스탯이 무엇인지
 public enum BuffStatType
 {
     MaxHealth,       // 최대 체력

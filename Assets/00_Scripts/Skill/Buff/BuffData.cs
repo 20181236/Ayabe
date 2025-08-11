@@ -4,7 +4,8 @@ using UnityEngine;
 public class BuffData : ScriptableObject, InterfaceBuff
 {
     [Header("기본 정보")]
-    //[SerializeField] private string _buffId;
+    [SerializeField] private string _buffId;
+    [SerializeField] private BuffGroup _group;
     [SerializeField] private BuffCategory _category;
     [SerializeField] private BuffApplyType _applyType;
     [SerializeField] private BuffStatType _targetStat;
@@ -14,7 +15,8 @@ public class BuffData : ScriptableObject, InterfaceBuff
     [SerializeField] private float _duration = 5f;
     [SerializeField] private float _tickInterval = 1f;
 
-    //public string buffId => _buffId;
+    public string buffId => _buffId;
+    public BuffGroup group => _group;
     public BuffCategory category => _category;
     public BuffApplyType applyType => _applyType;
     public BuffStatType targetStat => _targetStat;
