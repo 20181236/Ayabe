@@ -69,6 +69,7 @@ public enum PlayableAttackState
 
 public enum BuffID
 {
+    SoonDuBu_BuffData,
     Luna_AttackBuff
 }
 

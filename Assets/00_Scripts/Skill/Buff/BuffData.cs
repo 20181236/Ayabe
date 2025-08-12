@@ -26,12 +26,27 @@ public class BuffData : ScriptableObject, InterfaceBuff
     public float tickInterval => _tickInterval;
     public Sprite buffIcon => _buffIcon;
 
-    public void SetData(BuffStatType stat, float value, float duration, BuffApplyType applyType, float tickInterval)
+    public void SetData(
+        BuffID buffId,
+        BuffGroup group,
+        BuffCategory category,
+        BuffStatType stat,
+        float value,
+        float duration,
+        BuffApplyType applyType,
+        float tickInterval,
+        Sprite buffIcon = null
+    )
     {
+        _buffId = buffId;
+        _group = group;
+        _category = category;
         _targetStat = stat;
         _value = value;
         _duration = duration;
         _applyType = applyType;
         _tickInterval = tickInterval;
+        _buffIcon = buffIcon;
     }
+
 }

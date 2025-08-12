@@ -75,11 +75,15 @@ public abstract class CharacterBase : MonoBehaviour
         currentHealth = Mathf.Min(currentHealth + amount, MaxHealth);
         healthBarInstance.SetHealth(currentHealth);
     }
-    public void ApplyBuff(BuffData data)
+    public void ApplyBuff(BuffData data, CharacterBase caster)
     {
         Buff buff = BuffFactory.CreateBuffFromData(data);
+        buff.owner = this;   // 자신이 버프 받는 대상
+        buff.caster = caster; // 버프 건 주체, 없으면 null 가능
+
         activeBuffs.Add(buff);
-        Debug.Log($"버프 추가됨: {buff.targetStat} / 값: {buff.value} / 타입: {buff.applyType}");
+
+        Debug.Log($"[{buff.caster?.name ?? "Unknown"}]이(가) [{this.name}]에게 버프 적용: {buff.targetStat} / 값: {buff.value} / 타입: {buff.applyType}");
 
         if (buff.applyType == BuffApplyType.Burst)
         {
@@ -93,6 +97,7 @@ public abstract class CharacterBase : MonoBehaviour
 
         RecalculateBuffedStats();
     }
+
 
     public void RemoveBuff(Buff buffToRemove)
     {
@@ -159,6 +164,7 @@ public abstract class CharacterBase : MonoBehaviour
                     break;
             }
         }
+        Debug.Log($"Recalculated Stats: AttackPower={AttackPower}, MaxHealth={MaxHealth}");
 
         currentHealth = Mathf.Min(currentHealth, MaxHealth);
     }

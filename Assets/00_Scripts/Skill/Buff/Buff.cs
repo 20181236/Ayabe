@@ -13,9 +13,12 @@ public class Buff
     public float duration;
     public float tickInterval;
 
-    public CharacterBase owner;
+    public Sprite buffIcon; // 여기에 아이콘 추가
 
-    public void Initialize(BuffID buffId, BuffGroup group, BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float duration, float tickInterval = 0f)
+    public CharacterBase owner;   // 버프 받는 대상
+    public CharacterBase caster;  // 버프 건 주체 (캐스터)
+
+    public void Initialize(BuffID buffId, BuffGroup group, BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float duration, float tickInterval = 0f, Sprite buffIcon = null, CharacterBase caster = null)
     {
         this.buffId = buffId;
         this.category = category;
@@ -25,11 +28,14 @@ public class Buff
         this.value = value;
         this.duration = duration;
         this.tickInterval = tickInterval;
+        this.buffIcon = buffIcon;  // 아이콘 저장
+        this.caster = caster; // 추가
     }
 
-    public void SetOwner(CharacterBase owner)
+    public void SetOwner(CharacterBase owner, CharacterBase caster = null)
     {
         this.owner = owner;
+        this.caster = caster;
     }
 
     public IEnumerator BuffCoroutine()

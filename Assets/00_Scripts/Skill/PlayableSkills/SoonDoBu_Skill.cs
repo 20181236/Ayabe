@@ -35,14 +35,19 @@ public class SoonDoBuSkill : SkillBase
             float interval = 1f;
 
             BuffData healOverTimeBuff = BuffFactory.CreateRuntimeBuff(
-                BuffStatType.HealPower,
-                tickValue,
-                duration,
-                BuffApplyType.Tick,
-                interval
+                buffId: BuffID.SoonDuBu_BuffData,         // 실제 버프 ID로 교체
+                group: BuffGroup.Heal,              // 적절한 그룹 지정
+                category: BuffCategory.Buff,        // 적절한 카테고리 지정
+                stat: BuffStatType.HealPower,
+                value: tickValue,
+                duration: duration,
+                applyType: BuffApplyType.Tick,
+                tickInterval: interval,
+                buffIcon: null                      // 아이콘 있으면 넣기
             );
 
-            playable.ApplyBuff(healOverTimeBuff);
+            CharacterBase casterCharacter = context.Caster.GetComponent<CharacterBase>();
+            playable.ApplyBuff(healOverTimeBuff, casterCharacter);
 
             Debug.Log($"{context.Target.name}에게 즉시 {healPower} 회복 + 5초간 회복력의 80%씩 회복 부여");
         }
