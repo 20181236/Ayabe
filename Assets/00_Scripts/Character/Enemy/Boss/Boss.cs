@@ -53,7 +53,7 @@ public class Boss : EnemyBase
         // base에서 currentHealth가 줄어든 이후에 반영
         if (bossHpBar != null)
         {
-            bossHpBar.SetHP(Mathf.FloorToInt(currentHealth), Mathf.FloorToInt(maxHealth));
+            bossHpBar.SetHP(Mathf.FloorToInt(currentHealth), Mathf.FloorToInt(MaxHealth));
         }
     }
 

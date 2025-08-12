@@ -281,6 +281,7 @@ GameObject:
   - component: {fileID: 5482310726448674114}
   - component: {fileID: 7366966939161098626}
   - component: {fileID: 8622827309091313259}
+  - component: {fileID: 5216412520304361851}
   m_Layer: 6
   m_Name: Luna_Playable
   m_TagString: Player
@@ -440,6 +441,8 @@ MonoBehaviour:
   exSkillSlot: {fileID: 0}
   headTransform: {fileID: 5466355036713873269}
   healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
+  buffManager: {fileID: 0}
+  healthBarController: {fileID: 0}
   attackBuffData: {fileID: 11400000, guid: cda6c6c13e7f9eb42acf19fcd5e99808, type: 2}
 --- !u!114 &8622827309091313259
 MonoBehaviour:
@@ -454,6 +457,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
+--- !u!114 &5216412520304361851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2175214197470128850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b5c820851a9f0449abda1dd718b632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2742480746144338800
 GameObject:
   m_ObjectHideFlags: 0

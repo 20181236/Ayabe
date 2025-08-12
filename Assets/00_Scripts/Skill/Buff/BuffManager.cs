@@ -9,46 +9,61 @@ public class BuffManager : MonoBehaviour
     public event Action<BuffData> OnBuffAdded;
     public event Action<BuffData> OnBuffRemoved;
 
-    public void ApplyBuff(BuffData data, PlayableBase owner)
+    private Dictionary<BuffData, Buff> buffDataToBuff = new Dictionary<BuffData, Buff>();
+
+    public void ApplyBuff(BuffData data, CharacterBase owner)
     {
-        // Buff 생성
-        Buff buff = BuffFactory.CreateBuffFromData(data);
-        buff.SetOwner(owner);
-
-        // PlayableBase에 버프 적용 요청
-        owner.ApplyBuff(data);
-
-        // UI 이벤트 호출
-        OnBuffAdded?.Invoke(data);
-        Debug.Log($"[BuffManager] OnBuffAdded 호출: {data.group}");
-
-        // 버프 로직 실행
-        StartCoroutine(RunBuffCoroutine(buff));
-
-        // 일정 시간 뒤 버프 제거
-        StartCoroutine(RemoveBuffAfterDuration(data, data.duration));
-    }
-
-    private IEnumerator RunBuffCoroutine(Buff buff)
-    {
-        // 즉시 효과
-        if (buff.applyType == BuffApplyType.Burst || buff.applyType == BuffApplyType.Both)
+        if (buffDataToBuff.ContainsKey(data))
         {
-            ApplyBuffEffect(buff);
+            // 기존 버프가 있으면 갱신
+            Buff existingBuff = buffDataToBuff[data];
+            existingBuff.duration = data.duration;
+            existingBuff.value = data.value;
         }
-
-        // 지속 틱 효과
-        if (buff.applyType == BuffApplyType.Tick || buff.applyType == BuffApplyType.Both)
+        else
         {
-            float elapsed = 0f;
-            while (elapsed < buff.duration)
-            {
-                ApplyBuffEffect(buff);
-                yield return new WaitForSeconds(buff.tickInterval);
-                elapsed += buff.tickInterval;
-            }
+            // 새 버프 추가
+            Buff buff = BuffFactory.CreateBuffFromData(data);
+            buff.SetOwner(owner);
+            buffDataToBuff[data] = buff;
+
+            owner.ApplyBuff(data);
+
+            OnBuffAdded?.Invoke(data);
+
+            StartCoroutine(RemoveBuffAfterDuration(data, data.duration));
         }
     }
+
+
+    // 버프 소유자 반환
+    public CharacterBase GetOwnerOfBuff(BuffData data)
+    {
+        if (buffDataToBuff.TryGetValue(data, out Buff buff))
+            return buff.owner;
+        return null;
+    }
+
+    //private IEnumerator RunBuffCoroutine(Buff buff)
+    //{
+    //    // 즉시 효과
+    //    if (buff.applyType == BuffApplyType.Burst || buff.applyType == BuffApplyType.Both)
+    //    {
+    //        ApplyBuffEffect(buff);
+    //    }
+
+    //    // 지속 틱 효과
+    //    if (buff.applyType == BuffApplyType.Tick || buff.applyType == BuffApplyType.Both)
+    //    {
+    //        float elapsed = 0f;
+    //        while (elapsed < buff.duration)
+    //        {
+    //            ApplyBuffEffect(buff);
+    //            yield return new WaitForSeconds(buff.tickInterval);
+    //            elapsed += buff.tickInterval;
+    //        }
+    //    }
+    //}
 
     private void ApplyBuffEffect(Buff buff)
     {
@@ -59,12 +74,18 @@ public class BuffManager : MonoBehaviour
         }
         // 다른 스탯 효과도 여기서 처리 가능
     }
-
     private IEnumerator RemoveBuffAfterDuration(BuffData data, float duration)
     {
         yield return new WaitForSeconds(duration);
+        buffDataToBuff.Remove(data);
         OnBuffRemoved?.Invoke(data);
     }
+
+    //private IEnumerator RemoveBuffAfterDuration(BuffData data, float duration)
+    //{
+    //    yield return new WaitForSeconds(duration);
+    //    OnBuffRemoved?.Invoke(data);
+    //}
 }
 //public void ApplyBuff(Buff buff, System.Action<Buff> onTick)
 //{

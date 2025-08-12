@@ -10,39 +10,7 @@ public class EnemyBase : CharacterBase, InterfaceHealth
     [Header("Enemy Settings")]
     public EnemyID enemyID;
     public EnemyType enemyType;
-    [Header("Health Stats")]
-    public float maxHealth;
-    public float currentHealth;
 
-    [Header("Attack Settings")]
-    public float attackRange;
-    public float basicAttackInterval;
-    public float basicAttackTimer;
-    public float basicAttackCount;
-    public float skillInterval;
-    public float skillTimer;
-    public float exSkillInterval;
-    public float exSkillTimer;
-
-    [Header("Movement Settings")]
-    public float moveSpeed;
-    public float distance;
-    [Header("Enemy State Flags")]
-    public bool isCreate;
-    public bool isIdle;
-    public bool isChase;
-    public bool isAttack;
-    public bool isAttacking;
-    public bool isBisicAttack;
-    public bool isSkill;
-    public bool isUsingSkill;
-    public bool isExSkill;
-    public bool isUsingExSkill;
-    public bool isDead;
-    public bool checkInAttackRenge;
-    public bool readyBasicAttack;
-    public bool readySkill;
-    public bool readyExSkill;
     [Header("Component References")]
     public Rigidbody rigidbodyEnemy;
     public BoxCollider boxCollider;
@@ -53,15 +21,6 @@ public class EnemyBase : CharacterBase, InterfaceHealth
 
     [HideInInspector] public EnemyState currentState;
     protected PlayableBase currentTarget;
-
-    public Transform headTransform; // 머리 위치
-
-    [SerializeField] protected HealthBarController healthBarPrefab;
-    protected HealthBarController healthBarInstance;
-
-    public float MaxHealth => maxHealth;
-    public float CurrentHealth => currentHealth;
-
     protected virtual void Awake()
     {
         rigidbodyEnemy = GetComponent<Rigidbody>();
@@ -83,7 +42,8 @@ public class EnemyBase : CharacterBase, InterfaceHealth
             if (canvas != null)
             {
                 healthBarInstance = Instantiate(healthBarPrefab, canvas.transform);
-                healthBarInstance.Setup(headTransform, MaxHealth);
+                //healthBarInstance.Setup(headTransform, MaxHealth);
+                healthBarInstance.Setup(this, MaxHealth);
             }
             else
             {
@@ -135,7 +95,7 @@ public class EnemyBase : CharacterBase, InterfaceHealth
 
     protected virtual void Initialize()
     {
-        currentHealth = maxHealth;
+        currentHealth = MaxHealth;
         currentState = EnemyState.Create;
         isCreate = true;
 
@@ -151,12 +111,11 @@ public class EnemyBase : CharacterBase, InterfaceHealth
     public virtual void SetData(EnemyData data)
     {
         enemyType = data.enemyType;
-        maxHealth = data.maxHealth;
-        currentHealth = data.maxHealth;
-        attackRange = data.attackRange;
-        basicAttackInterval = data.basicAttackInterval;
-        skillInterval = data.skillInterval;
-        exSkillInterval = data.exSkillInterval;
+        baseMaxHealth = data.maxHealth;
+        baseAttackPower = data.attackPower;
+        baseAttackRange = data.attackRange;
+        baseAttackInterval = data.AttackInterval;
+        baseHealPower = data.HealPower;
         moveSpeed = data.moveSpeed;
     }
     protected virtual void UpdateTargetAndDistance()
@@ -174,7 +133,7 @@ public class EnemyBase : CharacterBase, InterfaceHealth
 
     protected virtual void CheckingAttackRenge()
     {
-        currentState = (distance <= attackRange) ? EnemyState.Attack : EnemyState.Chasing;
+        currentState = (distance <= AttackRange) ? EnemyState.Attack : EnemyState.Chasing;
     }
 
     void MoveToTarget(Vector3 targetPosition)
@@ -190,7 +149,7 @@ public class EnemyBase : CharacterBase, InterfaceHealth
     protected virtual void CoolTime()
     {
         basicAttackTimer += Time.deltaTime;
-        if (basicAttackTimer >= basicAttackInterval)
+        if (basicAttackTimer >= AttackInterval)
         {
             readyBasicAttack = true;
         }
@@ -227,12 +186,12 @@ public class EnemyBase : CharacterBase, InterfaceHealth
             return;
         }
         isAttacking = true;
-        isBisicAttack = true;
+        isBasicAttack = true;
         animator.SetBool("isAttack", true);
         ShootBulletAtTarget();
         //basicAttackCount++;
         basicAttackTimer = 0;
-        isBisicAttack = false;
+        isBasicAttack = false;
         readyBasicAttack = false;
         isAttacking = false;
         animator.SetBool("isAttack", false);

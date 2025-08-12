@@ -956,6 +956,7 @@ GameObject:
   - component: {fileID: 7187312169412409887}
   - component: {fileID: 397983305347310345}
   - component: {fileID: -5558029291031771613}
+  - component: {fileID: -5254844371920021528}
   m_Layer: 6
   m_Name: SoonDoBu_Playable
   m_TagString: Player
@@ -1115,6 +1116,8 @@ MonoBehaviour:
   exSkillSlot: {fileID: 0}
   headTransform: {fileID: 8808336068082448820}
   healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
+  buffManager: {fileID: 0}
+  healthBarController: {fileID: 0}
 --- !u!114 &-5558029291031771613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1128,6 +1131,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
+--- !u!114 &-5254844371920021528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6746566736275685183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b5c820851a9f0449abda1dd718b632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7563814381569756315
 GameObject:
   m_ObjectHideFlags: 0

@@ -471,6 +471,7 @@ GameObject:
   - component: {fileID: 2564922527090100131}
   - component: {fileID: 8086057423702833444}
   - component: {fileID: 3084578943035297842}
+  - component: {fileID: 448484000507507149}
   m_Layer: 6
   m_Name: Ludo_Playable
   m_TagString: Player
@@ -630,6 +631,8 @@ MonoBehaviour:
   exSkillSlot: {fileID: 0}
   headTransform: {fileID: 888795890810743215}
   healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
+  buffManager: {fileID: 0}
+  healthBarController: {fileID: 0}
   grenadePrefab: {fileID: 7221321937232580668, guid: 940ba6016c2f15445a7206c262b64c81, type: 3}
 --- !u!114 &3084578943035297842
 MonoBehaviour:
@@ -644,6 +647,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
+--- !u!114 &448484000507507149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3410974531977784702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b5c820851a9f0449abda1dd718b632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3858210144187104431
 GameObject:
   m_ObjectHideFlags: 0

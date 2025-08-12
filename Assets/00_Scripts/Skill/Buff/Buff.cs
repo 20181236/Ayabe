@@ -13,12 +13,7 @@ public class Buff
     public float duration;
     public float tickInterval;
 
-    public PlayableBase owner;
-
-    public Buff()
-    {
-        // 기본 생성자 (필요시 비워둠)
-    }
+    public CharacterBase owner;
 
     public void Initialize(BuffID buffId, BuffGroup group, BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float duration, float tickInterval = 0f)
     {
@@ -32,7 +27,7 @@ public class Buff
         this.tickInterval = tickInterval;
     }
 
-    public void SetOwner(PlayableBase owner)
+    public void SetOwner(CharacterBase owner)
     {
         this.owner = owner;
     }

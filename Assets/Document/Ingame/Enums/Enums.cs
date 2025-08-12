@@ -105,7 +105,8 @@ public enum BuffApplyType
 {
     Burst,
     Tick,
-    Both
+    Both,
+    Continuous
 }
 public enum SkillType
 {

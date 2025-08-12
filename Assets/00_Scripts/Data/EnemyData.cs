@@ -9,8 +9,10 @@ public class EnemyData : ScriptableObject
     public EnemyType enemyType;
     public GameObject prefab;
     public float maxHealth;
+    public float attackPower;
     public float attackRange;
-    public float basicAttackInterval;
+    public float AttackInterval;
+    public float HealPower;
     public float skillInterval;
     public float exSkillInterval;
     public float moveSpeed;
