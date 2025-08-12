@@ -4,18 +4,19 @@ using UnityEngine;
 public class BuffData : ScriptableObject, InterfaceBuff
 {
     [Header("기본 정보")]
-    [SerializeField] private string _buffId;
+    [SerializeField] private BuffID _buffId;
     [SerializeField] private BuffGroup _group;
     [SerializeField] private BuffCategory _category;
     [SerializeField] private BuffApplyType _applyType;
     [SerializeField] private BuffStatType _targetStat;
+    [SerializeField] private Sprite _buffIcon;
 
     [Header("버프 수치")]
     [SerializeField] private float _value; // 0.1f == +10%
     [SerializeField] private float _duration = 5f;
     [SerializeField] private float _tickInterval = 1f;
 
-    public string buffId => _buffId;
+    public BuffID buffId => _buffId;
     public BuffGroup group => _group;
     public BuffCategory category => _category;
     public BuffApplyType applyType => _applyType;
@@ -23,6 +24,7 @@ public class BuffData : ScriptableObject, InterfaceBuff
     public float value => _value;
     public float duration => _duration;
     public float tickInterval => _tickInterval;
+    public Sprite buffIcon => _buffIcon;
 
     public void SetData(BuffStatType stat, float value, float duration, BuffApplyType applyType, float tickInterval)
     {

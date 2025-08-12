@@ -502,7 +502,7 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
         }
     }
 
-    private void RecalculateBuffedStats()
+    public void RecalculateBuffedStats()
     {
         buffedMaxHealth = 0f;
         buffedAttackPower = 0f;
