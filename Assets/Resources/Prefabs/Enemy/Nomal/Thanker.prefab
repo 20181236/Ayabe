@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &110087188165920038
+--- !u!1 &2001486991974604974
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3509512496219452002}
+  - component: {fileID: 4252808016350485507}
   m_Layer: 7
   m_Name: BulletFirePosition
   m_TagString: Untagged
@@ -16,13 +16,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3509512496219452002
+--- !u!4 &4252808016350485507
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 110087188165920038}
+  m_GameObject: {fileID: 2001486991974604974}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 2}
@@ -530,8 +530,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2589905580577655557}
-  - {fileID: 3509512496219452002}
   - {fileID: 1660117689001929623}
+  - {fileID: 4252808016350485507}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!54 &4912246592243882025
@@ -616,12 +616,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4151a1fcb51254abf19a0008fcb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 0
-  enemyType: 0
-  maxHealth: 100
+  _rigidbody: {fileID: 4912246592243882025}
+  boxCollider: {fileID: 2898995844016275095}
+  meshs: []
+  navMeshAgent: {fileID: 6137310506369253759}
+  animator: {fileID: 2632422830809904678}
+  baseMaxHealth: 0
+  buffedMaxHealth: 0
   currentHealth: 0
-  attackRange: 10
-  basicAttackInterval: 0
+  baseAttackPower: 0
+  buffedAttackPower: 0
+  baseAttackRange: 0
+  buffedAttackRange: 0
+  baseAttackInterval: 0
+  buffedAttackInterval: 0
+  baseHealPower: 0
+  buffedHealPower: 0
   basicAttackTimer: 0
   basicAttackCount: 0
   skillInterval: 0
@@ -635,24 +645,24 @@ MonoBehaviour:
   isChase: 0
   isAttack: 0
   isAttacking: 0
-  isBisicAttack: 0
+  isBasicAttack: 0
   isSkill: 0
   isUsingSkill: 0
   isExSkill: 0
   isUsingExSkill: 0
   isDead: 0
-  checkInAttackRenge: 0
+  checkInAttackRange: 0
   readyBasicAttack: 0
   readySkill: 0
   readyExSkill: 0
-  rigidbodyEnemy: {fileID: 4912246592243882025}
-  boxCollider: {fileID: 2898995844016275095}
-  meshs: []
-  navMeshAgent: {fileID: 6137310506369253759}
-  animator: {fileID: 2632422830809904678}
-  enemyBulletFirePoint: {fileID: 3509512496219452002}
-  currentState: 0
   headTransform: {fileID: 2589905580577655557}
+  bulletFirePoint: {fileID: 4252808016350485507}
+  healthBarPrefab: {fileID: 0}
+  buffManager: {fileID: 0}
+  enemyID: 0
+  enemyType: 0
+  enemyBulletFirePoint: {fileID: 4252808016350485507}
+  currentState: 0
 --- !u!114 &-6087003418396502737
 MonoBehaviour:
   m_ObjectHideFlags: 0

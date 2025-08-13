@@ -16,13 +16,13 @@ public abstract class SkillBase : MonoBehaviour, InterfaceSkill
     protected virtual void HandleAnimation(GameObject caster, string triggerName = "doSkill")
     {
         var playable = caster.GetComponent<PlayableBase>();
-        if (playable?.playableAnimator == null)
+        if (playable?.animator == null)
         {
             Debug.LogWarning("[SkillBase] PlayableBase 또는 Animator가 없습니다.");
             return;
         }
 
-        Animator animator = playable.playableAnimator;
+        Animator animator = playable.animator;
         animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         animator.SetTrigger(triggerName);
         Debug.Log("[SkillBase] 스킬 애니메이션 트리거 실행됨");

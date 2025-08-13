@@ -861,12 +861,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3485c7ab47f3ea47ba34db0e007a071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 3
-  enemyType: 2
-  maxHealth: 0
+  _rigidbody: {fileID: 0}
+  boxCollider: {fileID: 4695479202306160998}
+  meshs: []
+  navMeshAgent: {fileID: 3101949999252343987}
+  animator: {fileID: 1552273398443527664}
+  bulletFirePoint: {fileID: 4297665436268764774}
+  baseMaxHealth: 0
+  buffedMaxHealth: 0
   currentHealth: 0
-  attackRange: 0
-  basicAttackInterval: 0
+  baseAttackPower: 0
+  buffedAttackPower: 0
+  baseAttackRange: 0
+  buffedAttackRange: 0
+  baseAttackInterval: 0
+  buffedAttackInterval: 0
+  baseHealPower: 0
+  buffedHealPower: 0
   basicAttackTimer: 0
   basicAttackCount: 0
   skillInterval: 0
@@ -880,24 +891,22 @@ MonoBehaviour:
   isChase: 0
   isAttack: 0
   isAttacking: 0
-  isBisicAttack: 0
+  isBasicAttack: 0
   isSkill: 0
   isUsingSkill: 0
   isExSkill: 0
   isUsingExSkill: 0
   isDead: 0
-  checkInAttackRenge: 0
+  checkInAttackRange: 0
   readyBasicAttack: 0
   readySkill: 0
   readyExSkill: 0
-  rigidbodyEnemy: {fileID: 6060269354617471229}
-  boxCollider: {fileID: 4695479202306160998}
-  meshs: []
-  navMeshAgent: {fileID: 3101949999252343987}
-  animator: {fileID: 1552273398443527664}
-  enemyBulletFirePoint: {fileID: 4297665436268764774}
-  currentState: 0
   headTransform: {fileID: 2690663887820057441}
+  healthBarPrefab: {fileID: 0}
+  buffManager: {fileID: 0}
+  enemyID: 3
+  enemyType: 2
+  currentState: 0
   skillDuration: 2
   missileSpawnDelay: 0.5
   skillMissile: {fileID: 7664551313295523910, guid: 259f52ed5c3075442b9f459196759ae8, type: 3}

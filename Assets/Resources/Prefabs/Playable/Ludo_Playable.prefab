@@ -625,6 +625,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a3f85663b34e04e913da273b9b0560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 0}
+  boxCollider: {fileID: 3127639583985119472}
+  meshs: []
+  navMeshAgent: {fileID: 2564922527090100131}
+  animator: {fileID: 8305532878563698034}
+  bulletFirePoint: {fileID: 5971833837110039715}
   baseMaxHealth: 0
   buffedMaxHealth: 0
   currentHealth: 0
@@ -661,17 +667,15 @@ MonoBehaviour:
   readyExSkill: 0
   headTransform: {fileID: 888795890810743215}
   healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
+  buffManager: {fileID: 0}
   playableID: 2
   playableType: 0
-  rigidbodyPlayable: {fileID: 57118403949804248}
-  boxCollider: {fileID: 3127639583985119472}
-  meshs: []
-  navMeshAgent: {fileID: 2564922527090100131}
-  playableAnimator: {fileID: 8305532878563698034}
-  playableBulletFirePoint: {fileID: 5971833837110039715}
   bullet: {fileID: 589644376409995535, guid: ad81f6d95223d0e44885783cb2c7ee76, type: 3}
   missile: {fileID: 7664551313295523910, guid: 95a965c89dc932e4387d19860fb5a301, type: 3}
   excapeSpotTransform: {fileID: 0}
+  rigidbodyPlayable: {fileID: 57118403949804248}
+  playableAnimator: {fileID: 8305532878563698034}
+  playableBulletFirePoint: {fileID: 5971833837110039715}
   currentState: 0
   exSkillData: {fileID: 11400000, guid: d5b3bc2587d55294bbf4f0dc29dfc4fa, type: 2}
   ownedSkills: 

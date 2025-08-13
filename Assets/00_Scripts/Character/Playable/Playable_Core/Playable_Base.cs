@@ -4,46 +4,45 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public abstract class PlayableBase : CharacterBase, InterfaceHealth
+public abstract class PlayableBase : CharacterBase
 {
     public override ObjectType ObjectType => ObjectType.Playable;
+    public enum PlayableState { Idle, Chasing, Attack, Dead, Create }
 
     [Header("Playable Settings")]
     public PlayableID playableID;
     public PlayableType playableType;
-
-
-    [Header("Component References")]
-    public Rigidbody rigidbodyPlayable;
-    public BoxCollider boxCollider;
-    public MeshRenderer[] meshs;
-    public NavMeshAgent navMeshAgent;
-    public Animator playableAnimator;
-    public Transform playableBulletFirePoint;
 
     [Header("Game Object References")]
     public GameObject bullet;
     public GameObject missile;
     public Transform excapeSpotTransform;
 
+    // CharacterBase의 공통 변수(_rigidbody, animator 등)를 사용하므로 이 변수들은 제거합니다.
+    // public Rigidbody rigidbodyPlayable;
+    // public Animator playableAnimator;
+    // public Transform playableBulletFirePoint;
+
     [HideInInspector] public PlayableState currentState;
     protected EnemyBase currentTarget;
 
+    [Header("Skill System")]
     public SkillData exSkillData;
     protected SkillBase exSkill;
     protected Vector3 exSkillTargetPosition;
-
     public List<SkillId> ownedSkills;
     public SkillSlot exSkillSlot;
 
-   // [SerializeField] private HealthBarController healthBarController;
-
-    protected virtual void Awake()
+    protected override void Awake()
     {
-        rigidbodyPlayable = GetComponent<Rigidbody>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        playableAnimator = GetComponentInChildren<Animator>();
-        buffManager = GetComponent<BuffManager>();
+        // 부모 클래스의 Awake를 먼저 호출합니다.
+        base.Awake();
+
+        // 중복되는 GetComponent는 CharacterBase에서 이미 처리되었으므로 삭제합니다.
+        // rigidbodyPlayable = GetComponent<Rigidbody>();
+        // navMeshAgent = GetComponent<NavMeshAgent>();
+        // playableAnimator = GetComponentInChildren<Animator>();
+        // buffManager = GetComponent<BuffManager>();
 
         if (PlayableManager.instance != null)
             PlayableManager.instance.RegisterPlayable(this);
@@ -56,12 +55,12 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
         readyExSkill = false;
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
-        InitHealthBar(); // 캐릭터별 HealthBar 생성
+        InitHealthBar();
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
         if (isDead)
             return;
@@ -75,8 +74,11 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
             isIdle = false;
             isChase = true;
             isAttack = false;
-            navMeshAgent.isStopped = false;
-            MoveToTarget(currentTarget.transform.position);
+            if (navMeshAgent != null && navMeshAgent.enabled)
+            {
+                navMeshAgent.isStopped = false;
+                MoveToTarget(currentTarget.transform.position);
+            }
         }
 
         if (currentState == PlayableState.Attack)
@@ -84,86 +86,103 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
             isIdle = false;
             isChase = false;
             isAttack = true;
-            navMeshAgent.isStopped = true;
-            AttackThnking();
+            if (navMeshAgent != null && navMeshAgent.enabled)
+            {
+                navMeshAgent.isStopped = true;
+            }
+            AttackThinking();
         }
     }
 
-    protected virtual void FixedUpdate()
+    protected override void FixedUpdate()
     {
         if (currentState == PlayableState.Chasing)
         {
-            MoveToTarget(currentTarget.transform.position);
+            if (navMeshAgent != null && navMeshAgent.enabled)
+            {
+                MoveToTarget(currentTarget.transform.position);
+            }
         }
         else if (currentState == PlayableState.Dead)
         {
-            rigidbodyPlayable.velocity = Vector3.zero;
+            if (_rigidbody != null)
+            {
+                _rigidbody.velocity = Vector3.zero;
+            }
         }
     }
 
-    protected virtual void Initialize()
+    protected override void Initialize()
     {
-        currentHealth = MaxHealth;
-        isCreate = false;
+        base.Initialize(); // 부모의 Initialize()를 먼저 호출합니다.
+
+        // 중복되는 코드를 제거합니다.
+        // currentHealth = MaxHealth;
+        // isCreate = false;
         currentState = PlayableState.Idle;
 
         isIdle = true;
-        readyBasicAttack = false;
+        // readyBasicAttack = false; // base.Initialize에서 처리
         isUsingSkill = false;
 
         if (navMeshAgent != null)
             navMeshAgent.speed = moveSpeed;
     }
 
-
     public virtual void SetData(PlayableData data)
     {
         playableType = data.playableType;
-
         baseMaxHealth = data.maxHealth;
         baseAttackPower = data.attackPower;
         baseAttackRange = data.attackRange;
         baseAttackInterval = data.AttackInterval;
         baseHealPower = data.HealPower;
         moveSpeed = data.moveSpeed;
-
         skillInterval = data.skillInterval;
         exSkillData = data.exSkillData;
         exSkillInterval = data.exSkillInterval;
-
-        if (navMeshAgent != null)
-            navMeshAgent.speed = moveSpeed;
-
-        if (exSkillSlot != null)
-        {
-            exSkillSlot.Setup(exSkillData, this);
-        }
-
+        if (navMeshAgent != null) navMeshAgent.speed = moveSpeed;
+        if (exSkillSlot != null) exSkillSlot.Setup(exSkillData, this);
         Initialize();
     }
-
 
     public void SetExSkill(SkillBase skill)
     {
         exSkill = skill;
     }
 
+    // 이 메서드들은 override 키워드를 명시적으로 추가합니다.
+    protected override void CoolTime()
+    {
+        basicAttackTimer += Time.deltaTime;
+        if (basicAttackTimer >= AttackInterval)
+        {
+            readyBasicAttack = true;
+        }
+        skillTimer += Time.deltaTime;
+        if (skillTimer >= skillInterval)
+        {
+            readySkill = true;
+        }
+        exSkillTimer += Time.deltaTime;
+        if (exSkillTimer >= exSkillInterval)
+        {
+            readyExSkill = true;
+        }
+    }
+
     protected virtual void UpdateTargetAndDistance()
     {
         if (isDead)
             return;
-
         currentTarget = GetNearestEnemyToPosition(transform.position);
-
         if (currentTarget == null)
             return;
-
         if (currentTarget.ObjectType == this.ObjectType)
         {
             currentTarget = null;
             return;
         }
-
         distance = Vector3.Distance(transform.position, currentTarget.transform.position);
     }
 
@@ -184,87 +203,53 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
             navMeshAgent.SetDestination(targetPosition);
         }
     }
-
-    protected virtual void CoolTime()
-    {
-        basicAttackTimer += Time.deltaTime;
-        if (basicAttackTimer >= AttackInterval)
-        {
-            readyBasicAttack = true;
-        }
-
-        skillTimer += Time.deltaTime;
-        if (skillTimer >= skillInterval)
-        {
-            readySkill = true;
-        }
-
-        exSkillTimer += Time.deltaTime;
-        if (exSkillTimer >= exSkillInterval)
-        {
-            readyExSkill = true;
-        }
-    }
-
-    protected virtual void AttackThnking()
+    protected override void AttackThinking()
     {
         if (isAttacking)
             return;
-
         if (readyBasicAttack && !isUsingSkill && !isUsingExSkill)
         {
             BasicAttack();
         }
-
         if (readySkill && !isUsingSkill && !isUsingExSkill)
         {
             Skill();
         }
-
         if (exSkillTimer >= exSkillInterval && !isUsingSkill && !isUsingExSkill)
         {
             //ExSkill();
         }
     }
 
-    protected virtual void BasicAttack()
+    protected override void BasicAttack()
     {
         if (!isAttack || currentTarget == null || currentTarget.isDead)
             return;
-
         isAttacking = true;
         isBasicAttack = true;
-
-        playableAnimator.SetBool("isAttack", true);
+        animator.SetBool("isAttack", true);
         ShootBulletAtTarget();
-
         basicAttackTimer = 0;
         readyBasicAttack = false;
         isBasicAttack = false;
         isAttacking = false;
-
-        playableAnimator.SetBool("isAttack", false);
+        animator.SetBool("isAttack", false);
         currentState = PlayableState.Idle;
     }
 
-    protected void ShootBulletAtTarget()
+    protected override void ShootBulletAtTarget()
     {
         if (currentTarget == null || currentTarget.isDead)
             return;
-
         Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-
         Bullet bullet = BulletPoolManager.instance.GetBullet(BulletPoolManager.PoolType.PlayableBullet);
-
         if (bullet != null)
         {
-            bullet.transform.position = playableBulletFirePoint.position;
+            bullet.transform.position = bulletFirePoint.position;
             bullet.transform.rotation = Quaternion.LookRotation(direction);
-
             bullet.SetDamageFromStat(this.AttackPower);
             bullet.ShooterType = this.ObjectType;
-
             Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
             if (bulletRigidbody != null)
             {
@@ -273,23 +258,16 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
         }
     }
 
-    protected virtual void Skill()
+    protected override void Skill() { }
+    protected override void ExSkill()
     {
-    }
-
-    protected virtual void ExSkill()
-    {
-        if (exSkill == null)
-            return;
-
+        if (exSkill == null) return;
         SkillContext context = new SkillContext
         {
             Caster = gameObject,
             TargetPosition = exSkillTargetPosition
         };
-
         exSkill.Execute(context);
-
         exSkillTimer = 0;
         readyExSkill = false;
     }
@@ -298,15 +276,9 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
     {
         EnemyBase nearestEnemy = null;
         float minDist = Mathf.Infinity;
-
         foreach (var enemy in EnemyManager.instance.enemies)
         {
-            if (enemy == null || enemy.isDead)
-                continue;
-
-            if (enemy.ObjectType == this.ObjectType)
-                continue;
-
+            if (enemy == null || enemy.isDead) continue;
             float dist = Vector3.Distance(position, enemy.transform.position);
             if (dist < minDist)
             {
@@ -316,100 +288,59 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
         }
         return nearestEnemy;
     }
-
-    public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth <= 0 && !isDead)
-        {
-            currentState = PlayableState.Dead;
-            Die();
-        }
-
-        DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
-
-        if (healthBarInstance != null)
-        {
-            healthBarInstance.SetHealth(currentHealth);
-            Debug.Log($"{currentHealth} 현재 체력 전송");
-        }
-        else
-        {
-            Debug.Log($"{name}의 HealthBarController가 할당되지 않았습니다.");
-        }
-
-        //myHealthBarController.SetHealth(currentHealth);
-
-        StartCoroutine(OnDamage(isExplosion));
-    }
-
-    protected virtual void Die()
-    {
-        isDead = true;
-        isChase = false;
-
-        playableAnimator.SetTrigger("doDie");
-
-        SkillPanel.instance.ClearSkillsForCaster(this);
-
-        if (healthBarInstance != null)
-        {
-            Destroy(healthBarInstance.gameObject);
-            healthBarInstance = null;
-        }
-
-        Destroy(gameObject, 1.8f);
-        OnDestroy();
-    }
-
-    public void OnDestroy()
-    {
-        if (PlayableManager.instance != null)
-            PlayableManager.instance.UnregisterPlayable(this);
-        
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<ProjectileBase>(out var projectile))
         {
-            if (projectile.ShooterType == ObjectType)
+            // 총알을 쏜 캐릭터와 맞는 캐릭터의 타입이 같으면 무시
+            if (projectile.ShooterType == this.ObjectType)
                 return;
 
-            if (gameObject.TryGetComponent<CharacterBase>(out var character))
-            {
-                if (projectile.ShooterType == character.ObjectType)
-                    return;
+            // 피해량 추출 및 ApplyDamage 호출
+            float damage = projectile.damage;
+            ApplyDamage(damage, false); // 폭발 피해가 아니라면 false로 설정
 
-                projectile.OnHit(gameObject);
-
-                if (projectile is Bullet bullet)
-                    BulletPoolManager.instance.ReturnBullet(bullet);
-                else
-                    Destroy(projectile.gameObject);
-            }
+            if (projectile is Bullet bullet)
+                BulletPoolManager.instance.ReturnBullet(bullet);
+            else
+                Destroy(projectile.gameObject);
         }
     }
 
+    public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0 && !isDead) Die();
+        DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
+        if (healthBarInstance != null) healthBarInstance.SetHealth(currentHealth);
+        StartCoroutine(OnDamage(isExplosion));
+    }
+    protected override void Die()
+    {
+        base.Die();
+        SkillPanel.instance.ClearSkillsForCaster(this);
+    }
+    protected override void OnDestroyed()
+    {
+        if (PlayableManager.instance != null) PlayableManager.instance.UnregisterPlayable(this);
+        base.OnDestroyed();
+    }
     IEnumerator OnDamage(bool isExplosion)
     {
-        foreach (MeshRenderer mesh in meshs)
-            mesh.material.color = Color.red;
-
+        foreach (MeshRenderer mesh in meshs) mesh.material.color = Color.red;
+        if (isExplosion)
+        {
+            if (navMeshAgent != null && navMeshAgent.enabled) navMeshAgent.enabled = false;
+        }
         yield return new WaitForSeconds(0.1f);
-
+        if (isExplosion && navMeshAgent != null && !isDead) navMeshAgent.enabled = true;
         if (currentHealth > 0)
         {
-            foreach (MeshRenderer mesh in meshs)
-                mesh.material.color = Color.white;
+            foreach (MeshRenderer mesh in meshs) mesh.material.color = Color.white;
         }
         else
         {
-            foreach (MeshRenderer mesh in meshs)
-                mesh.material.color = Color.gray;
+            foreach (MeshRenderer mesh in meshs) mesh.material.color = Color.gray;
         }
     }
-
-   
 }

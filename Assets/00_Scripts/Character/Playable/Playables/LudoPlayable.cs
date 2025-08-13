@@ -11,13 +11,12 @@ public class LudoPlayable : PlayableBase
         if (currentTarget == null || currentTarget.isDead)
             return;
 
+        // CharacterBase.ObjectType으로 타입을 비교합니다.
         if (currentTarget.ObjectType == this.ObjectType)
             return;
+
         readySkill = false;
         skillTimer = 0;
-
-        isAttacking = true;
-        isSkill = true;
 
         isAttacking = true;
         isSkill = true;
@@ -42,7 +41,8 @@ public class LudoPlayable : PlayableBase
         readySkill = false;
         isSkill = false;
         isAttacking = false;
+
+        // PlayableState.Idle -> CharacterBase.CharacterState.Idle 로 변경
         currentState = PlayableState.Idle;
     }
-
 }
