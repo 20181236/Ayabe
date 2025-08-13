@@ -27,6 +27,9 @@ public class EnemyBase : CharacterBase, InterfaceHealth
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
 
+        if (EnemyManager.instance != null)
+            EnemyManager.instance.RegisterEnemy(this);
+
         Initialize();
 
     }
@@ -36,20 +39,7 @@ public class EnemyBase : CharacterBase, InterfaceHealth
         if (EnemyManager.instance != null)
             EnemyManager.instance.RegisterEnemy(this);
 
-        if (healthBarPrefab != null && healthBarInstance == null)
-        {
-            GameObject canvas = GameObject.Find("HPBarCanvas");
-            if (canvas != null)
-            {
-                healthBarInstance = Instantiate(healthBarPrefab, canvas.transform);
-                //healthBarInstance.Setup(headTransform, MaxHealth);
-                healthBarInstance.Setup(this, MaxHealth);
-            }
-            else
-            {
-                Debug.LogError("HPBarCanvas를 찾을 수 없습니다.");
-            }
-        }
+        InitHealthBar();
     }
 
     protected virtual void Update()
@@ -98,7 +88,6 @@ public class EnemyBase : CharacterBase, InterfaceHealth
         currentHealth = MaxHealth;
         currentState = EnemyState.Create;
         isCreate = true;
-
         readyBasicAttack = false;
         readySkill = false;
         readyExSkill = false;
@@ -111,12 +100,18 @@ public class EnemyBase : CharacterBase, InterfaceHealth
     public virtual void SetData(EnemyData data)
     {
         enemyType = data.enemyType;
+
         baseMaxHealth = data.maxHealth;
         baseAttackPower = data.attackPower;
         baseAttackRange = data.attackRange;
         baseAttackInterval = data.AttackInterval;
         baseHealPower = data.HealPower;
         moveSpeed = data.moveSpeed;
+
+        if (navMeshAgent != null)
+            navMeshAgent.speed = moveSpeed;
+
+        Initialize();
     }
     protected virtual void UpdateTargetAndDistance()
     {

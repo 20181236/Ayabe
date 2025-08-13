@@ -229,6 +229,50 @@ Transform:
   - {fileID: 1659692882913004411}
   m_Father: {fileID: 5737024795954197719}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1810228084475857585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8278226958477612389}
+  - component: {fileID: 6266426172837913557}
+  m_Layer: 0
+  m_Name: LuDoBuff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8278226958477612389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810228084475857585}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1800978535460387913}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6266426172837913557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810228084475857585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b5c820851a9f0449abda1dd718b632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1834292660952910283
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +515,7 @@ GameObject:
   - component: {fileID: 2564922527090100131}
   - component: {fileID: 8086057423702833444}
   - component: {fileID: 3084578943035297842}
-  - component: {fileID: 448484000507507149}
+  - component: {fileID: 5093175607832657179}
   m_Layer: 6
   m_Name: Ludo_Playable
   m_TagString: Player
@@ -496,6 +540,7 @@ Transform:
   - {fileID: 5971833837110039715}
   - {fileID: 2505136695681250020}
   - {fileID: 7348239343022754659}
+  - {fileID: 8278226958477612389}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &57118403949804248
@@ -580,19 +625,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a3f85663b34e04e913da273b9b0560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playableID: 2
-  playableType: 0
   baseMaxHealth: 0
-  baseAttackPower: 0
-  baseAttackRange: 0
-  baseAttackInterval: 0
-  baseHealPower: 0
   buffedMaxHealth: 0
-  buffedAttackPower: 0
-  buffedAttackRange: 0
-  buffedAttackInterval: 0
-  buffedHealPower: 0
   currentHealth: 0
+  baseAttackPower: 0
+  buffedAttackPower: 0
+  baseAttackRange: 0
+  buffedAttackRange: 0
+  baseAttackInterval: 0
+  buffedAttackInterval: 0
+  baseHealPower: 0
+  buffedHealPower: 0
   basicAttackTimer: 0
   basicAttackCount: 0
   skillInterval: 0
@@ -606,16 +649,20 @@ MonoBehaviour:
   isChase: 0
   isAttack: 0
   isAttacking: 0
-  isBisicAttack: 0
+  isBasicAttack: 0
   isSkill: 0
   isUsingSkill: 0
   isExSkill: 0
   isUsingExSkill: 0
   isDead: 0
-  checkInAttackRenge: 0
+  checkInAttackRange: 0
   readyBasicAttack: 0
   readySkill: 0
   readyExSkill: 0
+  headTransform: {fileID: 888795890810743215}
+  healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
+  playableID: 2
+  playableType: 0
   rigidbodyPlayable: {fileID: 57118403949804248}
   boxCollider: {fileID: 3127639583985119472}
   meshs: []
@@ -629,10 +676,6 @@ MonoBehaviour:
   exSkillData: {fileID: 11400000, guid: d5b3bc2587d55294bbf4f0dc29dfc4fa, type: 2}
   ownedSkills: 
   exSkillSlot: {fileID: 0}
-  headTransform: {fileID: 888795890810743215}
-  healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
-  buffManager: {fileID: 0}
-  healthBarController: {fileID: 0}
   grenadePrefab: {fileID: 7221321937232580668, guid: 940ba6016c2f15445a7206c262b64c81, type: 3}
 --- !u!114 &3084578943035297842
 MonoBehaviour:
@@ -647,7 +690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
---- !u!114 &448484000507507149
+--- !u!114 &5093175607832657179
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

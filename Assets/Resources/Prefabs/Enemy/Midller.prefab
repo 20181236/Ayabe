@@ -339,6 +339,7 @@ GameObject:
   - component: {fileID: 2451850200465814943}
   - component: {fileID: 3506899790702820262}
   - component: {fileID: 7524648621636893778}
+  - component: {fileID: 836479452780363624}
   m_Layer: 7
   m_Name: Midller
   m_TagString: Enemy
@@ -446,12 +447,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4151a1fcb51254abf19a0008fcb449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 1
-  enemyType: 0
-  maxHealth: 100
+  baseMaxHealth: 0
+  buffedMaxHealth: 0
   currentHealth: 0
-  attackRange: 10
-  basicAttackInterval: 0
+  baseAttackPower: 0
+  buffedAttackPower: 0
+  baseAttackRange: 0
+  buffedAttackRange: 0
+  baseAttackInterval: 0
+  buffedAttackInterval: 0
+  baseHealPower: 0
+  buffedHealPower: 0
   basicAttackTimer: 0
   basicAttackCount: 0
   skillInterval: 0
@@ -465,16 +471,20 @@ MonoBehaviour:
   isChase: 0
   isAttack: 0
   isAttacking: 0
-  isBisicAttack: 0
+  isBasicAttack: 0
   isSkill: 0
   isUsingSkill: 0
   isExSkill: 0
   isUsingExSkill: 0
   isDead: 0
-  checkInAttackRenge: 0
+  checkInAttackRange: 0
   readyBasicAttack: 0
   readySkill: 0
   readyExSkill: 0
+  headTransform: {fileID: 0}
+  healthBarPrefab: {fileID: 0}
+  enemyID: 1
+  enemyType: 0
   rigidbodyEnemy: {fileID: 4227591098561413268}
   boxCollider: {fileID: 2451850200465814943}
   meshs: []
@@ -482,7 +492,18 @@ MonoBehaviour:
   animator: {fileID: 6460493037093374342}
   enemyBulletFirePoint: {fileID: 7023202440098054259}
   currentState: 0
-  headTransform: {fileID: 0}
+--- !u!114 &836479452780363624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4931071578747650822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b5c820851a9f0449abda1dd718b632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6014152868675815248
 GameObject:
   m_ObjectHideFlags: 0

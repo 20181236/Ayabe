@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public abstract class PlayableBase : CharacterBase, InterfaceHealth
 {
@@ -35,16 +36,16 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
     public List<SkillId> ownedSkills;
     public SkillSlot exSkillSlot;
 
-
-    [SerializeField] private BuffManager buffManager; // 인스펙터 연결 혹은 Find
-
-    [SerializeField] private HealthBarController healthBarController;
+   // [SerializeField] private HealthBarController healthBarController;
 
     protected virtual void Awake()
     {
         rigidbodyPlayable = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         playableAnimator = GetComponentInChildren<Animator>();
+
+        if (PlayableManager.instance != null)
+            PlayableManager.instance.RegisterPlayable(this);
 
         currentState = PlayableState.Create;
         isCreate = true;
@@ -56,26 +57,7 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
 
     protected virtual void Start()
     {
-        if (PlayableManager.instance != null)
-            PlayableManager.instance.RegisterPlayable(this);
-        // SkillPanel panel = FindObjectOfType<SkillPanel>();
-        // panel.AssignCasterToSkills(this.gameObject, ownedSkills);
-
-        // 체력바 프리팹이 할당되어 있고, 인스턴스가 아직 없으면 생성
-        if (healthBarPrefab != null && healthBarInstance == null)
-        {
-            GameObject canvas = GameObject.Find("HPBarCanvas");
-            if (canvas != null)
-            {
-                healthBarInstance = Instantiate(healthBarPrefab, canvas.transform);
-                //healthBarInstance.Setup(headTransform, MaxHealth);
-                healthBarInstance.Setup(this, MaxHealth);
-            }
-            else
-            {
-                Debug.LogError("HPBarCanvas를 찾을 수 없습니다.");
-            }
-        }
+        InitHealthBar(); // 캐릭터별 HealthBar 생성
     }
 
     protected virtual void Update()
@@ -345,7 +327,15 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
         }
         DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
 
-        healthBarInstance.SetHealth(currentHealth);
+        if (myHealthBarController != null)
+        {
+            myHealthBarController.SetHealth(currentHealth);
+            Debug.Log($"{currentHealth}현재체력전송");
+        }
+        else
+            Debug.Log($"{name}의 HealthBarController가 할당되지 않았습니다.");
+
+        //myHealthBarController.SetHealth(currentHealth);
 
         StartCoroutine(OnDamage(isExplosion));
     }

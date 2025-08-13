@@ -956,7 +956,7 @@ GameObject:
   - component: {fileID: 7187312169412409887}
   - component: {fileID: 397983305347310345}
   - component: {fileID: -5558029291031771613}
-  - component: {fileID: -5254844371920021528}
+  - component: {fileID: -7308696852596614642}
   m_Layer: 6
   m_Name: SoonDoBu_Playable
   m_TagString: Player
@@ -981,6 +981,7 @@ Transform:
   - {fileID: 4807638279038874048}
   - {fileID: 2322599252825256750}
   - {fileID: 4180509183810145966}
+  - {fileID: 803668614871538815}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6451167297155870258
@@ -1065,19 +1066,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5239887d2d49a804fac0ab23d2eb325e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playableID: 0
-  playableType: 0
   baseMaxHealth: 0
-  baseAttackPower: 0
-  baseAttackRange: 0
-  baseAttackInterval: 0
-  baseHealPower: 0
   buffedMaxHealth: 0
-  buffedAttackPower: 0
-  buffedAttackRange: 0
-  buffedAttackInterval: 0
-  buffedHealPower: 0
   currentHealth: 0
+  baseAttackPower: 0
+  buffedAttackPower: 0
+  baseAttackRange: 0
+  buffedAttackRange: 0
+  baseAttackInterval: 0
+  buffedAttackInterval: 0
+  baseHealPower: 0
+  buffedHealPower: 0
   basicAttackTimer: 0
   basicAttackCount: 0
   skillInterval: 0
@@ -1091,16 +1090,20 @@ MonoBehaviour:
   isChase: 0
   isAttack: 0
   isAttacking: 0
-  isBisicAttack: 0
+  isBasicAttack: 0
   isSkill: 0
   isUsingSkill: 0
   isExSkill: 0
   isUsingExSkill: 0
   isDead: 0
-  checkInAttackRenge: 0
+  checkInAttackRange: 0
   readyBasicAttack: 0
   readySkill: 0
   readyExSkill: 0
+  headTransform: {fileID: 8808336068082448820}
+  healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
+  playableID: 0
+  playableType: 0
   rigidbodyPlayable: {fileID: 6451167297155870258}
   boxCollider: {fileID: 4480802960578815363}
   meshs: []
@@ -1114,10 +1117,6 @@ MonoBehaviour:
   exSkillData: {fileID: 11400000, guid: 455bf3096de623742940f927dc3b3055, type: 2}
   ownedSkills: 
   exSkillSlot: {fileID: 0}
-  headTransform: {fileID: 8808336068082448820}
-  healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
-  buffManager: {fileID: 0}
-  healthBarController: {fileID: 0}
 --- !u!114 &-5558029291031771613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1131,13 +1130,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightColor: {r: 0.16892412, g: 1, b: 0.042452812, a: 1}
---- !u!114 &-5254844371920021528
+--- !u!114 &-7308696852596614642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6746566736275685183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b5c820851a9f0449abda1dd718b632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &6877521031093617490
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 803668614871538815}
+  - component: {fileID: 9095510125040001614}
+  m_Layer: 6
+  m_Name: SoonDubuBuff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &803668614871538815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6877521031093617490}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8393298177302427086}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9095510125040001614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6877521031093617490}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63b5c820851a9f0449abda1dd718b632, type: 3}

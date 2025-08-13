@@ -21,6 +21,7 @@ public class HealthBarController : MonoBehaviour
     private Dictionary<BuffGroup, GameObject> activeBuffIcons = new Dictionary<BuffGroup, GameObject>();
 
     private CharacterBase targetCharacter;
+    private BuffManager boundBuffManager; // 현재 구독 중인 BuffManager 참조
 
     private void Awake()
     {
@@ -30,13 +31,13 @@ public class HealthBarController : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
-    //public void Setup(PlayableBase character, float maxHp)
     public void Setup(CharacterBase character, float maxHp)
     {
         targetCharacter = character;
         target = character.transform;
         maxHealth = maxHp;
         currentHealth = maxHp;
+        Debug.Log($"{character.name}의 HealthBar 생성됨");
         UpdateHealthBar();
     }
 
@@ -75,29 +76,42 @@ public class HealthBarController : MonoBehaviour
         }
     }
 
+    // BuffManager 이벤트 바인딩
     public void BindBuffManager(BuffManager buffManager)
     {
-        buffManager.OnBuffAdded += (buff) =>
+        // 기존 구독 해제 (중복 방지)
+        if (boundBuffManager != null)
         {
-            Debug.Log($"[HealthBarController] 버프 추가 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name}");
-            if (buff.owner == targetCharacter)
-            {
-                Debug.Log($"[HealthBarController] 이 캐릭터에게 버프 적용됨: {buff.buffId}");
-                AddBuffIcon(buff.group, buff.buffIcon);
-            }
-        };
+            boundBuffManager.OnBuffAdded -= OnBuffAddedHandler;
+            boundBuffManager.OnBuffRemoved -= OnBuffRemovedHandler;
+        }
 
-        buffManager.OnBuffRemoved += (buff) =>
-        {
-            Debug.Log($"[HealthBarController] 버프 제거 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name}");
-            if (buff.owner == targetCharacter)
-            {
-                Debug.Log($"[HealthBarController] 이 캐릭터 버프 제거됨: {buff.buffId}");
-                RemoveBuffIcon(buff.group);
-            }
-        };
+        boundBuffManager = buffManager;
+        boundBuffManager.OnBuffAdded += OnBuffAddedHandler;
+        boundBuffManager.OnBuffRemoved += OnBuffRemovedHandler;
     }
 
+    // 이벤트 핸들러: 버프 추가
+    private void OnBuffAddedHandler(Buff buff)
+    {
+        Debug.Log($"[HealthBarController] 버프 추가 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name}");
+        if (buff.owner == targetCharacter)
+        {
+            Debug.Log($"[HealthBarController] 이 캐릭터에게 버프 적용됨: {buff.buffId}");
+            AddBuffIcon(buff.group, buff.buffIcon);
+        }
+    }
+
+    // 이벤트 핸들러: 버프 제거
+    private void OnBuffRemovedHandler(Buff buff)
+    {
+        Debug.Log($"[HealthBarController] 버프 제거 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name}");
+        if (buff.owner == targetCharacter)
+        {
+            Debug.Log($"[HealthBarController] 이 캐릭터 버프 제거됨: {buff.buffId}");
+            RemoveBuffIcon(buff.group);
+        }
+    }
 
     public void AddBuffIcon(BuffGroup group, Sprite iconSprite)
     {
@@ -141,8 +155,6 @@ public class HealthBarController : MonoBehaviour
         activeBuffIcons[group] = icon;
     }
 
-
-
     public void RemoveBuffIcon(BuffGroup group)
     {
         Debug.Log($"[HealthBarController] RemoveBuffIcon 호출: {group}");
@@ -154,5 +166,15 @@ public class HealthBarController : MonoBehaviour
 
         Destroy(activeBuffIcons[group]);
         activeBuffIcons.Remove(group);
+    }
+
+    private void OnDestroy()
+    {
+        // 객체 파괴 시 구독 해제
+        if (boundBuffManager != null)
+        {
+            boundBuffManager.OnBuffAdded -= OnBuffAddedHandler;
+            boundBuffManager.OnBuffRemoved -= OnBuffRemovedHandler;
+        }
     }
 }

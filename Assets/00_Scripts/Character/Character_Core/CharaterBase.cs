@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public abstract class CharacterBase : MonoBehaviour
 {
@@ -63,12 +65,48 @@ public abstract class CharacterBase : MonoBehaviour
     [Header("Health Bar")]
     [SerializeField] protected HealthBarController healthBarPrefab;
     protected HealthBarController healthBarInstance;
+    protected HealthBarController myHealthBarController;  // 캐릭터 전용 인스턴스
 
     [Header("Buff System")]
+    //[SerializeField] private BuffManager buffManager;
     public List<Buff> activeBuffs = new List<Buff>();
 
     public abstract ObjectType ObjectType { get; }
+
+    protected void InitHealthBar()
+    {
+        if (healthBarPrefab != null && myHealthBarController == null)
+        {
+            GameObject canvas = GameObject.Find("HPBarCanvas");
+            if (canvas == null)
+            {
+                canvas = new GameObject("HPBarCanvas");
+                Canvas c = canvas.AddComponent<Canvas>();
+                c.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.AddComponent<CanvasScaler>();
+                canvas.AddComponent<GraphicRaycaster>();
+            }
+
+            var instance = Instantiate(healthBarPrefab, canvas.transform);
+            instance.Setup(this, MaxHealth);
+
+            BuffManager myBuffManager = GetComponent<BuffManager>();
+
+            if (myBuffManager != null)
+            {
+                instance.BindBuffManager(myBuffManager);
+            }
+            else
+            {
+                Debug.LogError("BuffManager 컴포넌트를 찾을 수 없습니다. 캐릭터에 BuffManager를 추가해주세요.");
+            }
+
+            myHealthBarController = instance;
+        }
+    }
+
     public abstract void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null);
+
 
     public void Heal(float amount)
     {

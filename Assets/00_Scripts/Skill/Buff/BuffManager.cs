@@ -13,11 +13,11 @@ public class BuffManager : MonoBehaviour
 
     public void ApplyBuff(BuffData data, CharacterBase owner, CharacterBase caster)
     {
-        // 같은 버프가 이미 owner에게 있는지 체크 (필요시)
+        Debug.Log($"ApplyBuff 호출: 버프={data.buffId}, owner={owner.name}, caster={caster.name}");
+
         Buff existingBuff = activeBuffs.Find(b => b.owner == owner && b.buffId == data.buffId);
         if (existingBuff != null)
         {
-            // 기존 버프 갱신
             existingBuff.duration = data.duration;
             existingBuff.value = data.value;
             Debug.Log($"버프 갱신: {existingBuff.buffId} on {owner.name}");
@@ -29,15 +29,15 @@ public class BuffManager : MonoBehaviour
             buff.caster = caster;
 
             activeBuffs.Add(buff);
-
             owner.ApplyBuff(data, caster);
 
-            OnBuffAdded?.Invoke(buff);
+            Debug.Log($"버프 새로 적용: {buff.buffId} on {owner.name}, targetStat={buff.targetStat}, value={buff.value}");
 
+            OnBuffAdded?.Invoke(buff);
             StartCoroutine(RemoveBuffAfterDuration(buff));
-            Debug.Log($"{caster.name}이(가) {owner.name}에게 버프 적용: {buff.targetStat} / 값: {buff.value} / 타입: {buff.applyType}");
         }
     }
+
 
     private IEnumerator RemoveBuffAfterDuration(Buff buff)
     {

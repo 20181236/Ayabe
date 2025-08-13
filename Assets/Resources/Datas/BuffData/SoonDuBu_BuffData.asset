@@ -17,7 +17,7 @@ MonoBehaviour:
   _category: 0
   _applyType: 2
   _targetStat: 6
-  _buffIcon: {fileID: 21300000, guid: 5c9c20cb297884e1d9779377a976b16b, type: 3}
+  _buffIcon: {fileID: 21300000, guid: a3d3b1d91ce30e342b78327ddbdd9e15, type: 3}
   _value: 50
   _duration: 5
   _tickInterval: 1
