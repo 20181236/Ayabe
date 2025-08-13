@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class BuffManager : MonoBehaviour
 {
-    public event Action<Buff> OnBuffAdded;
+    //public event Action<Buff> OnBuffAdded;
+    public event Action<Buff, float> OnBuffAdded;
     public event Action<Buff> OnBuffRemoved;
+    //public event Action<Buff> OnBuffRemoved;
 
     private List<Buff> activeBuffs = new List<Buff>();
 
@@ -35,7 +37,8 @@ public class BuffManager : MonoBehaviour
             activeBuffs.Add(buff);
 
             // 이벤트 발생
-            OnBuffAdded?.Invoke(buff);
+            //OnBuffAdded?.Invoke(buff);
+            OnBuffAdded?.Invoke(buff, buff.duration);
 
             // 캐릭터의 스탯 업데이트
             owner.ApplyBuff(data, caster);
