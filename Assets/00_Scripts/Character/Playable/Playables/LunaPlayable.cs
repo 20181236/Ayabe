@@ -35,9 +35,8 @@ public class LunaPlayable : PlayableBase
         {
             if (playable != null && !playable.isDead)
             {
-                BuffManager buffManager = FindObjectOfType<BuffManager>(); // 또는 싱글톤
-                buffManager.ApplyBuff(attackBuffData, playable, this);
-                //playable.ApplyBuff(attackBuffData);
+                //buffManager.ApplyBuff(attackBuffData, playable, this);
+                playable.ApplyBuff(attackBuffData, this);
                 //Debug.Log($"{playable.name}에게 버프 적용 - 현재 공격력: {playable.AttackPower}");
             }
         }

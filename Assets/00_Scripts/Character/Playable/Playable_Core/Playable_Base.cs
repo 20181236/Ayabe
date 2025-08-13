@@ -43,6 +43,7 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
         rigidbodyPlayable = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         playableAnimator = GetComponentInChildren<Animator>();
+        buffManager = GetComponent<BuffManager>();
 
         if (PlayableManager.instance != null)
             PlayableManager.instance.RegisterPlayable(this);
@@ -325,15 +326,18 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
             currentState = PlayableState.Dead;
             Die();
         }
+
         DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
 
-        if (myHealthBarController != null)
+        if (healthBarInstance != null)
         {
-            myHealthBarController.SetHealth(currentHealth);
-            Debug.Log($"{currentHealth}현재체력전송");
+            healthBarInstance.SetHealth(currentHealth);
+            Debug.Log($"{currentHealth} 현재 체력 전송");
         }
         else
+        {
             Debug.Log($"{name}의 HealthBarController가 할당되지 않았습니다.");
+        }
 
         //myHealthBarController.SetHealth(currentHealth);
 
@@ -363,6 +367,7 @@ public abstract class PlayableBase : CharacterBase, InterfaceHealth
     {
         if (PlayableManager.instance != null)
             PlayableManager.instance.UnregisterPlayable(this);
+        
     }
 
     void OnTriggerEnter(Collider other)

@@ -65,17 +65,19 @@ public abstract class CharacterBase : MonoBehaviour
     [Header("Health Bar")]
     [SerializeField] protected HealthBarController healthBarPrefab;
     protected HealthBarController healthBarInstance;
-    protected HealthBarController myHealthBarController;  // 캐릭터 전용 인스턴스
 
     [Header("Buff System")]
     //[SerializeField] private BuffManager buffManager;
     public List<Buff> activeBuffs = new List<Buff>();
 
+    [HideInInspector]
+    public BuffManager buffManager;
+
     public abstract ObjectType ObjectType { get; }
 
     protected void InitHealthBar()
     {
-        if (healthBarPrefab != null && myHealthBarController == null)
+        if (healthBarPrefab != null && healthBarInstance == null)
         {
             GameObject canvas = GameObject.Find("HPBarCanvas");
             if (canvas == null)
@@ -90,20 +92,21 @@ public abstract class CharacterBase : MonoBehaviour
             var instance = Instantiate(healthBarPrefab, canvas.transform);
             instance.Setup(this, MaxHealth);
 
+            // 자기 자신의 BuffManager만 바인딩
             BuffManager myBuffManager = GetComponent<BuffManager>();
-
             if (myBuffManager != null)
             {
                 instance.BindBuffManager(myBuffManager);
             }
             else
             {
-                Debug.LogError("BuffManager 컴포넌트를 찾을 수 없습니다. 캐릭터에 BuffManager를 추가해주세요.");
+                Debug.LogWarning($"{name}에 BuffManager가 없음. HealthBar의 버프 아이콘은 표시되지 않음.");
             }
 
-            myHealthBarController = instance;
+            healthBarInstance = instance;
         }
     }
+
 
     public abstract void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null);
 
@@ -115,25 +118,15 @@ public abstract class CharacterBase : MonoBehaviour
     }
     public void ApplyBuff(BuffData data, CharacterBase caster)
     {
-        Buff buff = BuffFactory.CreateBuffFromData(data);
-        buff.owner = this;   // 자신이 버프 받는 대상
-        buff.caster = caster; // 버프 건 주체, 없으면 null 가능
-
-        activeBuffs.Add(buff);
-
-        Debug.Log($"[{buff.caster?.name ?? "Unknown"}]이(가) [{this.name}]에게 버프 적용: {buff.targetStat} / 값: {buff.value} / 타입: {buff.applyType}");
-
-        if (buff.applyType == BuffApplyType.Burst)
+        if (this.buffManager != null)
         {
-            OnBuffTick(buff);
-            activeBuffs.Remove(buff);
+            Debug.Log($"[{caster.name}]이(가) [{this.name}]에게 버프 적용: {data.buffId} / 값: {data.value} / 타입: {data.applyType}");
+            this.buffManager.ApplyBuff(data, this, caster);
         }
         else
         {
-            StartCoroutine(BuffRoutine(buff));
+            Debug.LogError($"[{this.name}]의 BuffManager가 할당되지 않았습니다.");
         }
-
-        RecalculateBuffedStats();
     }
 
 

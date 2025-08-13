@@ -38,6 +38,7 @@ public class HealthBarController : MonoBehaviour
         maxHealth = maxHp;
         currentHealth = maxHp;
         Debug.Log($"{character.name}의 HealthBar 생성됨");
+        
         UpdateHealthBar();
     }
 
@@ -50,7 +51,10 @@ public class HealthBarController : MonoBehaviour
     private void Update()
     {
         if (target == null)
+        {
+            Destroy(gameObject); // 타겟이 사라지면 자기 자신 삭제
             return;
+        }
 
         Vector3 worldPosition = target.position + offset;
         Vector3 screenPosition = mainCamera.WorldToScreenPoint(worldPosition);
@@ -94,62 +98,71 @@ public class HealthBarController : MonoBehaviour
     // 이벤트 핸들러: 버프 추가
     private void OnBuffAddedHandler(Buff buff)
     {
-        Debug.Log($"[HealthBarController] 버프 추가 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name}");
-        if (buff.owner == targetCharacter)
+        // buff.owner가 아닌, buff.receiver가 targetCharacter와 같은지 확인
+        // 이 예시에서는 편의상 buff.owner를 receiver로 가정합니다.
+        if (buff.owner != targetCharacter)
         {
-            Debug.Log($"[HealthBarController] 이 캐릭터에게 버프 적용됨: {buff.buffId}");
-            AddBuffIcon(buff.group, buff.buffIcon);
+            Debug.Log($"[HealthBarController] 다른 캐릭터 버프 무시: {buff.owner.name}");
+            return;
         }
+
+        AddBuffIcon(buff.group, buff.buffIcon);
     }
 
     // 이벤트 핸들러: 버프 제거
     private void OnBuffRemovedHandler(Buff buff)
     {
-        Debug.Log($"[HealthBarController] 버프 제거 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name}");
-        if (buff.owner == targetCharacter)
+        Debug.Log($"[HealthBarController] 버프 제거 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name} / BuffGroup: {buff.group}");
+
+        if (buff.owner != targetCharacter)
         {
-            Debug.Log($"[HealthBarController] 이 캐릭터 버프 제거됨: {buff.buffId}");
-            RemoveBuffIcon(buff.group);
+            Debug.Log($"[HealthBarController] 다른 캐릭터 버프 제거 무시: {buff.owner.name}");
+            return;
         }
+
+        Debug.Log($"[HealthBarController] 아이콘 제거 시작: {buff.buffId}");
+        RemoveBuffIcon(buff.group);
+        Debug.Log($"[HealthBarController] 아이콘 제거 완료: {buff.buffId}");
+
+        //if (buff.owner == targetCharacter)
+        //{
+        //    Debug.Log($"[HealthBarController] 이 캐릭터 버프 제거됨: {buff.buffId}");
+        //    RemoveBuffIcon(buff.group);
+        //}
     }
 
     public void AddBuffIcon(BuffGroup group, Sprite iconSprite)
     {
-        Debug.Log($"[HealthBarController] AddBuffIcon 호출: {group}");
-        if (iconSprite == null)
+        // 프리팹과 컨테이너가 제대로 할당되었는지 확인
+        if (buffIconPrefab == null || buffIconContainer == null)
         {
-            Debug.LogWarning($"[HealthBarController] 아이콘 스프라이트가 null임: {group}");
+            Debug.LogError("BuffIcon Prefab 또는 Container가 없습니다! Inspector를 확인하세요.");
             return;
         }
 
-        if (activeBuffIcons.ContainsKey(group))
-        {
-            var imageComponent = activeBuffIcons[group].GetComponent<Image>();
-            if (imageComponent != null)
-            {
-                Debug.Log($"[HealthBarController] 기존 아이콘 갱신: {group}");
-                imageComponent.sprite = iconSprite;
-            }
-            return;
-        }
-
-        Debug.Log($"[HealthBarController] 아이콘 인스턴스 생성: {group}");
+        // 아이콘이 생성되는지 확인
         GameObject icon = Instantiate(buffIconPrefab, buffIconContainer);
         if (icon == null)
         {
-            Debug.LogError("[HealthBarController] 아이콘 인스턴스화 실패");
+            Debug.LogError("버프 아이콘 프리팹 인스턴스화 실패!");
             return;
         }
 
+        RectTransform rt = icon.GetComponent<RectTransform>();
+        rt.localScale = Vector3.one;
+        rt.localRotation = Quaternion.identity;
+        rt.anchoredPosition = Vector2.zero;
+
+        // Image 컴포넌트가 있는지 확인
         var image = icon.GetComponent<Image>();
         if (image != null)
         {
             image.sprite = iconSprite;
-            Debug.Log($"[HealthBarController] 아이콘 스프라이트 할당 완료: {iconSprite.name}");
+            Debug.Log("아이콘 생성 및 스프라이트 할당 성공: " + iconSprite.name);
         }
         else
         {
-            Debug.LogError("[HealthBarController] 인스턴스에 Image 컴포넌트가 없음");
+            Debug.LogError("인스턴스화된 프리팹에 Image 컴포넌트가 없습니다!");
         }
 
         activeBuffIcons[group] = icon;
@@ -158,6 +171,7 @@ public class HealthBarController : MonoBehaviour
     public void RemoveBuffIcon(BuffGroup group)
     {
         Debug.Log($"[HealthBarController] RemoveBuffIcon 호출: {group}");
+
         if (!activeBuffIcons.ContainsKey(group))
         {
             Debug.LogWarning($"[HealthBarController] 제거할 아이콘이 없음: {group}");
@@ -166,8 +180,12 @@ public class HealthBarController : MonoBehaviour
 
         Destroy(activeBuffIcons[group]);
         activeBuffIcons.Remove(group);
+        Debug.Log($"[HealthBarController] 아이콘 제거 완료: {group}");
     }
-
+    public Dictionary<BuffGroup, GameObject> GetActiveBuffIcons()
+    {
+        return activeBuffIcons;
+    }
     private void OnDestroy()
     {
         // 객체 파괴 시 구독 해제

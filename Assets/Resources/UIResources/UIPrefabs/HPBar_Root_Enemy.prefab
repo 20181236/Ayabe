@@ -698,6 +698,8 @@ MonoBehaviour:
   target: {fileID: 0}
   mainCamera: {fileID: 0}
   fillImage: {fileID: 4301375762888263322}
+  buffIconContainer: {fileID: 0}
+  buffIconPrefab: {fileID: 5737012393044151147, guid: b7f88987ba25b6641b4e2f11ba088c1a, type: 3}
   offset: {x: 0, y: 5, z: 0}
 --- !u!1 &8094131133075527248
 GameObject:
