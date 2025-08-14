@@ -26,7 +26,7 @@ public class StageManager : MonoBehaviour
     private float battleTime = 0f; // 경과 시간 변수 추가
     private float stageTimer;
     private bool isTimeOver = false;
-    [SerializeField] private LimitTime limitTime;
+    [SerializeField] private Timer limitTime;
 
     private float startUIDuration = 2f;
     public StageState CurrentStageState { get; private set; } = StageState.None;
@@ -37,8 +37,6 @@ public class StageManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
-
-
     }
 
     private void Start()
@@ -123,17 +121,19 @@ public class StageManager : MonoBehaviour
     private void OnStageClear()
     {
         CurrentStageState = StageState.Victory;
-        //startAndResult.SetElapsedTime(battleTime); // 경과 시간 전달
-        startAndResult.ShowVictory();
+        startAndResult.ShowUI(StageState.Victory, battleTime);
+        //startAndResult.SetBattleTime(battleTime); // 경과 시간 전달
+        //startAndResult.ShowVictory();
     }
 
     private void OnStageFailed()
     {
         CurrentStageState = StageState.Defeat;
-       // startAndResult.SetElapsedTime(battleTime); // 경과 시간 전달
         ScreenAndTimeEffectController.instance.StartEffect();
         StartCoroutine(EndClearEffectAfterDelay(2f));
-        startAndResult.ShowDefeat();
+        // 경과 시간 전달 + 결과 패널 표시
+        startAndResult.ShowUI(StageState.Defeat, battleTime);
+        //startAndResult.ShowDefeat();
     }
     private IEnumerator EndClearEffectAfterDelay(float delay)
     {

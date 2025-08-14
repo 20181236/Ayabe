@@ -1,35 +1,37 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class StartAndResult : MonoBehaviour
 {
+    [Header("Common UI")]
     [SerializeField] private GameObject darkOverlay;
 
+    [Header("Start UI")]
     [SerializeField] private GameObject startImage;
 
-    [SerializeField] private GameObject victoryImage;
-    [SerializeField] private GameObject victoryPanel;
+    [Header("Result UI")]
+    [SerializeField] private GameObject resultPanel;
+    [SerializeField] private Image resultImage;
+    [SerializeField] private Sprite victorySprite;
+    [SerializeField] private Sprite defeatSprite;
+    [SerializeField] private TextMeshProUGUI resultText;
+    [SerializeField] private TextMeshProUGUI battleTimeText;
 
-    [SerializeField] private GameObject defeatImage;
-    [SerializeField] private GameObject defeatPanel;
+    [SerializeField] private Button okButton;
 
-    [SerializeField] private TextMeshPro battleResultText;
-    [SerializeField] private TextMeshPro battleTimeText;
+    [SerializeField] private GameObject helathBar;
+    [SerializeField] private GameObject bossHelathBar;
+    [SerializeField] private GameObject uiHUD;
 
     private void Awake()
     {
-        // UI 전부 꺼둠
+        // 모든 UI 초기 비활성화
         darkOverlay.SetActive(false);
         startImage.SetActive(false);
-        victoryImage.SetActive(false);
-        defeatImage.SetActive(false);
-    }
-
-    public void ShowStartSequence(float startDuration)
-    {
-        StartCoroutine(PlayStartSequence(startDuration));
+        resultPanel.SetActive(false);
+        okButton.gameObject.SetActive(false);
     }
 
     public IEnumerator PlayStartSequence(float duration)
@@ -43,48 +45,57 @@ public class StartAndResult : MonoBehaviour
         darkOverlay.SetActive(false);
     }
 
-    public void SetElapsedTime(float time)
-    {
-        int minutes = Mathf.FloorToInt(time / 60f);
-        int seconds = Mathf.FloorToInt(time % 60f);
-        battleTimeText.text = $"전투 시간: {minutes:00}:{seconds:00}";
-    }
-
-
-    public void ShowVictory()
-    {
-        darkOverlay.SetActive(true);    
-        victoryImage.SetActive(true);
-    }
-
-    public void ShowDefeat()
-    {
-        darkOverlay.SetActive(true);
-        defeatImage.SetActive(true);
-    }
-
-    // 결과 UI 출력용 함수
-    public void ShowResultUI(bool isVictory, float battleTime)
-    {
-        string formattedTime = FormatTime(battleTime);
-        battleTimeText.text = $"소요 시간: {formattedTime}";
-
-        if (isVictory)
-        {
-            battleResultText.text = "이겼다!";
-            victoryPanel.SetActive(true);
-        }
-        else
-        {
-            battleResultText.text = "졌다...";
-            defeatPanel.SetActive(true);
-        }
-    }
-
     private string FormatTime(float time)
     {
         int minutes = Mathf.FloorToInt(time / 60f);
         int seconds = Mathf.FloorToInt(time % 60f);
-        return $"{minutes}분 {seconds}초";
+        return $"{minutes:00}:{seconds:00}";
+    }
+
+    public void ShowUI(StageState state, float battleTime = 0f)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ShowUISequence(state, battleTime));
+    }
+
+    private IEnumerator ShowUISequence(StageState state, float battleTime)
+    {
+        uiHUD.SetActive(false);
+        helathBar.SetActive(false);
+        bossHelathBar.SetActive(false) ;
+
+        // 공통: 배경
+        darkOverlay.SetActive(state != StageState.None);
+
+        // 시작 상태면 그냥 시작 이미지만 보여주고 끝
+        if (state == StageState.Starting)
+        {
+            startImage.SetActive(true);
+            yield break;
+        }
+
+        // 승리/패배 시
+        if (state == StageState.Victory || state == StageState.Defeat)
+        {
+            // 패널 켜기
+            resultPanel.SetActive(true);
+
+            // 결과 이미지 설정
+            resultImage.sprite = (state == StageState.Victory) ? victorySprite : defeatSprite;
+            resultText.text = (state == StageState.Victory) ? "Win!" : "Defeat...";
+            battleTimeText.text = $"소요 시간: {FormatTime(battleTime)}";
+
+            // 결과 이미지 보여주기
+            resultImage.gameObject.SetActive(true);
+
+            // 몇 초 대기
+            yield return new WaitForSeconds(3f);
+
+            // 결과 이미지 숨기기
+            resultImage.gameObject.SetActive(false);
+
+            // 여기서 나머지 UI(버튼, 상세 결과 패널 등) 켜기
+             okButton.gameObject.SetActive(true);
+        }
     }
 }

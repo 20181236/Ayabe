@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class LimitTime : MonoBehaviour
+public class Timer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timeText; // 시간 표시용 텍스트
 
