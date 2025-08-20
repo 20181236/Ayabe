@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playableID: 0
   playableType: 0
-  prefab: {fileID: 6746566736275685183, guid: 18530a8ecaf9391489b39db933de18ad, type: 3}
+  prefab: {fileID: 8046442371555746191, guid: d9334addfb3204f4bbd8059fed36fa58, type: 3}
   maxHealth: 5000
   attackPower: 30
   attackRange: 50
