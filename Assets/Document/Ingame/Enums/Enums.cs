@@ -10,6 +10,19 @@ public enum GameLayerMask
     Projectile = 8
 }
 
+/// <summary>
+/// UI
+/// </summary>
+
+public enum PopupList
+{
+    SetPlayablePopup
+}
+
+/// <summary>
+/// InGame
+/// </summary>
+
 public enum StageState
 {
     None,

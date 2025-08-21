@@ -6,7 +6,11 @@ public class PlayableData : ScriptableObject
 {
     public PlayableID playableID;
     public PlayableType playableType;
+
+    public Sprite playableIcon;
+
     public GameObject prefab;
+
     public float maxHealth;
     public float attackPower;
     public float attackRange;

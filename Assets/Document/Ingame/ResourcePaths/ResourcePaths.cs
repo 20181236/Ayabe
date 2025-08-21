@@ -8,16 +8,16 @@ public static class ResourcePaths
     public const string LunaCastEffectPath = "Art/Effect/Luna_CastEffect/ShinySlash";
     public const string LudoCastEffectPath = "Art/Effect/Ludo_CastEffect/DoubleSlash";
  
-
-
     public static string GetSkillPrefabPath(SkillId id)
     {
-        return SkillPrefabRoot + id.ToString(); // ¿¹: "Prefabs/Skills/LudoSkill"
+        return SkillPrefabRoot + id.ToString();
     }
     public static string GetEffectPath(EffectId effectId)
     {
         switch (effectId)
         {
+            case EffectId.SoonDoBu_CastEffect:
+                return SoonDuBuEffectPath;
             case EffectId.Ludo_CastEffect:
                 return LudoCastEffectPath;
             case EffectId.Luna_CastEffect:
