@@ -48,7 +48,15 @@ public class PlanUIManager : MonoBehaviour
     {
         if (!popupDictionary.ContainsKey(popupType))
         {
-            GameObject prefab = Resources.Load<GameObject>($"UI/Popups/{popupType}");
+            string path = ResourcePaths.GetPopupPath(popupType); // "Plan/SetPlayablePopup"
+            GameObject prefab = Resources.Load<GameObject>(path);
+
+            if (prefab == null)
+            {
+                Debug.LogError($"팝업 프리팹을 찾을 수 없습니다: {path}");
+                return null;
+            }
+
             GameObject popupObj = Instantiate(prefab, popupRoot);
             UIBase popup = popupObj.GetComponent<UIBase>();
             popupDictionary[popupType] = popup;
