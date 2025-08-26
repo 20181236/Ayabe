@@ -11,6 +11,17 @@ public enum GameLayerMask
 }
 
 /// <summary>
+/// Scene
+/// </summary>
+
+public enum SceneNmae
+{
+    Plan,
+    SceneChange,
+    InGame
+}
+
+/// <summary>
 /// UI
 /// </summary>
 
