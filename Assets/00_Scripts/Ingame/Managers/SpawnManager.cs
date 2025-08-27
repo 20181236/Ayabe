@@ -26,19 +26,26 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(info.delayAfter);
         }
     }
-
-    public void PlayableSpawn(PlayableSpawnData spawnData)
+    public GameObject SpawnPlayable(PlayableData playable, Vector3 position)
     {
-        StartCoroutine(SpawnCoroutine(spawnData));
+        GameObject spawnPlayable = Instantiate(playable.prefab, position, Quaternion.identity);
+        spawnPlayable.SetActive(true);
+        return spawnPlayable; // 생성된 오브젝트 반환
     }
 
-    private IEnumerator SpawnCoroutine(PlayableSpawnData spawnData)
-    {
-        foreach (var info in spawnData.playableSpawn)
-        {
-            PlayableManager.instance.SpawnPlayable(info.playableID, info.spawnPosition);
-            yield return new WaitForSeconds(info.delayAfter);
-        }
-    }
+
+    //public void PlayableSpawn(PlayableSpawnData spawnData)
+    //{
+    //    StartCoroutine(SpawnCoroutine(spawnData));
+    //}
+
+    //private IEnumerator SpawnCoroutine(PlayableSpawnData spawnData)
+    //{
+    //    foreach (var info in spawnData.playableSpawn)
+    //    {
+    //        PlayableManager.instance.SpawnPlayable(info.playableID, info.spawnPosition);
+    //        yield return new WaitForSeconds(info.delayAfter);
+    //    }
+    //}
 }
 

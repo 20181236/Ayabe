@@ -16,9 +16,9 @@ public enum GameLayerMask
 
 public enum SceneNmae
 {
-    Plan,
-    SceneChange,
-    InGame
+    Plan = 0,
+    SceneChange = 1,
+    InGame = 2
 }
 
 /// <summary>

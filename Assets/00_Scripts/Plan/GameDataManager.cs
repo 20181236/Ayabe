@@ -7,6 +7,7 @@ public class GameDataManager : MonoBehaviour
     public static GameDataManager instance;
 
     public List<PlayableData> selectedCharacters = new List<PlayableData>();
+    public PlayableData leaderCharacter;
 
     private void Awake()
     {
