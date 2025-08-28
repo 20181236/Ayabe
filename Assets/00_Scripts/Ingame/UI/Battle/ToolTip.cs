@@ -23,14 +23,6 @@ public class ToolTip : MonoBehaviour
         ApplyToolTip(text, icon);
     }
 
-    ////
-    //public void SetToolTip(ResultData resultData)
-    //{
-    //    string text = resultData.resultText;
-    //    Sprite icon = resultData.resultIcon;
-    //    ApplyToolTip(text, icon);
-    //}
-
     private void ApplyToolTip(string rawText, Sprite icon)
     {
         ToolTipIcon.sprite = icon;

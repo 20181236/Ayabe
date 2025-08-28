@@ -19,8 +19,8 @@ MonoBehaviour:
   areaType: 0
   castEffectId: 3
   weaponPrefab: {fileID: 7221321937232580668, guid: e2fa3772567e051488a311b6fd0b0514, type: 3}
-  icon: {fileID: 21300000, guid: 4e5b816343df5574c8a051077a2156b9, type: 3}
-  skillCutInImage: {fileID: 21300000, guid: 0fa18763c4e83da4098bfa2203b7ad8d, type: 3}
+  icon: {fileID: 21300000, guid: 9c58620c327be8e4391258d99b84f223, type: 3}
+  skillCutInImage: {fileID: 21300000, guid: d1f6377041f26a9409847ba9beda8dc7, type: 3}
   cutInText: tokutoku
   skillToolTipIcon: {fileID: 21300000, guid: 7257286cb89c248efa2e4e2a50701d0d, type: 3}
   skillToolTipText: LudoSkillTest500

@@ -6,7 +6,6 @@ public class FormationPanel : MonoBehaviour
 {
     public Image[] slotIcons;
 
-    [Header("모든 캐릭터 데이터")]
     public List<PlayableData> allPlayableDataList;
 
     public void OnClickSlot()

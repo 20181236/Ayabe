@@ -81,7 +81,8 @@ public enum PlayableState
     Idle,
     Chasing,
     Attack,
-    Dead
+    Dead,
+    Victory
 }
 public enum PlayableAttackState
 {
@@ -210,9 +211,9 @@ public enum EnemySpawnState
 
 public enum WeaponType
 {
-    Bullet,
-    Mssile,
-    Grenada
+    Pistol,
+    Rifle,
+    Cannon
 }
 
 public enum EffectId

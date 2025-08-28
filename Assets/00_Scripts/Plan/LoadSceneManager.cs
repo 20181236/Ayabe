@@ -33,6 +33,15 @@ public class LoadSceneManager : MonoBehaviour
     {
         StartCoroutine(LoadSceneAsync(SceneNmae.Plan.ToString()));
     }
+    public void MoveToInGame()
+    {
+        LoadSceneManager.instance.OnClickMoveToInGame();
+    }
+
+    public void MoveToPlan()
+    {
+        LoadSceneManager.instance.OnClickMoveToPlan();
+    }
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {

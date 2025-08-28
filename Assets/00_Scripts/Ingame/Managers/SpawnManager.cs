@@ -28,9 +28,20 @@ public class SpawnManager : MonoBehaviour
     }
     public GameObject SpawnPlayable(PlayableData playable, Vector3 position)
     {
-        GameObject spawnPlayable = Instantiate(playable.prefab, position, Quaternion.identity);
-        spawnPlayable.SetActive(true);
-        return spawnPlayable; // 생성된 오브젝트 반환
+        if (playable == null || playable.prefab == null)
+        {
+            Debug.LogError("PlayableData or prefab is null!");
+            return null;
+        }
+
+        // Factory를 이용해 생성
+        PlayableBase playableInstance = PlayableFactory.CreatePlayable(playable, position);
+
+        if (playableInstance == null)
+            return null;
+
+        // GameObject 반환
+        return playableInstance.gameObject;
     }
 
 

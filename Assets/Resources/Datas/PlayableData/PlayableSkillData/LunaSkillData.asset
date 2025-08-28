@@ -19,8 +19,8 @@ MonoBehaviour:
   areaType: 0
   castEffectId: 2
   weaponPrefab: {fileID: 0}
-  icon: {fileID: 21300000, guid: 47fbbf7a9c438ed4ea370ca0e59905ff, type: 3}
-  skillCutInImage: {fileID: 21300000, guid: ff108e4c79a535c45ace10eaa3c82242, type: 3}
+  icon: {fileID: 21300000, guid: e51358a42cd11dd4aa30db710d2e7e5b, type: 3}
+  skillCutInImage: {fileID: 21300000, guid: 6d994ba04ed4c8b428afbb36dd018b11, type: 3}
   cutInText: AllHeal250
   skillToolTipIcon: {fileID: 21300000, guid: 5c9c20cb297884e1d9779377a976b16b, type: 3}
   skillToolTipText: LunaSkillTest

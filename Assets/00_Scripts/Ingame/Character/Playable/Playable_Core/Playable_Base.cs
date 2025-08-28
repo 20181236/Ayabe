@@ -14,6 +14,7 @@ public abstract class PlayableBase : CharacterBase
     public PlayableType playableType;
 
     [Header("Game Object References")]
+    public WeaponType equippedWeapon;
     public GameObject bullet;
     public GameObject missile;
     public Transform excapeSpotTransform;
