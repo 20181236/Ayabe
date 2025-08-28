@@ -7,6 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class SoonDoBuPlayable : PlayableBase
 {
+
     protected override void Skill()
     {
         if (currentTarget == null)

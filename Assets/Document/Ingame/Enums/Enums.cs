@@ -213,7 +213,9 @@ public enum WeaponType
 {
     Pistol,
     Rifle,
-    Cannon
+    Cannon,
+    Mssile,
+    Bullet
 }
 
 public enum EffectId

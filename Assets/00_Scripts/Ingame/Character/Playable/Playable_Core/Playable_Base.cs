@@ -13,6 +13,7 @@ public abstract class PlayableBase : CharacterBase
     public PlayableID playableID;
     public PlayableType playableType;
 
+    //이것도 캐릭터마다 필요한게 다를텐데 오버라이딩으로 하고싶네..
     [Header("Game Object References")]
     public WeaponType equippedWeapon;
     public GameObject bullet;
