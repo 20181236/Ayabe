@@ -18,6 +18,7 @@ MonoBehaviour:
   castType: 1
   areaType: 1
   castEffectId: 1
+  buffData: {fileID: 11400000, guid: 7eed983d60e6469499fd14cc7bc39f0e, type: 2}
   weaponPrefab: {fileID: 0}
   icon: {fileID: 21300000, guid: 144b0e966f2e8a941ae8433aacc0429b, type: 3}
   skillCutInImage: {fileID: 21300000, guid: 9b29f24f0b7edaf4d985adf5882ac3f9, type: 3}

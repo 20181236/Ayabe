@@ -14,10 +14,10 @@ public class PlayableData : ScriptableObject
     public float maxHealth;
     public float attackPower;
     public float attackRange;
-    public float AttackInterval;
+    public float AttackSpeed;
     public float HealPower;
-    public float skillInterval;
-    public float exSkillInterval;
+    public float skillCoolTime;
+    public float exSkillCoolTime;
     public float moveSpeed;
 
     public SkillData exSkillData;  // 고유 Ex스킬 데이터 연결

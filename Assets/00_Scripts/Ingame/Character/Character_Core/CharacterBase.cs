@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using UnityEngine.VFX;
+using static UnityEditor.VersionControl.Asset;
 
 public abstract class CharacterBase : MonoBehaviour
 {
@@ -16,50 +18,70 @@ public abstract class CharacterBase : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public Animator animator;
 
+    [Header("Base Stats")]
     public float baseMaxHealth;
     public float buffedMaxHealth;
     public float currentHealth;
-    public float MaxHealth => baseMaxHealth + buffedMaxHealth;
     public float CurrentHealth => currentHealth;
+
+    public float MaxHealth => baseMaxHealth + buffedMaxHealth;
+
     public float baseAttackPower;
     public float buffedAttackPower;
     public float AttackPower => baseAttackPower + buffedAttackPower;
+
     public float baseAttackRange;
     public float buffedAttackRange;
     public float AttackRange => baseAttackRange + buffedAttackRange;
-    public float baseAttackInterval;
-    public float buffedAttackInterval;
-    public float AttackInterval => baseAttackInterval + buffedAttackInterval;
+
+    public float baseAttackSpeed; 
+    public float buffedAttackSpeed;
+    public float AttackSpeed => baseAttackSpeed + buffedAttackSpeed;
+
     public float baseHealPower;
     public float buffedHealPower;
     public float HealPower => baseHealPower + buffedHealPower;
-    public float basicAttackTimer;
-    public float basicAttackCount;
-    public float skillInterval;
-    public float skillTimer;
-    public float exSkillInterval;
-    public float exSkillTimer;
+
     public float moveSpeed;
-    public float distance;
-    public bool isCreate;
-    public bool isIdle;
-    public bool isChase;
-    public bool isAttack;
-    public bool isAttacking;
-    public bool isBasicAttack;
-    public bool isSkill;
-    public bool isUsingSkill;
-    public bool isExSkill;
-    public bool isUsingExSkill;
-    public bool isDead;
-    public bool checkInAttackRange;
+
+    [Header("Universal States")]
+    public float distance; // 타겟과의 거리는 범용적으로 사용될 수 있습니다.
+    public bool isAttacking; // 공격 애니메이션 재생 중임을 알리는 '잠금' 플래그
+    public bool isDead;      // 모든 캐릭터는 죽을 수 있습니다.
+
+    [Header("Cooldowns")]
+    public float skillTimer;
+    public float exSkillTimer;
     public bool readyBasicAttack;
     public bool readySkill;
     public bool readyExSkill;
 
+    [Header("BasicAttack")]
+    //public float basicAttackSpeed;
+    public float basicAttackTimer;
+
+    [Header("SkillCoolTime")]
+    public float skillCoolTime;
+    public float exSkillCoolTime;
+
+    public float basicAttackCount;
+
+    public bool isCreate;
+    public bool isIdle;
+    public bool isChase;
+    public bool isAttack;
+
+    public bool isBasicAttack;
+    public bool isSkill;
+    public bool isUsingSkill;
+
+    public bool isExSkill;
+    public bool isUsingExSkill;
+
+    public bool checkInAttackRange;
+
     public Transform headTransform;
     public Transform bulletFirePoint;
-    // protected CharacterBase currentTarget; // 자식 클래스에서 선언
 
     [Header("Health Bar")]
     [SerializeField] protected HealthBarController healthBarPrefab;
@@ -68,10 +90,6 @@ public abstract class CharacterBase : MonoBehaviour
     [Header("Buff System")]
     public List<Buff> activeBuffs = new List<Buff>();
     [HideInInspector] public BuffManager buffManager;
-
-    // 이 클래스에서는 상태 Enum을 제거하고 자식 클래스에서 직접 관리합니다.
-    // public CharacterState currentState;
-
 
     protected virtual void Awake()
     {
@@ -125,6 +143,7 @@ public abstract class CharacterBase : MonoBehaviour
         }
     }
 
+
     protected virtual void CoolTime() { }
     protected virtual void AttackThinking() { }
     protected virtual void BasicAttack() { }
@@ -160,11 +179,21 @@ public abstract class CharacterBase : MonoBehaviour
     }
 
     // ... Buff 관련 메서드들은 동일 ...
+    // BuffManager에게 버프 적용을 위임하는 메서드
     public void ApplyBuff(BuffData data, CharacterBase caster)
     {
+        Debug.Log($"Applying Buff {data.buffId} to {name}, AttackPower={AttackPower}");
+
+        if (data == null)
+        {
+            Debug.LogError($"[{name}] ApplyBuff 호출 시 BuffData가 null입니다.");
+            return;
+        }
+
         if (this.buffManager != null)
         {
             Debug.Log($"[{caster.name}]이(가) [{this.name}]에게 버프 적용: {data.buffId} / 값: {data.value} / 타입: {data.applyType}");
+            // 이제 CharacterBase는 BuffManager에게 버프를 적용해달라고 요청만 함
             this.buffManager.ApplyBuff(data, this, caster);
         }
         else
@@ -172,84 +201,55 @@ public abstract class CharacterBase : MonoBehaviour
             Debug.LogWarning($"[{this.name}]의 BuffManager가 할당되지 않았습니다.");
         }
     }
-    public void RemoveBuff(Buff buffToRemove)
-    {
-        if (activeBuffs.Remove(buffToRemove)) RecalculateBuffedStats();
-    }
+
     public void RecalculateBuffedStats()
     {
         buffedMaxHealth = 0f;
         buffedAttackPower = 0f;
         buffedAttackRange = 0f;
-        buffedAttackInterval = 0f;
+        buffedAttackSpeed = 0f;
         buffedHealPower = 0f;
+
         foreach (var buff in activeBuffs)
         {
-            float buffValue = buff.value;
-            switch (buff.applyType)
+            if (buff.applyType == BuffApplyType.Burst || buff.applyType == BuffApplyType.Continuous)
             {
-                case BuffApplyType.Burst:
-                case BuffApplyType.Tick:
-                    switch (buff.targetStat)
-                    {
-                        case BuffStatType.MaxHealth: buffedMaxHealth += baseMaxHealth * buffValue; break;
-                        case BuffStatType.AttackPower: buffedAttackPower += baseAttackPower * buffValue; break;
-                        case BuffStatType.AttackRange: buffedAttackRange += baseAttackRange * buffValue; break;
-                        case BuffStatType.AttackInterval: buffedAttackInterval += baseAttackInterval * buffValue; break;
-                        case BuffStatType.HealPower: buffedHealPower += baseHealPower * buffValue; break;
-                    }
-                    break;
-                case BuffApplyType.Continuous:
-                    switch (buff.targetStat)
-                    {
-                        case BuffStatType.MaxHealth: buffedMaxHealth += baseMaxHealth * buffValue; break;
-                        case BuffStatType.AttackPower: buffedAttackPower += baseAttackPower * buffValue; break;
-                        case BuffStatType.AttackRange: buffedAttackRange += baseAttackRange * buffValue; break;
-                        case BuffStatType.AttackInterval: buffedAttackInterval += baseAttackInterval * buffValue; break;
-                        case BuffStatType.HealPower: buffedHealPower += baseHealPower * buffValue; break;
-                    }
-                    break;
+                switch (buff.targetStat)
+                {
+                    case BuffStatType.AttackPower:
+                        buffedAttackPower += baseAttackPower * buff.value;
+                        break;
+                    case BuffStatType.MaxHealth:
+                        buffedMaxHealth += baseMaxHealth * buff.value;
+                        break;
+                    case BuffStatType.AttackRange:
+                        buffedAttackRange += baseAttackRange * buff.value;
+                        break;
+                    case BuffStatType.AttackSpeed:
+                        buffedAttackSpeed += baseAttackSpeed * buff.value;
+                        break;
+                    case BuffStatType.HealPower:
+                        buffedHealPower += baseHealPower * buff.value;
+                        break;
+                }
             }
         }
         Debug.Log($"Recalculated Stats: AttackPower={AttackPower}, MaxHealth={MaxHealth}");
         currentHealth = Mathf.Min(currentHealth, MaxHealth);
     }
-    private IEnumerator BuffRoutine(Buff buff)
-    {
-        float elapsed = 0f;
-        Debug.Log($"BuffRoutine 시작: {buff.targetStat}, applyType: {buff.applyType}, duration: {buff.duration}, tickInterval: {buff.tickInterval}");
-        if (buff.applyType == BuffApplyType.Tick)
-        {
-            float interval = Mathf.Max(buff.tickInterval, 0.1f);
-            while (elapsed < buff.duration)
-            {
-                Debug.Log($"BuffRoutine 진행중: elapsed={elapsed}");
-                yield return new WaitForSeconds(interval);
-                OnBuffTick(buff);
-                Debug.Log($"OnBuffTick 호출됨: {buff.targetStat}");
-                elapsed += interval;
-            }
-        }
-        else if (buff.applyType == BuffApplyType.Continuous)
-        {
-            yield return new WaitForSeconds(buff.duration);
-        }
-        else
-        {
-            OnBuffTick(buff);
-            Debug.Log($"OnBuffTick 호출됨 (Burst 타입): {buff.targetStat}");
-            yield return new WaitForSeconds(buff.duration);
-        }
-        Debug.Log($"BuffRoutine 종료: {buff.targetStat}");
-        activeBuffs.Remove(buff);
-        RecalculateBuffedStats();
-    }
     protected virtual void OnBuffTick(Buff buff)
     {
         switch (buff.targetStat)
         {
-            case BuffStatType.HealPower: Heal(baseHealPower * buff.value); break;
+            case BuffStatType.HealPower:
+                Heal(baseHealPower * buff.value); // Tick마다 회복
+                break;
         }
+    }
+    public void RemoveBuff(Buff buffToRemove)
+    { 
+        if (activeBuffs.Remove(buffToRemove))
+            RecalculateBuffedStats();
     }
     public Vector3 GetCasterPosition()
     {

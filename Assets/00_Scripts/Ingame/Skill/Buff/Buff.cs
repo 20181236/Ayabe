@@ -10,6 +10,7 @@ public class Buff
     public BuffApplyType applyType;
     public BuffStatType targetStat;
     public float value;
+    public float tickValue;
     public float duration;
     public float tickInterval;
 
@@ -18,7 +19,7 @@ public class Buff
     public CharacterBase owner;   // 버프 받는 대상
     public CharacterBase caster;  // 버프 건 주체 (캐스터)
 
-    public void Initialize(BuffID buffId, BuffGroup group, BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float duration, float tickInterval = 0f, Sprite buffIcon = null, CharacterBase caster = null)
+    public void Initialize(BuffID buffId, BuffGroup group, BuffCategory category, BuffApplyType applyType, BuffStatType stat, float value, float tickValue, float duration, float tickInterval = 0f, Sprite buffIcon = null, CharacterBase caster = null)
     {
         this.buffId = buffId;
         this.category = category;
@@ -26,6 +27,7 @@ public class Buff
         this.applyType = applyType;
         this.targetStat = stat;
         this.value = value;
+        this.tickValue = tickValue;
         this.duration = duration;
         this.tickInterval = tickInterval;
         this.buffIcon = buffIcon;  // 아이콘 저장

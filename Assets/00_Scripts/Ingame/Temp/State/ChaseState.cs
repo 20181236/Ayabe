@@ -1,33 +1,57 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-//public class ChaseState : MonoBehaviour, PlayableStateInterface
-//{
-//    private PlayableBase playable;
+public class ChaseState : PlayableStateInterface
+{
+    private PlayableBase owner;
 
-//    public void Enter(PlayableBase p)
-//    {
-//        playable = p;
-//        playable.animator.SetBool("isChase", true);
-//    }
+    public void Enter(PlayableBase playable)
+    {
+        this.owner = playable;
 
-//    public void Update()
-//    {
-//        if (playable.currentTarget != null)
-//        {
-//            playable.MoveToTarget(playable.currentTarget.transform.position);
+        owner.animator.SetBool("isStandby", false); // 추격 중에는 전투 대기 상태가 아님
 
-//            // 타겟이 공격 범위 안에 들어오면 Attack 상태로 전환
-//            if (playable.HasTargetInRange())
-//            {
-//                playable.ChangeState(new AttackState());
-//            }
-//        }
-//    }
+        if (owner.navMeshAgent != null && owner.navMeshAgent.enabled)
+        {
+            owner.navMeshAgent.isStopped = false;
+        }
+    }
 
-//    public void Exit()
-//    {
-//        playable.animator.SetBool("isChase", false);
-//    }
-//}
+    public void Update()
+    {
+        if (owner.currentTarget == null || owner.currentTarget.isDead)
+        {
+            owner.TransitionToState(PlayableBase.PlayableState.Idle);
+            return;
+        }
+
+        owner.UpdateTargetAndDistance();
+
+        // 공격 범위에 들어왔을 때,
+        if (owner.distance <= owner.AttackRange)
+        {
+            // 금 다른 공격을 하고 있는 중이 아닐 때만 AttackState로 전환합니다.
+            if (!owner.isAttacking)
+            {
+                owner.TransitionToState(PlayableBase.PlayableState.Attack);
+            }
+        }
+        // 공격 범위 밖에 있다면 계속 추적합니다.
+        else
+        {
+            owner.navMeshAgent.SetDestination(owner.currentTarget.transform.position);
+            float speedPercent = owner.navMeshAgent.velocity.magnitude / owner.navMeshAgent.speed;
+            owner.animator.SetFloat("moveSpeed", Mathf.Clamp(speedPercent, 0.01f, 1f));
+        }
+    }
+
+    public void Exit()
+    {
+        if (owner.navMeshAgent != null && owner.navMeshAgent.enabled)
+        {
+            owner.navMeshAgent.isStopped = true;
+        }
+        owner.animator.SetFloat("moveSpeed", 0f);
+    }
+}

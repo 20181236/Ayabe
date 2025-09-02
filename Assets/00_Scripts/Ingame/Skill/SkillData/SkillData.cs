@@ -12,6 +12,8 @@ public class SkillData : ScriptableObject
     public AreaType areaType;   // 장판이 딜인지 힐인지 구분
     public EffectId castEffectId;
 
+    public BuffData buffData;
+
     public GameObject weaponPrefab;
     public Sprite icon;
 

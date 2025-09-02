@@ -1,60 +1,22 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-//public class AttackState : MonoBehaviour
-//{
-//    private PlayableBase playable;
-//    private PlayableAttackState currentAttackState;
+public class AttackState : PlayableStateInterface
+{
+    public void Enter(PlayableBase owner)
+    {
+        // 1. 상태에 진입하자마자 공격을 실행합니다.
+        owner.ExecuteAttackAction();
 
-//    public void Enter(PlayableBase p)
-//    {
-//        playable = p;
-//        currentAttackState = PlayableAttackState.BasicAttack;
-//        playable.animator.SetBool("isAttack", true);
-//    }
+        // 2. 공격 실행 후, 다음 프레임에 곧바로 Standby 상태로 돌아가 대기합니다.
+        owner.TransitionToState(PlayableBase.PlayableState.Standby);
+    }
 
-//    public void Update()
-//    {
-//        switch (currentAttackState)
-//        {
-//            case PlayableAttackState.BasicAttack:
-//                if (playable.readyBasicAttack)
-//                {
-//                    playable.BasicAttack();
-//                }
-//                break;
-//            case PlayableAttackState.Skill:
-//                if (playable.readySkill)
-//                {
-//                    playable.Skill();
-//                }
-//                break;
-//            case PlayableAttackState.ExSkill:
-//                if (playable.readyExSkill)
-//                {
-//                    playable.ExSkill();
-//                }
-//                break;
-//            case PlayableAttackState.Reload:
-//                playable.Reload();
-//                break;
-//        }
+    public void Update()
+    {
+        // Enter에서 모든 것을 처리하므로 Update는 비워둡니다.
+    }
 
-//        // 공격 대상이 범위를 벗어나면 Chase 상태로 전환
-//        if (!playable.HasTargetInRange())
-//        {
-//            playable.ChangeState(new ChaseState());
-//        }
-//    }
-
-//    public void Exit()
-//    {
-//        playable.animator.SetBool("isAttack", false);
-//    }
-
-//    public void SetAttackState(PlayableAttackState state)
-//    {
-//        currentAttackState = state;
-//    }
-//}
+    public void Exit() { }
+}

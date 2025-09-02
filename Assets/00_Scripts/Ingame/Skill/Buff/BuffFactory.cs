@@ -14,6 +14,7 @@ public static class BuffFactory
             data.applyType,
             data.targetStat,
             data.value,
+            data.tickValue,
             data.duration,
             data.tickInterval
         );
@@ -28,13 +29,14 @@ public static class BuffFactory
         BuffStatType stat,
         float value,
         float duration,
+        float tickValue,
         BuffApplyType applyType = BuffApplyType.Tick,
         float tickInterval = 1f,
         Sprite buffIcon = null
     )
     {
         var buff = ScriptableObject.CreateInstance<BuffData>();
-        buff.SetData(buffId, group, category, stat, value, duration, applyType, tickInterval, buffIcon);
+        buff.SetData(buffId, group, category, stat, value, tickValue, duration, applyType, tickInterval, buffIcon);
         return buff;
     }
 

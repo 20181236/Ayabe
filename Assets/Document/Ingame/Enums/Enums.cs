@@ -116,7 +116,7 @@ public enum BuffStatType
 {
     MaxHealth,       // 최대 체력
     AttackPower,     // 공격력
-    AttackInterval,     // 공격 속도 (속도는 증가, 쿨타임 감소)
+    AttackSpeed,     // 공격 속도 (속도는 증가, 쿨타임 감소)
     AttackRange,      // 공격 사거리
     CriticalRate,    // 치명타 확률
     CriticalDamage, //치명타 데미지 증가

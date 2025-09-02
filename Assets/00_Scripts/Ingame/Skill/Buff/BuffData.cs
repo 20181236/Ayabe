@@ -13,6 +13,7 @@ public class BuffData : ScriptableObject, InterfaceBuff
 
     [Header("버프 수치")]
     [SerializeField] private float _value; // 0.1f == +10%
+    [SerializeField] private float _tickValue;
     [SerializeField] private float _duration = 5f;
     [SerializeField] private float _tickInterval = 1f;
 
@@ -22,6 +23,7 @@ public class BuffData : ScriptableObject, InterfaceBuff
     public BuffApplyType applyType => _applyType;
     public BuffStatType targetStat => _targetStat;
     public float value => _value;
+    public float tickValue => _tickValue;
     public float duration => _duration;
     public float tickInterval => _tickInterval;
     public Sprite buffIcon => _buffIcon;
@@ -32,6 +34,7 @@ public class BuffData : ScriptableObject, InterfaceBuff
         BuffCategory category,
         BuffStatType stat,
         float value,
+        float tickValue,
         float duration,
         BuffApplyType applyType,
         float tickInterval,
@@ -43,6 +46,7 @@ public class BuffData : ScriptableObject, InterfaceBuff
         _category = category;
         _targetStat = stat;
         _value = value;
+        _tickValue = tickValue;
         _duration = duration;
         _applyType = applyType;
         _tickInterval = tickInterval;

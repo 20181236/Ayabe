@@ -19,9 +19,9 @@ MonoBehaviour:
   maxHealth: 5000
   attackPower: 30
   attackRange: 50
-  AttackInterval: 2
-  HealPower: 100
-  skillInterval: 5
-  exSkillInterval: 5
+  AttackSpeed: 2
+  HealPower: 10
+  skillCoolTime: 0
+  exSkillCoolTime: 0
   moveSpeed: 10
   exSkillData: {fileID: 11400000, guid: 455bf3096de623742940f927dc3b3055, type: 2}

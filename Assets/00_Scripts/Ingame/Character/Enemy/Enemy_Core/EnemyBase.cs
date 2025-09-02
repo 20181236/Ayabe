@@ -102,7 +102,7 @@ public class EnemyBase : CharacterBase
         baseMaxHealth = data.maxHealth;
         baseAttackPower = data.attackPower;
         baseAttackRange = data.attackRange;
-        baseAttackInterval = data.AttackInterval;
+        baseAttackSpeed = data.AttackInterval;
         baseHealPower = data.HealPower;
         moveSpeed = data.moveSpeed;
         if (navMeshAgent != null) navMeshAgent.speed = moveSpeed;
@@ -137,17 +137,17 @@ public class EnemyBase : CharacterBase
     protected override void CoolTime()
     {
         basicAttackTimer += Time.deltaTime;
-        if (basicAttackTimer >= AttackInterval)
+        if (basicAttackTimer >= AttackSpeed)
         {
             readyBasicAttack = true;
         }
         skillTimer += Time.deltaTime;
-        if (skillTimer >= skillInterval)
+        if (skillTimer >= skillCoolTime)
         {
             readySkill = true;
         }
         exSkillTimer += Time.deltaTime;
-        if (exSkillTimer >= exSkillInterval)
+        if (exSkillTimer >= exSkillCoolTime)
         {
             readyExSkill = true;
         }
@@ -163,7 +163,7 @@ public class EnemyBase : CharacterBase
         {
             Skill();
         }
-        else if (exSkillTimer >= exSkillInterval)
+        else if (exSkillTimer >= exSkillCoolTime)
         {
             ExSkill();
         }

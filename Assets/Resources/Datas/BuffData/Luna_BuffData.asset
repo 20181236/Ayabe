@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 865260c2576098449b9793bf5fbdca25, type: 3}
   m_Name: Luna_BuffData
   m_EditorClassIdentifier: 
-  _buffId: 0
+  _buffId: 1
   _group: 0
   _category: 0
   _applyType: 0
