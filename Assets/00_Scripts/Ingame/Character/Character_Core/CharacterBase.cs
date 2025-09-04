@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using UnityEngine.VFX;
-using static UnityEditor.VersionControl.Asset;
 
 public abstract class CharacterBase : MonoBehaviour
 {

@@ -62,7 +62,7 @@ public class StartAndResult : MonoBehaviour
     {
         uiHUD.SetActive(false);
         helathBar.SetActive(false);
-        bossHelathBar.SetActive(false) ;
+        bossHelathBar.SetActive(false);
 
         // 공통: 배경
         darkOverlay.SetActive(state != StageState.None);
@@ -95,7 +95,13 @@ public class StartAndResult : MonoBehaviour
             resultImage.gameObject.SetActive(false);
 
             // 여기서 나머지 UI(버튼, 상세 결과 패널 등) 켜기
-             okButton.gameObject.SetActive(true);
+            okButton.gameObject.SetActive(true);
         }
+    }
+    public void ShowStageStartUI()
+    {
+        uiHUD.SetActive(true);
+        helathBar.SetActive(true);
+        bossHelathBar.SetActive(StageManager.instance.hasBoss);
     }
 }

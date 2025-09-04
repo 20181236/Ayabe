@@ -135,7 +135,6 @@ public abstract class PlayableBase : CharacterBase
     {
         basicAttackTimer += Time.deltaTime;
 
-        // AttackSpeed가 0이 되어 0으로 나누는 에러를 방지하기 위해 안전장치를 추가합니다.
         if (AttackSpeed > 0)
         {
             // 공격 간격은 '1 / 공격 속도'가 됩니다.
@@ -146,11 +145,11 @@ public abstract class PlayableBase : CharacterBase
             readyBasicAttack = false;
         }
 
-            skillTimer += Time.deltaTime;
-        readySkill = skillTimer >= skillCoolTime; // 스킬 쿨타임도 주석 해제
+        skillTimer += Time.deltaTime;
+        readySkill = skillTimer >= skillCoolTime;
 
         exSkillTimer += Time.deltaTime;
-        readyExSkill = exSkillTimer >= exSkillCoolTime; // EX스킬 쿨타임도 주석 해제
+        readyExSkill = exSkillTimer >= exSkillCoolTime;
     }
 
     public virtual void UpdateTargetAndDistance()
@@ -353,375 +352,39 @@ public abstract class PlayableBase : CharacterBase
         foreach (MeshRenderer mesh in meshs) mesh.material.color = restoreColor;
     }
 
+    // 추가: 애니메이션 이벤트에서 호출
+    public void OnSpawnAnimationEnd()
+    {
+        // 현재 상태가 CreateState일 때만 Idle로 전환
+        if (CurrentState is CreateState)
+        {
+            TransitionToState(PlayableState.Idle);
+        }
+    }
+
+    public void EnableActions()
+    {
+        if (navMeshAgent != null) navMeshAgent.isStopped = false;
+        isAttacking = false;
+        isUsingSkill = false;
+    }
+
+    // 캐릭터 행동 정지
+    public void DisableActions()
+    {
+        if (navMeshAgent != null) navMeshAgent.isStopped = true;
+        isAttacking = true;
+        isUsingSkill = true;
+    }
+
     // State Pattern으로 대체되어 제거된 메서드들:
     // - CheckingAttackRange()
     // - HandleState()
     // - MoveToTarget()
-    private void OnDrawGizmosSelected()
-    {
-        // 공격 사거리를 나타내는 원을 그립니다.
-        Gizmos.color = Color.red; // 원의 색상을 빨간색으로 설정
-        Gizmos.DrawWireSphere(transform.position, AttackRange); // 현재 위치를 중심으로 AttackRange만큼의 반지름을 가진 원을 그림
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    // 공격 사거리를 나타내는 원을 그립니다.
+    //    Gizmos.color = Color.red; // 원의 색상을 빨간색으로 설정
+    //    Gizmos.DrawWireSphere(transform.position, AttackRange); // 현재 위치를 중심으로 AttackRange만큼의 반지름을 가진 원을 그림
+    //}
 }
-
-//public abstract class PlayableBase : CharacterBase
-//{
-//    public override ObjectType ObjectType => ObjectType.Playable;
-//    public enum PlayableState { Idle, Chasing, Attack, Dead, Create }
-
-//    [Header("Playable Settings")]
-//    public PlayableID playableID;
-//    public PlayableType playableType;
-
-//    [Header("Game Object References")]
-//    public WeaponType equippedWeapon;
-//    public GameObject bullet;
-//    public GameObject missile;
-//    public Transform excapeSpotTransform;
-
-//    [HideInInspector] public PlayableState currentState;
-//    protected EnemyBase currentTarget;
-
-//    [Header("Skill System")]
-//    public SkillData exSkillData;
-//    protected SkillBase exSkill;
-//    protected Vector3 exSkillTargetPosition;
-//    public List<SkillId> ownedSkills;
-//    public SkillSlot exSkillSlot;
-
-
-//    protected override void Awake()
-//    {
-//        base.Awake();
-
-//        if (PlayableManager.instance != null)
-//            PlayableManager.instance.RegisterPlayable(this);
-
-//        currentState = PlayableState.Create;
-//        isCreate = true;
-//        Initialize();
-//        readyBasicAttack = true;
-//        readySkill = false;
-//        readyExSkill = false;
-//    }
-
-//    protected override void Start()
-//    {
-//        InitHealthBar();
-//    }
-
-//    protected override void Update()
-//    {
-//        if (isDead) return;
-
-//        CoolTime();
-//        UpdateTargetAndDistance();
-//        CheckingAttackRange();
-//        HandleState();
-//    }
-
-//    protected override void FixedUpdate()
-//    {
-//        if (isDead) return;
-
-//        if (currentState == PlayableState.Chasing && currentTarget != null)
-//        {
-//            MoveToTarget(currentTarget.transform.position);
-//        }
-//    }
-
-//    protected override void Initialize()
-//    {
-//        base.Initialize();
-//        currentState = PlayableState.Idle;
-//        isIdle = true;
-//        isUsingSkill = false;
-
-//        if (navMeshAgent != null)
-//            navMeshAgent.speed = moveSpeed;
-//    }
-
-//    public virtual void SetData(PlayableData data)
-//    {
-//        playableType = data.playableType;
-//        baseMaxHealth = data.maxHealth;
-//        baseAttackPower = data.attackPower;
-//        baseAttackRange = data.attackRange;
-//        baseAttackInterval = data.AttackInterval;
-//        baseHealPower = data.HealPower;
-//        moveSpeed = data.moveSpeed;
-//        skillInterval = data.skillInterval;
-//        exSkillData = data.exSkillData;
-//        exSkillInterval = data.exSkillInterval;
-
-//        if (navMeshAgent != null) navMeshAgent.speed = moveSpeed;
-//        if (exSkillSlot != null) exSkillSlot.Setup(exSkillData, this);
-//        Initialize();
-//    }
-
-//    public void SetExSkill(SkillBase skill)
-//    {
-//        exSkill = skill;
-//    }
-
-
-//    protected override void CoolTime()
-//    {
-//        basicAttackTimer += Time.deltaTime;
-//        readyBasicAttack = basicAttackTimer >= AttackInterval;
-
-//        skillTimer += Time.deltaTime;
-//        readySkill = skillTimer >= skillInterval;
-
-//        exSkillTimer += Time.deltaTime;
-//        readyExSkill = exSkillTimer >= exSkillInterval;
-//    }
-
-//    protected virtual void UpdateTargetAndDistance()
-//    {
-//        if (isDead) return;
-
-//        currentTarget = GetNearestEnemyToPosition(transform.position);
-//        if (currentTarget == null || currentTarget.ObjectType == this.ObjectType)
-//        {
-//            currentTarget = null;
-//            distance = Mathf.Infinity;
-//            return;
-//        }
-
-//        distance = Vector3.Distance(transform.position, currentTarget.transform.position);
-//    }
-
-//    protected virtual void CheckingAttackRange()
-//    {
-//        if (currentTarget == null)
-//        {
-//            currentState = PlayableState.Idle;
-//            return;
-//        }
-
-//        currentState = distance <= AttackRange ? PlayableState.Attack : PlayableState.Chasing;
-//    }
-
-//    void HandleState()
-//    {
-//        switch (currentState)
-//        {
-//            case PlayableState.Idle:
-//                isIdle = true;
-//                isChase = false;
-//                isAttack = false;
-//                animator.SetFloat("moveSpeed", 0f);
-//                if (navMeshAgent != null) navMeshAgent.isStopped = true;
-//                break;
-
-//            case PlayableState.Chasing:
-//                isIdle = false;
-//                isChase = true;
-//                isAttack = false;
-//                if (navMeshAgent != null && navMeshAgent.enabled && currentTarget != null)
-//                {
-//                    navMeshAgent.isStopped = false;
-//                    MoveToTarget(currentTarget.transform.position);
-//                    float speedPercent = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
-//                    speedPercent = Mathf.Clamp(speedPercent, 0.01f, 1f);
-//                    animator.SetFloat("moveSpeed", speedPercent);
-//                }
-//                break;
-
-//            case PlayableState.Attack:
-//                isIdle = false;
-//                isChase = false;
-//                isAttack = true;
-//                if (navMeshAgent != null) navMeshAgent.isStopped = true;
-//                AttackThinking();
-//                break;
-//        }
-//    }
-
-//    void MoveToTarget(Vector3 targetPosition)
-//    {
-//        if (navMeshAgent != null)
-//        {
-//            navMeshAgent.SetDestination(targetPosition);
-//        }
-//    }
-
-//    protected override void AttackThinking()
-//    {
-//        if (isAttacking) return;
-
-//        if (readyBasicAttack && !isUsingSkill && !isUsingExSkill)
-//        {
-//            BasicAttack();
-//            return;
-//        }
-
-//        if (readySkill && !isUsingSkill && !isUsingExSkill)
-//        {
-//            Skill();
-//            return;
-//        }
-
-//        if (readyExSkill && !isUsingSkill && !isUsingExSkill)
-//        {
-//            ExSkill();
-//        }
-//    }
-
-//    protected override void BasicAttack()
-//    {
-//        if (!isAttack || currentTarget == null || currentTarget.isDead)
-//            return;
-
-//        StartCoroutine(DoBasicAttack());
-//    }
-
-//    private IEnumerator DoBasicAttack()
-//    {
-//        isAttacking = true;
-
-//        // 공속에 맞춰 애니메이션 속도 설정
-//        float animSpeed = 1f / AttackInterval;
-//        animator.SetFloat("attackSpeed", animSpeed);
-
-//        animator.SetBool("isAttack", true);
-
-//        // 애니메이션 끝날 때까지 대기
-//        float animLength = animator.GetCurrentAnimatorStateInfo(0).length;
-//        yield return new WaitForSeconds(animLength / animSpeed);
-
-//        animator.SetBool("isAttack", false);
-//        isAttacking = false;
-//        currentState = PlayableState.Idle;
-
-//        // 공격 쿨타임 초기화
-//        basicAttackTimer = 0f;
-//        readyBasicAttack = false;
-//    }
-
-//    // 애니메이션 이벤트에서 총알 발사
-//    public void OnAttackHit()
-//    {
-//        ShootBulletAtTarget();
-//    }
-
-
-//    protected override void ShootBulletAtTarget()
-//    {
-//        if (currentTarget == null || currentTarget.isDead) return;
-
-//        Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
-//        transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-
-//        Bullet bullet = BulletPoolManager.instance.GetBullet(BulletPoolManager.PoolType.PlayableBullet);
-//        if (bullet != null)
-//        {
-//            bullet.transform.position = bulletFirePoint.position;
-//            bullet.transform.rotation = Quaternion.LookRotation(direction);
-//            bullet.SetDamageFromStat(this.AttackPower);
-//            bullet.ShooterType = this.ObjectType;
-
-//            Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
-//            if (bulletRigidbody != null)
-//            {
-//                bulletRigidbody.velocity = direction * bullet.speed;
-//            }
-//        }
-//    }
-
-//    protected override void Skill() { }
-
-//    protected override void ExSkill()
-//    {
-//        if (exSkill == null) return;
-
-//        SkillContext context = new SkillContext
-//        {
-//            Caster = gameObject,
-//            TargetPosition = exSkillTargetPosition
-//        };
-//        exSkill.Execute(context);
-
-//        exSkillTimer = 0;
-//        readyExSkill = false;
-//    }
-
-//    public EnemyBase GetNearestEnemyToPosition(Vector3 position)
-//    {
-//        EnemyBase nearestEnemy = null;
-//        float minDist = Mathf.Infinity;
-
-//        foreach (var enemy in EnemyManager.instance.enemies)
-//        {
-//            if (enemy == null || enemy.isDead) continue;
-
-//            float dist = Vector3.Distance(position, enemy.transform.position);
-//            if (dist < minDist)
-//            {
-//                minDist = dist;
-//                nearestEnemy = enemy;
-//            }
-//        }
-//        return nearestEnemy;
-//    }
-
-//    void OnTriggerEnter(Collider other)
-//    {
-//        if (other.TryGetComponent<ProjectileBase>(out var projectile))
-//        {
-//            if (projectile.ShooterType == this.ObjectType) return;
-
-//            float damage = projectile.damage;
-//            ApplyDamage(damage, false);
-
-//            if (projectile is Bullet bullet)
-//                BulletPoolManager.instance.ReturnBullet(bullet);
-//            else
-//                Destroy(projectile.gameObject);
-//        }
-//    }
-
-//    public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
-//    {
-//        currentHealth -= damage;
-//        if (currentHealth <= 0 && !isDead) Die();
-
-//        DamageManager.instance.ShowDamage(headTransform.position, Mathf.FloorToInt(damage));
-
-//        if (healthBarInstance != null)
-//            healthBarInstance.SetHealth(currentHealth);
-
-//        StartCoroutine(OnDamage(isExplosion));
-//    }
-
-//    protected override void Die()
-//    {
-//        base.Die();
-//        SkillPanel.instance.ClearSkillsForCaster(this);
-//    }
-
-//    protected override void OnDestroyed()
-//    {
-//        if (PlayableManager.instance != null)
-//            PlayableManager.instance.UnregisterPlayable(this);
-//        base.OnDestroyed();
-//    }
-
-//    IEnumerator OnDamage(bool isExplosion)
-//    {
-//        foreach (MeshRenderer mesh in meshs) mesh.material.color = Color.red;
-
-//        if (isExplosion && navMeshAgent != null && navMeshAgent.enabled)
-//            navMeshAgent.enabled = false;
-
-//        yield return new WaitForSeconds(0.1f);
-
-//        if (isExplosion && navMeshAgent != null && !isDead)
-//            navMeshAgent.enabled = true;
-
-//        Color restoreColor = currentHealth > 0 ? Color.white : Color.gray;
-//        foreach (MeshRenderer mesh in meshs) mesh.material.color = restoreColor;
-//    }
-//}
