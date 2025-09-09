@@ -39,6 +39,7 @@ public enum StageState
     None,
     Starting,
     Playing,
+    Boss,
     Paused,
     End,
     Victory,

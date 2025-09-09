@@ -592,16 +592,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5704467011777348373}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 50, y: 50, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2383275141800895827}
   - {fileID: 5535623165424227867}
   - {fileID: 7118304852616942812}
   m_Father: {fileID: 8223468271567014412}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -90}
 --- !u!95 &1552273398443527664
 Animator:
   serializedVersion: 5
@@ -747,7 +747,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8223468271567014412}
-  - component: {fileID: 6060269354617471229}
   - component: {fileID: 4695479202306160998}
   - component: {fileID: 3101949999252343987}
   - component: {fileID: 2868136651991913489}
@@ -769,7 +768,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 50, y: 50, z: 50}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 298721279570059315}
@@ -779,33 +778,6 @@ Transform:
   - {fileID: 1619600472054347958}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &6060269354617471229
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8009809945130812139}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
 --- !u!65 &4695479202306160998
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -866,7 +838,6 @@ MonoBehaviour:
   meshs: []
   navMeshAgent: {fileID: 3101949999252343987}
   animator: {fileID: 1552273398443527664}
-  bulletFirePoint: {fileID: 4297665436268764774}
   baseMaxHealth: 0
   buffedMaxHealth: 0
   currentHealth: 0
@@ -874,38 +845,40 @@ MonoBehaviour:
   buffedAttackPower: 0
   baseAttackRange: 0
   buffedAttackRange: 0
-  baseAttackInterval: 0
-  buffedAttackInterval: 0
+  baseAttackSpeed: 0
+  buffedAttackSpeed: 0
   baseHealPower: 0
   buffedHealPower: 0
-  basicAttackTimer: 0
-  basicAttackCount: 0
-  skillInterval: 0
-  skillTimer: 0
-  exSkillInterval: 0
-  exSkillTimer: 0
   moveSpeed: 0
   distance: 0
+  isAttacking: 0
+  isDead: 0
+  skillTimer: 0
+  exSkillTimer: 0
+  readyBasicAttack: 0
+  readySkill: 0
+  readyExSkill: 0
+  basicAttackTimer: 0
+  skillCoolTime: 0
+  exSkillCoolTime: 0
+  basicAttackCount: 0
   isCreate: 0
   isIdle: 0
   isChase: 0
   isAttack: 0
-  isAttacking: 0
   isBasicAttack: 0
   isSkill: 0
   isUsingSkill: 0
   isExSkill: 0
   isUsingExSkill: 0
-  isDead: 0
   checkInAttackRange: 0
-  readyBasicAttack: 0
-  readySkill: 0
-  readyExSkill: 0
   headTransform: {fileID: 2690663887820057441}
+  bulletFirePoint: {fileID: 4297665436268764774}
   healthBarPrefab: {fileID: 0}
   buffManager: {fileID: 0}
   enemyID: 3
   enemyType: 2
+  enemyBulletFirePoint: {fileID: 0}
   currentState: 0
   skillDuration: 2
   missileSpawnDelay: 0.5

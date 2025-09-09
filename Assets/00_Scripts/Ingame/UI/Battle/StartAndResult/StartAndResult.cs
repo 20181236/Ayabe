@@ -21,9 +21,13 @@ public class StartAndResult : MonoBehaviour
 
     [SerializeField] private Button okButton;
 
-    [SerializeField] private GameObject helathBar;
-    [SerializeField] private GameObject bossHelathBar;
+    [SerializeField] private GameObject healthBar;
+    [SerializeField] private GameObject bossHealthBar;
     [SerializeField] private GameObject uiHUD;
+
+    [SerializeField] private GameObject skillUI;
+
+
 
     private void Awake()
     {
@@ -32,6 +36,7 @@ public class StartAndResult : MonoBehaviour
         startImage.SetActive(false);
         resultPanel.SetActive(false);
         okButton.gameObject.SetActive(false);
+        //skillUI.gameObject.SetActive(false);
     }
 
     public IEnumerator PlayStartSequence(float duration)
@@ -43,6 +48,9 @@ public class StartAndResult : MonoBehaviour
 
         startImage.SetActive(false);
         darkOverlay.SetActive(false);
+
+        bossHealthBar.SetActive(true);
+        skillUI.gameObject.SetActive(true);
     }
 
     private string FormatTime(float time)
@@ -61,8 +69,8 @@ public class StartAndResult : MonoBehaviour
     private IEnumerator ShowUISequence(StageState state, float battleTime)
     {
         uiHUD.SetActive(false);
-        helathBar.SetActive(false);
-        bossHelathBar.SetActive(false);
+        healthBar.SetActive(false);
+        //bossHealthBar.SetActive(false);
 
         // 공통: 배경
         darkOverlay.SetActive(state != StageState.None);
@@ -98,10 +106,12 @@ public class StartAndResult : MonoBehaviour
             okButton.gameObject.SetActive(true);
         }
     }
-    public void ShowStageStartUI()
+    public void ShowStageStartUI(bool hasBoss)
     {
         uiHUD.SetActive(true);
-        helathBar.SetActive(true);
-        bossHelathBar.SetActive(StageManager.instance.hasBoss);
+        healthBar.SetActive(true);
+
+        // 전달받은 hasBoss 정보를 사용 (더 이상 StageManager를 참조하지 않음)
+        bossHealthBar.SetActive(hasBoss);
     }
 }

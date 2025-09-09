@@ -19,7 +19,7 @@ MonoBehaviour:
   maxHealth: 5000
   attackPower: 30
   attackRange: 50
-  AttackSpeed: 2
+  AttackSpeed: 4
   HealPower: 10
   skillCoolTime: 0
   exSkillCoolTime: 0

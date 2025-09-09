@@ -6,21 +6,23 @@ public class StageStartingState : GameStateInterface
 {
     public void Enter(StageManager manager)
     {
-        // HUD는 꺼진 상태
-        manager.UIHUD.SetActive(false);
-        manager.HealthBar.SetActive(false);
-        manager.BossHealthBar.SetActive(false);
+        manager.StartCoroutine(StartSequence(manager));
+    }
 
-        manager.StartCoroutine(manager.PlayStartSequence());
+    private IEnumerator StartSequence(StageManager manager)
+    {
+        yield return manager.startAndResult.PlayStartSequence(manager.StartUIDuration);
+        manager.SetStageState(new StagePlayingState());
     }
 
     public void Update(StageManager manager)
     {
-        // 시작 UI는 PlayStartSequence 코루틴에서 처리
+        // 시작 상태에서는 특별한 Update 없음
     }
 
     public void Exit(StageManager manager)
     {
-        // 필요시 종료 처리
+        // 시작 UI 종료 시점에 추가 처리 가능
     }
 }
+

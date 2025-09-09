@@ -22,6 +22,7 @@ public class Boss : EnemyBase
     {
         base.Start();
 
+
         if (bossHpBar == null)
         {
             bossHpBar = FindObjectOfType<BossHpBar>();
@@ -36,7 +37,7 @@ public class Boss : EnemyBase
         bossHpBar.Show();
         bossHpBar.SetHP((int)CurrentHealth, (int)MaxHealth);
 
-        healthBarPrefab = null; healthBarInstance=null;
+        //healthBarPrefab = null; healthBarInstance=null;
     }
 
     protected override void Update()
@@ -105,11 +106,18 @@ public class Boss : EnemyBase
     }
     protected override void Die()
     {
-        if (bossHpBar != null)
-        {
-            bossHpBar.Hide();
-        }
-
+        bossHpBar?.Hide();
         base.Die();
     }
+
+    //protected override void Die()
+    //{
+    //    if (bossHpBar != null)
+    //    {
+    //        bossHpBar.Hide();
+    //    }
+    //    StageManager.instance.OnBossDefeated(); // ★ 여기서 처리
+
+    //    base.Die();
+    //}
 }

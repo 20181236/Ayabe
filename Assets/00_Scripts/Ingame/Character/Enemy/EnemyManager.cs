@@ -15,6 +15,7 @@ public class EnemyManager : MonoBehaviour
 
     public EnemyData[] enemyDatas; // 에디터에 드래그해서 연결할 수 있게
 
+
     private void Awake()
     {
         if (instance != null && instance != this)

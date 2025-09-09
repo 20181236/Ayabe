@@ -1,39 +1,24 @@
 public class StageEndState : GameStateInterface
 {
-    private StageState endState;
+    private StageState result;
 
-    public StageEndState(StageState state)
+    public StageEndState(StageState result)
     {
-        endState = state;
+        this.result = result;
     }
 
     public void Enter(StageManager manager)
     {
-        // HUD와 전투 관련 UI 끄기
-        manager.UIHUD.SetActive(false);
-        manager.HealthBar.SetActive(false);
-        manager.BossHealthBar.SetActive(false);
-
-        // 승리/패배 패널 처리
-        if (endState == StageState.Victory)
-        {
-            manager.VictoryPanel.SetActive(true);  // 승리 패널 켜기
-            manager.DefeatPanel.SetActive(false);  // 패배 패널 끄기
-        }
-        else if (endState == StageState.Defeat)
-        {
-            manager.DefeatPanel.SetActive(true);   // 패배 패널 켜기
-            manager.VictoryPanel.SetActive(false); // 승리 패널 끄기
-        }
+        manager.startAndResult.ShowUI(result, manager.battleTime);
     }
 
     public void Update(StageManager manager)
     {
-        // 별도 처리 필요 없으면 비워둬도 됨
+        // 엔드 상태에서는 특별히 업데이트할 필요 없음
     }
 
     public void Exit(StageManager manager)
     {
-        // 필요 시 종료 시 처리
+        // End UI 닫기 시점에 필요하면 처리
     }
 }

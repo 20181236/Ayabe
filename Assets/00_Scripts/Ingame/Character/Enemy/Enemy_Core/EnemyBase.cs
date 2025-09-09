@@ -94,6 +94,8 @@ public class EnemyBase : CharacterBase
         isUsingSkill = false;
         currentState = EnemyState.Idle;
         isIdle = true;
+
+        currentHealth = MaxHealth;
     }
 
     public virtual void SetData(EnemyData data)

@@ -15,11 +15,11 @@ MonoBehaviour:
   playableID: 1
   playableType: 1
   playableIcon: {fileID: 21300000, guid: e51358a42cd11dd4aa30db710d2e7e5b, type: 3}
-  prefab: {fileID: 2175214197470128850, guid: 59bd0d50a5a8d524cba698b71b03c9a2, type: 3}
+  prefab: {fileID: 6700842768440356415, guid: d4df8aab6df084b4c91c532bc3165062, type: 3}
   maxHealth: 5000
   attackPower: 80
   attackRange: 50
-  AttackSpeed: 2
+  AttackSpeed: 1
   HealPower: 100
   skillCoolTime: 0
   exSkillCoolTime: 0

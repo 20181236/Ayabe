@@ -663,14 +663,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978054833903736238}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0, y: 0, z: 0.5114773}
   m_LocalScale: {x: 849.6544, y: 849.6544, z: 849.6544}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7358709621047875694}
   m_Father: {fileID: 4104160047655823926}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &1090858592970827953
 GameObject:
   m_ObjectHideFlags: 0
@@ -3649,33 +3649,33 @@ MonoBehaviour:
   buffedAttackPower: 0
   baseAttackRange: 0
   buffedAttackRange: 0
-  baseAttackInterval: 0
-  buffedAttackInterval: 0
+  baseAttackSpeed: 0
+  buffedAttackSpeed: 0
   baseHealPower: 0
   buffedHealPower: 0
-  basicAttackTimer: 0
-  basicAttackCount: 0
-  skillInterval: 0
-  skillTimer: 0
-  exSkillInterval: 0
-  exSkillTimer: 0
   moveSpeed: 0
   distance: 0
+  isAttacking: 0
+  isDead: 0
+  skillTimer: 0
+  exSkillTimer: 0
+  readyBasicAttack: 0
+  readySkill: 0
+  readyExSkill: 0
+  basicAttackTimer: 0
+  skillCoolTime: 0
+  exSkillCoolTime: 0
+  basicAttackCount: 0
   isCreate: 0
   isIdle: 0
   isChase: 0
   isAttack: 0
-  isAttacking: 0
   isBasicAttack: 0
   isSkill: 0
   isUsingSkill: 0
   isExSkill: 0
   isUsingExSkill: 0
-  isDead: 0
   checkInAttackRange: 0
-  readyBasicAttack: 0
-  readySkill: 0
-  readyExSkill: 0
   headTransform: {fileID: 5693009463385022248, guid: 7516fb270456f2149af6dc4d73f2268b, type: 3}
   bulletFirePoint: {fileID: 3638027902137393175}
   healthBarPrefab: {fileID: 5824188954962644920, guid: 40983df85de2ad94fb6af3d3ad522b0e, type: 3}
@@ -3686,7 +3686,7 @@ MonoBehaviour:
   bullet: {fileID: 589644376409995535, guid: ad81f6d95223d0e44885783cb2c7ee76, type: 3}
   missile: {fileID: 7664551313295523910, guid: 95a965c89dc932e4387d19860fb5a301, type: 3}
   excapeSpotTransform: {fileID: 0}
-  currentState: 0
+  currentTarget: {fileID: 0}
   exSkillData: {fileID: 11400000, guid: 455bf3096de623742940f927dc3b3055, type: 2}
   ownedSkills: 
   exSkillSlot: {fileID: 0}
