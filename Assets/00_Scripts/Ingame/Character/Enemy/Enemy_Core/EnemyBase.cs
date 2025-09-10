@@ -106,8 +106,8 @@ public class EnemyBase : CharacterBase
         baseAttackRange = data.attackRange;
         baseAttackSpeed = data.AttackInterval;
         baseHealPower = data.HealPower;
-        moveSpeed = data.moveSpeed;
-        if (navMeshAgent != null) navMeshAgent.speed = moveSpeed;
+        baseMoveSpeed = data.moveSpeed;
+        if (navMeshAgent != null) navMeshAgent.speed = baseMoveSpeed;
         Initialize();
     }
 

@@ -72,7 +72,7 @@ public abstract class PlayableBase : CharacterBase
         base.Initialize();
         isUsingSkill = false;
         if (navMeshAgent != null)
-            navMeshAgent.speed = moveSpeed;
+            navMeshAgent.speed = baseMoveSpeed;
     }
 
     private void InitializeStates()
@@ -111,14 +111,14 @@ public abstract class PlayableBase : CharacterBase
 
         baseHealPower = data.HealPower;
 
-        moveSpeed = data.moveSpeed;
+        baseMoveSpeed = data.moveSpeed;
 
         skillCoolTime = data.skillCoolTime;
 
         exSkillData = data.exSkillData;
         exSkillCoolTime = data.exSkillCoolTime;
 
-        if (navMeshAgent != null) navMeshAgent.speed = moveSpeed;
+        if (navMeshAgent != null) navMeshAgent.speed = baseMoveSpeed;
         if (exSkillSlot != null) exSkillSlot.Setup(exSkillData, this);
 
         Initialize();
@@ -381,10 +381,10 @@ public abstract class PlayableBase : CharacterBase
     // - CheckingAttackRange()
     // - HandleState()
     // - MoveToTarget()
-    //private void OnDrawGizmosSelected()
-    //{
-    //    // 공격 사거리를 나타내는 원을 그립니다.
-    //    Gizmos.color = Color.red; // 원의 색상을 빨간색으로 설정
-    //    Gizmos.DrawWireSphere(transform.position, AttackRange); // 현재 위치를 중심으로 AttackRange만큼의 반지름을 가진 원을 그림
-    //}
+    private void OnDrawGizmosSelected()
+    {
+        // 공격 사거리를 나타내는 원을 그립니다.
+        Gizmos.color = Color.red; // 원의 색상을 빨간색으로 설정
+        Gizmos.DrawWireSphere(transform.position, AttackRange); // 현재 위치를 중심으로 AttackRange만큼의 반지름을 가진 원을 그림
+    }
 }

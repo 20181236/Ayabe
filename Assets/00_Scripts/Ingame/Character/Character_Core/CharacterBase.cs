@@ -41,7 +41,9 @@ public abstract class CharacterBase : MonoBehaviour
     public float buffedHealPower;
     public float HealPower => baseHealPower + buffedHealPower;
 
-    public float moveSpeed;
+    public float baseMoveSpeed;
+    public float buffedMoveSpeed;
+    public float MoveSpeed => baseMoveSpeed + buffedMoveSpeed;
 
     [Header("Universal States")]
     public float distance; // 타겟과의 거리는 범용적으로 사용될 수 있습니다.
@@ -208,6 +210,7 @@ public abstract class CharacterBase : MonoBehaviour
         buffedAttackRange = 0f;
         buffedAttackSpeed = 0f;
         buffedHealPower = 0f;
+        buffedMoveSpeed = 0f;
 
         foreach (var buff in activeBuffs)
         {
@@ -230,8 +233,15 @@ public abstract class CharacterBase : MonoBehaviour
                     case BuffStatType.HealPower:
                         buffedHealPower += baseHealPower * buff.value;
                         break;
+                    case BuffStatType.MoveSpeed: // 이 부분을 추가해야 합니다. (Enum에 MoveSpeed 추가 필요)
+                        buffedMoveSpeed += baseMoveSpeed * buff.value;
+                        break;
                 }
             }
+        }
+        if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
+        {
+            navMeshAgent.speed = MoveSpeed;
         }
         Debug.Log($"Recalculated Stats: AttackPower={AttackPower}, MaxHealth={MaxHealth}");
         currentHealth = Mathf.Min(currentHealth, MaxHealth);

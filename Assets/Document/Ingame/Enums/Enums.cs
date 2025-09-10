@@ -95,7 +95,8 @@ public enum PlayableAttackState
 
 public enum BuffID
 {
-    SoonDuBu_BuffData,
+    SoonDuBu_ExBuff,
+    SoonDuBu_SkillBuff,
     Luna_AttackBuff
 }
 
@@ -122,6 +123,7 @@ public enum BuffStatType
     CriticalRate,    // 치명타 확률
     CriticalDamage, //치명타 데미지 증가
     HealPower,       // 치유량
+    MoveSpeed,
 }
 public enum BuffCategory
 {
