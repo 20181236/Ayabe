@@ -46,6 +46,13 @@ public enum StageState
     Defeat,
 }
 
+public enum BehaviorTreeState
+{
+    Running,
+    Success,
+    Failed
+}
+
 public enum AnimatorType
 {
     isWalk,
@@ -193,6 +200,7 @@ public enum EnemyState
     Create,
     Idle,
     Chasing,
+    Standby,
     Attack,
     Dead
 }

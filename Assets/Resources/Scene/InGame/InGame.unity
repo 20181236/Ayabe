@@ -2073,7 +2073,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 6860c76585aba95408f1227856c80eab, type: 2}
   m_BuildHeightMesh: 0
 --- !u!65 &684024121
 BoxCollider:
@@ -5087,13 +5087,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588786845}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5071971, y: -0.04929966, z: 0.07233531, w: 0.85737294}
-  m_LocalPosition: {x: 8.1, y: 72.8, z: -292}
+  m_LocalRotation: {x: 0.16473785, y: -0, z: -0, w: 0.9863374}
+  m_LocalPosition: {x: 0, y: 109, z: -156}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 61.264, y: -1.33, z: 8.857}
+  m_LocalEulerAnglesHint: {x: 18.964, y: 0, z: 0}
 --- !u!1 &1611845838
 GameObject:
   m_ObjectHideFlags: 0

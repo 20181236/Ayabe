@@ -19,12 +19,20 @@ public class EnemyBase : CharacterBase
 
     [HideInInspector] public EnemyState currentState;
     protected PlayableBase currentTarget;
+    public PlayableBase CurrentTarget => currentTarget;  // 읽기 전용
+
+    //protected float distance;
+    public float Distance => distance;  // 읽기 전용
+
+    private InterfaceBehaviorTreeNode rootNode;
+
 
     protected override void Awake()
     {
         base.Awake(); // CharacterBase의 Awake를 호출하여 컴포넌트 할당
         if (EnemyManager.instance != null) EnemyManager.instance.RegisterEnemy(this);
         Initialize();
+        
     }
 
     protected override void Start()
@@ -34,70 +42,24 @@ public class EnemyBase : CharacterBase
 
     protected override void Update()
     {
-        if (isDead)
+        if (isDead) 
             return;
 
         CoolTime();
         UpdateTargetAndDistance();
-        CheckingAttackRenge();
 
-        if (currentState == EnemyState.Chasing)
-        {
-            isIdle = false;
-            isChase = true;
-            isAttack = false;
-            if (navMeshAgent != null && navMeshAgent.enabled)
-            {
-                navMeshAgent.isStopped = false;
-                MoveToTarget(currentTarget.transform.position);
-            }
-        }
-        if (currentState == EnemyState.Attack)
-        {
-            isIdle = false;
-            isChase = false;
-            isAttack = true;
-            if (navMeshAgent != null && navMeshAgent.enabled)
-            {
-                navMeshAgent.isStopped = true;
-            }
-            AttackThinking();
-        }
+        rootNode?.Evaluate();
     }
+
+    
+
 
     protected override void FixedUpdate()
     {
-        if (currentState == EnemyState.Chasing)
-        {
-            if (navMeshAgent != null && navMeshAgent.enabled)
-            {
-                MoveToTarget(currentTarget.transform.position);
-            }
-        }
-        else if (currentState == EnemyState.Dead)
-        {
-            if (_rigidbody != null)
-            {
-                _rigidbody.velocity = Vector3.zero;
-            }
-        }
+
     }
 
-    protected override void Initialize()
-    {
-        base.Initialize(); // 부모의 Initialize()를 먼저 호출합니다.
-
-        currentState = EnemyState.Create;
-        readyBasicAttack = false;
-        readySkill = false;
-        readyExSkill = false;
-        isUsingSkill = false;
-        currentState = EnemyState.Idle;
-        isIdle = true;
-
-        currentHealth = MaxHealth;
-    }
-
+    //팩토리에서 이걸 참고해서 인스턴스하고 그다음 Initialize()가 이뤄지기떄문에 위에
     public virtual void SetData(EnemyData data)
     {
         enemyType = data.enemyType;
@@ -111,27 +73,95 @@ public class EnemyBase : CharacterBase
         Initialize();
     }
 
+    protected override void Initialize()
+    {
+        base.Initialize(); // 부모의 Initialize()를 먼저 호출합니다.
+        BuildBehaviorTree();
+        currentHealth = MaxHealth;
+        currentTarget = null;
+        distance = 0f;
+    }
+
+    //  EnemyBehaviorTree의 역할을 이 함수가 대신합니다.
+    private void BuildBehaviorTree()
+    {
+        // --- 1. 말단 노드들 생성 및 초기화 ---
+        var hasTargetNode = new BehaviorTreeConditionNode();
+        hasTargetNode.Initialize(() => EnemyConditions.HasTarget(this));
+
+        var isTargetInRangeNode = new BehaviorTreeConditionNode();
+        isTargetInRangeNode.Initialize(() => EnemyConditions.IsTargetInAttackRange(this));
+
+        var basicAttackNode = new BehaviorTreeActionNode();
+        basicAttackNode.Initialize(() => EnemyActions.BasicAttack(this));
+
+        var chaseTargetNode = new BehaviorTreeActionNode();
+        chaseTargetNode.Initialize(() => EnemyActions.ChaseTarget(this));
+
+        var standbyNode = new BehaviorTreeActionNode();
+        standbyNode.Initialize(() => EnemyActions.Standby(this));
+
+        var idleNode = new BehaviorTreeActionNode();
+        idleNode.Initialize(() => EnemyActions.Idle(this));
+
+        // --- 2. 중간 계층 노드 생성 및 초기화 (모두 2단계 패턴 사용) ---
+
+        // [레벨 3] 공격 또는 대기 선택
+        var attackOrStandbySelector = new BehaviorTreeSelectorNode(); // 1. 생성
+        attackOrStandbySelector.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
+    {
+        basicAttackNode,
+        standbyNode
+    });
+
+        // [레벨 2] 사거리 안 또는 밖의 행동 결정
+
+        // 사거리 안일 때의 행동 (시퀀스)
+        var inRangeSequence = new BehaviorTreeSequenceNode(); // 1. 생성
+        inRangeSequence.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
+    {
+        isTargetInRangeNode,
+        attackOrStandbySelector
+    });
+
+        var inRangeOrChaseSelector = new BehaviorTreeSelectorNode(); // 1. 생성
+        inRangeOrChaseSelector.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
+    {
+        inRangeSequence,
+        chaseTargetNode
+    });
+
+        // [레벨 1] 타겟 유무에 따른 행동 결정
+        var targetActionSequence = new BehaviorTreeSequenceNode(); // 1. 생성
+        targetActionSequence.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
+    {
+        hasTargetNode,
+        inRangeOrChaseSelector
+    });
+
+        // [레벨 0] 최종 루트 노드
+        var rootSelector = new BehaviorTreeSelectorNode(); // 1. 생성
+        rootSelector.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
+    {
+        targetActionSequence,
+        idleNode
+    });
+
+        rootNode = rootSelector;
+    }
+
     protected virtual void UpdateTargetAndDistance()
     {
-        if (isDead)
-            return;
-
         currentTarget = GetNearestPlayableToPosition(transform.position);
-        if (currentTarget == null)
-            return;
-
-        distance = Vector3.Distance(transform.position, currentTarget.transform.position);
+        if (currentTarget != null)
+            distance = Vector3.Distance(transform.position, currentTarget.transform.position);
     }
 
-    protected virtual void CheckingAttackRenge()
+    public void MoveToTarget(Vector3 targetPosition)
     {
-        currentState = (distance <= AttackRange) ? EnemyState.Attack : EnemyState.Chasing;
-    }
-
-    void MoveToTarget(Vector3 targetPosition)
-    {
-        if (navMeshAgent != null)
+        if (navMeshAgent != null && navMeshAgent.enabled)
         {
+            navMeshAgent.isStopped = false; // 이동 시작 시 항상 isStopped를 false로 설정
             navMeshAgent.SetDestination(targetPosition);
         }
     }
@@ -143,11 +173,13 @@ public class EnemyBase : CharacterBase
         {
             readyBasicAttack = true;
         }
+
         skillTimer += Time.deltaTime;
         if (skillTimer >= skillCoolTime)
         {
             readySkill = true;
         }
+
         exSkillTimer += Time.deltaTime;
         if (exSkillTimer >= exSkillCoolTime)
         {
@@ -155,56 +187,40 @@ public class EnemyBase : CharacterBase
         }
     }
 
-    protected override void AttackThinking()
-    {
-        if (readyBasicAttack && !isUsingSkill)
-        {
-            BasicAttack();
-        }
-        else if (readySkill && !isUsingSkill)
-        {
-            Skill();
-        }
-        else if (exSkillTimer >= exSkillCoolTime)
-        {
-            ExSkill();
-        }
-    }
-
     protected override void BasicAttack()
     {
-        if (!isAttack || currentTarget == null || currentTarget.isDead)
-        {
-            return;
-        }
+        if (currentTarget == null || currentTarget.isDead) return;
+
+        //여기에 쿨타임 초기화 로직을 추가합니다.
+        readyBasicAttack = false; // 공격 준비 상태를 false로 변경
+        basicAttackTimer = 0;     // 타이머를 0으로 리셋
+
         isAttacking = true;
-        isBasicAttack = true;
         animator.SetBool("isAttack", true);
+
         ShootBulletAtTarget();
-        //basicAttackCount++;
-        basicAttackTimer = 0;
-        isBasicAttack = false;
-        readyBasicAttack = false;
+    }
+
+    public void ExecuteBasicAttack()
+    {
+        BasicAttack();
+    }
+    public void OnAttackAnimationEnd()
+    {
         isAttacking = false;
         animator.SetBool("isAttack", false);
-        currentState = EnemyState.Idle;
-
-        //if (basicAttackCount > 5)
-        //{
-        //    readySkill = true;
-        //    basicAttackCount = 0;
-        //}
-        //basicAttackTimer = 0;
-        readyBasicAttack = false;
     }
 
     protected override void ShootBulletAtTarget()
     {
         if (currentTarget == null || currentTarget.isDead)
             return;
+
         Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+
         Bullet bullet = BulletPoolManager.instance.GetBullet(BulletPoolManager.PoolType.EnemyBullet);
+
         if (bullet != null)
         {
             bullet.transform.position = enemyBulletFirePoint.position;
@@ -225,7 +241,9 @@ public class EnemyBase : CharacterBase
     public PlayableBase GetNearestPlayableToPosition(Vector3 position)
     {
         PlayableBase nearest = null;
+
         float minDist = Mathf.Infinity;
+
         foreach (var playable in PlayableManager.instance.playables)
         {
             if (playable == null || playable.isDead) continue;
