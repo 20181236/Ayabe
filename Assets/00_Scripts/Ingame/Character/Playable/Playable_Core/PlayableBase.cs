@@ -106,7 +106,7 @@ public abstract class PlayableBase : CharacterBase
 
         baseAttackPower = data.attackPower;
         baseAttackRange = data.attackRange;
-        baseAttackSpeed = data.AttackSpeed; // 이 변수는 없습니다.
+        baseAttackSpeed = data.attackSpeed; 
 
 
         baseHealPower = data.HealPower;
@@ -128,8 +128,6 @@ public abstract class PlayableBase : CharacterBase
     {
         exSkill = skill;
     }
-
-    // PlayableBase.cs
 
     protected override void CoolTime()
     {

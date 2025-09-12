@@ -241,7 +241,7 @@ public abstract class CharacterBase : MonoBehaviour
         }
         if (navMeshAgent != null && navMeshAgent.isOnNavMesh)
         {
-            navMeshAgent.speed = MoveSpeed;
+            navMeshAgent.speed = this.MoveSpeed;
         }
         Debug.Log($"Recalculated Stats: AttackPower={AttackPower}, MaxHealth={MaxHealth}");
         currentHealth = Mathf.Min(currentHealth, MaxHealth);

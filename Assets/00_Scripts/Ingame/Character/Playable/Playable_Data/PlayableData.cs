@@ -14,7 +14,7 @@ public class PlayableData : ScriptableObject
     public float maxHealth;
     public float attackPower;
     public float attackRange;
-    public float AttackSpeed;
+    public float attackSpeed;
     public float HealPower;
     public float skillCoolTime;
     public float exSkillCoolTime;

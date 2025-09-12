@@ -7,7 +7,9 @@ public class EnemyBullet : Bullet
     protected override void SetProjectileInfo()
     {
         base.SetProjectileInfo();
-        damage = 10;
+        weaponType = WeaponType.Bullet;
         isExplosion = false;
+        damageMultiplier = 1.5f;
+        speed = 20f;
     }
 }

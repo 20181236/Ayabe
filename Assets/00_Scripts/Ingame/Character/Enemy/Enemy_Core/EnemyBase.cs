@@ -13,26 +13,25 @@ public class EnemyBase : CharacterBase
     public EnemyID enemyID;
     public EnemyType enemyType;
 
-    // 이 변수들은 CharacterBase에서 이미 선언되었으므로 제거합니다.
-    // public Rigidbody rigidbodyEnemy;
     public Transform enemyBulletFirePoint;
 
     [HideInInspector] public EnemyState currentState;
     protected PlayableBase currentTarget;
-    public PlayableBase CurrentTarget => currentTarget;  // 읽기 전용
+    public PlayableBase CurrentTarget => currentTarget;
 
-    //protected float distance;
-    public float Distance => distance;  // 읽기 전용
+    public float Distance => distance;
 
     private InterfaceBehaviorTreeNode rootNode;
 
-
     protected override void Awake()
     {
-        base.Awake(); // CharacterBase의 Awake를 호출하여 컴포넌트 할당
+        base.Awake();
         if (EnemyManager.instance != null) EnemyManager.instance.RegisterEnemy(this);
         Initialize();
-        
+        //if (navMeshAgent != null)
+        //{
+        //    navMeshAgent.updatePosition = true; // 직접 위치를 업데이트하도록 변경
+        //}
     }
 
     protected override void Start()
@@ -42,7 +41,7 @@ public class EnemyBase : CharacterBase
 
     protected override void Update()
     {
-        if (isDead) 
+        if (isDead)
             return;
 
         CoolTime();
@@ -51,41 +50,34 @@ public class EnemyBase : CharacterBase
         rootNode?.Evaluate();
     }
 
-    
-
-
     protected override void FixedUpdate()
     {
-
     }
 
-    //팩토리에서 이걸 참고해서 인스턴스하고 그다음 Initialize()가 이뤄지기떄문에 위에
     public virtual void SetData(EnemyData data)
     {
-        enemyType = data.enemyType;
         baseMaxHealth = data.maxHealth;
         baseAttackPower = data.attackPower;
         baseAttackRange = data.attackRange;
-        baseAttackSpeed = data.AttackInterval;
+        baseAttackSpeed = data.attackSpeed;
         baseHealPower = data.HealPower;
         baseMoveSpeed = data.moveSpeed;
-        if (navMeshAgent != null) navMeshAgent.speed = baseMoveSpeed;
+        if (navMeshAgent != null) 
+            navMeshAgent.speed = baseMoveSpeed;
         Initialize();
     }
 
     protected override void Initialize()
     {
-        base.Initialize(); // 부모의 Initialize()를 먼저 호출합니다.
+        base.Initialize();
         BuildBehaviorTree();
         currentHealth = MaxHealth;
         currentTarget = null;
         distance = 0f;
     }
 
-    //  EnemyBehaviorTree의 역할을 이 함수가 대신합니다.
     private void BuildBehaviorTree()
     {
-        // --- 1. 말단 노드들 생성 및 초기화 ---
         var hasTargetNode = new BehaviorTreeConditionNode();
         hasTargetNode.Initialize(() => EnemyConditions.HasTarget(this));
 
@@ -104,48 +96,40 @@ public class EnemyBase : CharacterBase
         var idleNode = new BehaviorTreeActionNode();
         idleNode.Initialize(() => EnemyActions.Idle(this));
 
-        // --- 2. 중간 계층 노드 생성 및 초기화 (모두 2단계 패턴 사용) ---
+        var attackOrStandbySelector = new BehaviorTreeSelectorNode();
+        attackOrStandbySelector.Initialize(new List<InterfaceBehaviorTreeNode>
+        {
+            basicAttackNode,
+            standbyNode
+        });
 
-        // [레벨 3] 공격 또는 대기 선택
-        var attackOrStandbySelector = new BehaviorTreeSelectorNode(); // 1. 생성
-        attackOrStandbySelector.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
-    {
-        basicAttackNode,
-        standbyNode
-    });
+        var inRangeSequence = new BehaviorTreeSequenceNode();
+        inRangeSequence.Initialize(new List<InterfaceBehaviorTreeNode>
+        {
+            isTargetInRangeNode,
+            attackOrStandbySelector
+        });
 
-        // [레벨 2] 사거리 안 또는 밖의 행동 결정
+        var inRangeOrChaseSelector = new BehaviorTreeSelectorNode();
+        inRangeOrChaseSelector.Initialize(new List<InterfaceBehaviorTreeNode>
+        {
+            inRangeSequence,
+            chaseTargetNode
+        });
 
-        // 사거리 안일 때의 행동 (시퀀스)
-        var inRangeSequence = new BehaviorTreeSequenceNode(); // 1. 생성
-        inRangeSequence.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
-    {
-        isTargetInRangeNode,
-        attackOrStandbySelector
-    });
+        var targetActionSequence = new BehaviorTreeSequenceNode();
+        targetActionSequence.Initialize(new List<InterfaceBehaviorTreeNode>
+        {
+            hasTargetNode,
+            inRangeOrChaseSelector
+        });
 
-        var inRangeOrChaseSelector = new BehaviorTreeSelectorNode(); // 1. 생성
-        inRangeOrChaseSelector.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
-    {
-        inRangeSequence,
-        chaseTargetNode
-    });
-
-        // [레벨 1] 타겟 유무에 따른 행동 결정
-        var targetActionSequence = new BehaviorTreeSequenceNode(); // 1. 생성
-        targetActionSequence.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
-    {
-        hasTargetNode,
-        inRangeOrChaseSelector
-    });
-
-        // [레벨 0] 최종 루트 노드
-        var rootSelector = new BehaviorTreeSelectorNode(); // 1. 생성
-        rootSelector.Initialize(new List<InterfaceBehaviorTreeNode> // 2. 초기화
-    {
-        targetActionSequence,
-        idleNode
-    });
+        var rootSelector = new BehaviorTreeSelectorNode();
+        rootSelector.Initialize(new List<InterfaceBehaviorTreeNode>
+        {
+            targetActionSequence,
+            idleNode
+        });
 
         rootNode = rootSelector;
     }
@@ -153,6 +137,7 @@ public class EnemyBase : CharacterBase
     protected virtual void UpdateTargetAndDistance()
     {
         currentTarget = GetNearestPlayableToPosition(transform.position);
+
         if (currentTarget != null)
             distance = Vector3.Distance(transform.position, currentTarget.transform.position);
     }
@@ -161,10 +146,13 @@ public class EnemyBase : CharacterBase
     {
         if (navMeshAgent != null && navMeshAgent.enabled)
         {
-            navMeshAgent.isStopped = false; // 이동 시작 시 항상 isStopped를 false로 설정
+            navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(targetPosition);
         }
     }
+
+    // OnAnimatorMove는 애니메이션 루트 모션을 사용하지 않으므로 비워둡니다.
+    //protected virtual void OnAnimatorMove() { }
 
     protected override void CoolTime()
     {
@@ -172,8 +160,8 @@ public class EnemyBase : CharacterBase
         if (basicAttackTimer >= AttackSpeed)
         {
             readyBasicAttack = true;
+            isAttacking = false; // 공격 쿨타임이 다 차면 공격 가능 상태로 변경
         }
-
         skillTimer += Time.deltaTime;
         if (skillTimer >= skillCoolTime)
         {
@@ -189,49 +177,67 @@ public class EnemyBase : CharacterBase
 
     protected override void BasicAttack()
     {
-        if (currentTarget == null || currentTarget.isDead) return;
+        if (currentTarget == null || currentTarget.isDead) 
+            return;
 
-        //여기에 쿨타임 초기화 로직을 추가합니다.
-        readyBasicAttack = false; // 공격 준비 상태를 false로 변경
-        basicAttackTimer = 0;     // 타이머를 0으로 리셋
 
-        isAttacking = true;
-        animator.SetBool("isAttack", true);
+        readyBasicAttack = false;
+        basicAttackTimer = 0f;
+        isAttacking = true; // 공격 실행 상태로 변경
 
         ShootBulletAtTarget();
+        Debug.Log("총알발싸까지옴");
     }
 
     public void ExecuteBasicAttack()
     {
         BasicAttack();
     }
-    public void OnAttackAnimationEnd()
-    {
-        isAttacking = false;
-        animator.SetBool("isAttack", false);
-    }
+
+    // OnAttackAnimationEnd는 더 이상 필요하지 않으므로 비워두거나 삭제할 수 있습니다.
+    //public void OnAttackAnimationEnd() { }
 
     protected override void ShootBulletAtTarget()
     {
+        // 1. 함수가 시작되었는지 확인
+        Debug.Log("--- ShootBulletAtTarget 함수 시작 ---");
+
         if (currentTarget == null || currentTarget.isDead)
+        {
+            Debug.LogWarning("타겟이 없거나 죽어서 총알 발사를 취소합니다.");
             return;
+        }
 
         Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
+        // 2. BulletPoolManager에서 총알을 가져오기 직전인지 확인
+        Debug.Log("BulletPoolManager에서 총알을 가져옵니다...");
         Bullet bullet = BulletPoolManager.instance.GetBullet(BulletPoolManager.PoolType.EnemyBullet);
 
+        // 3. GetBullet의 결과를 확인하는 것이 가장 중요합니다!
         if (bullet != null)
         {
+            // 이 로그가 뜬다면, 총알 객체는 성공적으로 받아온 것입니다.
+            Debug.Log("<color=green>성공: 총알을 풀에서 가져왔습니다!</color> 이제 총알 위치를 설정합니다.");
+
+            if (enemyBulletFirePoint == null)
+            {
+                Debug.LogError("치명적 오류: 'enemyBulletFirePoint'가 Inspector에 할당되지 않았습니다!", this.gameObject);
+                return;
+            }
+
             bullet.transform.position = enemyBulletFirePoint.position;
             bullet.transform.rotation = Quaternion.LookRotation(direction);
             bullet.SetDamageFromStat(this.AttackPower);
             bullet.ShooterType = this.ObjectType;
-            Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
-            if (bulletRigidbody != null)
-            {
-                bulletRigidbody.velocity = direction * bullet.speed;
-            }
+
+            Debug.Log("<color=cyan>총알 설정 완료!</color>");
+        }
+        else
+        {
+            // 이 에러 로그가 뜬다면, 풀에서 총알을 가져오는 데 실패한 것입니다.
+            Debug.LogError("<color=red>실패: BulletPoolManager.GetBullet()이 null을 반환했습니다.</color> 풀이 비었거나 설정이 잘못되었을 수 있습니다.");
         }
     }
 
@@ -241,13 +247,15 @@ public class EnemyBase : CharacterBase
     public PlayableBase GetNearestPlayableToPosition(Vector3 position)
     {
         PlayableBase nearest = null;
-
         float minDist = Mathf.Infinity;
 
         foreach (var playable in PlayableManager.instance.playables)
         {
-            if (playable == null || playable.isDead) continue;
+            if (playable == null || playable.isDead) 
+                continue;
+
             float dist = Vector3.Distance(position, playable.transform.position);
+
             if (dist < minDist)
             {
                 minDist = dist;
@@ -262,17 +270,16 @@ public class EnemyBase : CharacterBase
         var reactVec = (transform.position - explosionPos).normalized;
         return reactVec;
     }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<ProjectileBase>(out var projectile))
         {
-            // 총알을 쏜 캐릭터와 맞는 캐릭터의 타입이 같으면 무시
             if (projectile.ShooterType == this.ObjectType)
                 return;
 
-            // 피해량 추출 및 ApplyDamage 호출
             float damage = projectile.damage;
-            ApplyDamage(damage, false, null); // 폭발 피해가 아니라면 false, explosionPos는 null로 설정
+            ApplyDamage(damage, false, null);
 
             if (projectile is Bullet bullet)
                 BulletPoolManager.instance.ReturnBullet(bullet);
@@ -280,18 +287,29 @@ public class EnemyBase : CharacterBase
                 Destroy(projectile.gameObject);
         }
     }
+
     public override void ApplyDamage(float damage, bool isExplosion, Vector3? explosionPos = null)
     {
-        if (isDead) return;
+        if (isDead) 
+            return;
+
         currentHealth -= damage;
+
         DamageManager.instance.ShowDamage2(headTransform.position, Mathf.FloorToInt(damage));
-        if (healthBarInstance != null) healthBarInstance.SetHealth(currentHealth);
-        if (currentHealth <= 0) Die();
-        else StartCoroutine(OnDamage(isExplosion, explosionPos));
+
+        if (healthBarInstance != null) 
+            healthBarInstance.SetHealth(currentHealth);
+
+        if (currentHealth <= 0) 
+            Die();
+        else 
+            StartCoroutine(OnDamage(isExplosion, explosionPos));
     }
+
     IEnumerator OnDamage(bool isExplosion, Vector3? explosionPos)
     {
         foreach (MeshRenderer mesh in meshs) mesh.material.color = Color.red;
+
         if (isExplosion && explosionPos.HasValue)
         {
             if (navMeshAgent != null) navMeshAgent.enabled = false;
@@ -300,18 +318,30 @@ public class EnemyBase : CharacterBase
             _rigidbody.AddForce(finalVec * 5f, ForceMode.Impulse);
             _rigidbody.AddTorque(finalVec * 15f, ForceMode.Impulse);
         }
+
         yield return new WaitForSeconds(0.1f);
-        foreach (MeshRenderer mesh in meshs) mesh.material.color = Color.white;
-        if (isExplosion && navMeshAgent != null && !isDead) navMeshAgent.enabled = true;
+
+        foreach 
+            (MeshRenderer mesh in meshs) mesh.material.color = Color.white;
+        if (isExplosion && navMeshAgent != null && !isDead)
+            navMeshAgent.enabled = true;
     }
+
     protected override void Die()
     {
         base.Die();
         StageManager.instance.NotifyEnemyKilled();
     }
+
     protected override void OnDestroyed()
     {
         if (EnemyManager.instance != null) EnemyManager.instance.UnregisterEnemy(this);
         base.OnDestroyed();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, AttackRange);
     }
 }
