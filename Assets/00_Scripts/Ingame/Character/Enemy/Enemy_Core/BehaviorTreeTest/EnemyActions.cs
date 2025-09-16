@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//지금 액션들을 여기에 몰아넣은거일뿐인가?
 public static class EnemyActions
 {
     public static BehaviorTreeState BasicAttack(EnemyBase enemy)

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HealthBarController : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private Camera mainCamera;
+    //[SerializeField] private Camera mainCamera;
     [SerializeField] private Image fillImage;
 
     [SerializeField] private Transform buffIconContainer;
@@ -15,9 +15,9 @@ public class HealthBarController : MonoBehaviour
     private float maxHealth;
     private float currentHealth;
 
-    private RectTransform rectTransform;
+    //private RectTransform rectTransform;
 
-    [SerializeField] private Vector3 offset = new Vector3(0, 5f, 0);
+    [SerializeField] private Vector3 offset = new Vector3(0, 10f, 0);
 
     private Dictionary<BuffGroup, GameObject> activeBuffIcons = new Dictionary<BuffGroup, GameObject>();
     private Dictionary<BuffGroup, Coroutine> flashingCoroutines = new Dictionary<BuffGroup, Coroutine>();
@@ -27,20 +27,42 @@ public class HealthBarController : MonoBehaviour
 
     private void Awake()
     {
-        if (mainCamera == null)
-            mainCamera = Camera.main;
+        //if (mainCamera == null)
+        //    mainCamera = Camera.main;
 
-        rectTransform = GetComponent<RectTransform>();
+        //rectTransform = GetComponent<RectTransform>();
     }
 
     public void Setup(CharacterBase character, float maxHp)
     {
         targetCharacter = character;
-        target = character.transform;
+
+        // CharacterBase로부터 상속받은 ObjectType 속성을 확인합니다.
+        if (character.ObjectType == ObjectType.Playable)
+        {
+            // 타입이 Playable이면 "Hatch" 오브젝트를 찾아서 타겟으로 설정합니다.
+            GameObject hatchObject = GameObject.Find("Hatch");
+            if (hatchObject != null)
+            {
+                target = hatchObject.transform;
+            }
+            else
+            {
+                Debug.LogWarning("'Hatch' 오브젝트를 찾을 수 없습니다. 캐릭터 자신을 타겟으로 설정합니다.");
+                target = character.transform;
+            }
+        }
+        else
+        {
+            // 타입이 Playable이 아니라면 (Enemy 등) 자기 자신을 타겟으로 설정합니다.
+            target = character.transform;
+        }
+
+        // --- 이하 코드는 동일합니다 ---
         maxHealth = maxHp;
         currentHealth = maxHp;
-        Debug.Log($"{character.name}의 HealthBar 생성됨");
-        
+        Debug.Log($"{character.name}의 HealthBar 생성됨. 타겟: {target.name}");
+
         UpdateHealthBar();
     }
 
@@ -58,20 +80,22 @@ public class HealthBarController : MonoBehaviour
             return;
         }
 
-        Vector3 worldPosition = target.position + offset;
-        Vector3 screenPosition = mainCamera.WorldToScreenPoint(worldPosition);
+        transform.position = target.position + offset;
 
-        if (screenPosition.z > 0)
-        {
-            rectTransform.position = screenPosition;
-            if (!gameObject.activeSelf)
-                gameObject.SetActive(true);
-        }
-        else
-        {
-            if (gameObject.activeSelf)
-                gameObject.SetActive(false);
-        }
+        //Vector3 worldPosition = target.position + offset;
+        //Vector3 screenPosition = mainCamera.WorldToScreenPoint(worldPosition);
+
+        //if (screenPosition.z > 0)
+        //{
+        //    rectTransform.position = screenPosition;
+        //    if (!gameObject.activeSelf)
+        //        gameObject.SetActive(true);
+        //}
+        ////else
+        ////{
+        ////    if (gameObject.activeSelf)
+        ////        gameObject.SetActive(false);
+        ////}
     }
 
     private void UpdateHealthBar()
