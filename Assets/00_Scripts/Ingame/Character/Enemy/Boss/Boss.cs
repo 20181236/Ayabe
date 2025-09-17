@@ -9,35 +9,36 @@ using static UnityEngine.GraphicsBuffer;
 public class Boss : EnemyBase
 {
     public float skillDuration = 2f; // 미사일 생성 지속 시간
+
     public float missileSpawnDelay = 1f;   // 미사일 생성 간 딜레이
+
     float skillDurationTimer = 0f;
+
     public GameObject skillMissile;
     public GameObject exSkillMissile;
     public Transform enemyMissileFirePoint;
     public Transform enemyExMissileFirePoint;
 
-    public BossHpBar bossHpBar; // 연결할 체력바 UI
+    //public BossHpBar bossHpBar; // 연결할 체력바 UI
+    public BossHpBar bossHpBar; // private으로 참조를 저장할 변수
 
     protected override void Start()
     {
         base.Start();
 
+        // 1. FindObjectOfType 대신 싱글톤 인스턴스를 바로 가져옴
+        bossHpBar = BossHpBar.instance;
 
+        // 2. null 체크 (혹시 모를 상황 대비)
         if (bossHpBar == null)
         {
-            bossHpBar = FindObjectOfType<BossHpBar>();
-
-            if (bossHpBar == null)
-            {
-                Debug.LogError("BossHpBar가 씬에 존재하지 않습니다.");
-                return;
-            }
+            Debug.LogError("BossHpBar 싱글톤 인스턴스가 씬에 존재하지 않습니다!");
+            return;
         }
 
+        // 3. HP바 활성화 및 설정
         bossHpBar.Show();
         bossHpBar.SetHP((int)CurrentHealth, (int)MaxHealth);
-
-        //healthBarPrefab = null; healthBarInstance=null;
     }
 
     protected override void Update()

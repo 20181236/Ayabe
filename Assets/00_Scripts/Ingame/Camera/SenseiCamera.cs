@@ -21,6 +21,11 @@ public class SenseiCamera : MonoBehaviour
     // 캐릭터 움직임이 끝난 후 카메라를 이동시키기 위해 LateUpdate 사용
     void LateUpdate()
     {
+        CameraMove();
+    }
+
+    public void CameraMove()
+    {
         if (!playableManager.HasPlayable())
         {
             return;
@@ -35,8 +40,30 @@ public class SenseiCamera : MonoBehaviour
         }
         averagePosition /= allies.Count;
 
-        // 2. 계산된 평균 위치에 고정 오프셋을 더해 카메라 위치를 즉시 설정
-        transform.position = averagePosition + cameraOffset;
+        // 2. 새로운 Vector3를 만들어서 카메라 위치 설정 (이 부분을 수정)
+        // X 좌표는 계산된 값을 사용하고, Y와 Z 좌표는 카메라의 현재 값을 그대로 사용
+        transform.position = new Vector3(
+            averagePosition.x + cameraOffset.x,
+            transform.position.y,
+            transform.position.z
+        );
+
+        //if (!playableManager.HasPlayable())
+        //{
+        //    return;
+        //}
+
+        //// 1. 모든 아군의 위치를 더해서 평균을 계산
+        //Vector3 averagePosition = Vector3.zero;
+        //var allies = playableManager.GetPlayables();
+        //foreach (var ally in allies)
+        //{
+        //    averagePosition += ally.transform.position;
+        //}
+        //averagePosition /= allies.Count;
+
+        //// 2. 계산된 평균 위치에 고정 오프셋을 더해 카메라 위치를 즉시 설정
+        //transform.position = averagePosition + cameraOffset;
     }
 }
 //public Vector3 baseOffset = new Vector3(0f, 15f, -15f);

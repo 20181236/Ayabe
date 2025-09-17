@@ -13,7 +13,7 @@ public class DamageImage : MonoBehaviour
 
     [Header("Settings")]
     public float spacing = 10f;
-    public float floatUpDistance = 30f; // 월드 공간 기준 상승 거리 (예: 1미터)
+    public float floatUpDistance = 50f; // 월드 공간 기준 상승 거리 (예: 1미터)
     public float duration = 1f;
 
     private HorizontalLayoutGroup layout;
@@ -59,9 +59,12 @@ public class DamageImage : MonoBehaviour
             Destroy(gameObject); // 데미지가 0이면 바로 파괴
             return;
         }
+        float randomRadius = 3f; // 랜덤 범위 (이 값을 조절해 흩어지는 정도를 바꿀 수 있습니다)
+        Vector3 randomOffset = Camera.main.transform.right * UnityEngine.Random.Range(-randomRadius, randomRadius);
 
-        // 전달받은 월드 좌표를 그대로 자신의 위치로 설정합니다.
-        transform.position = worldPosition;
+        // 기존 위치 계산에 랜덤 오프셋을 더해줍니다.
+        // 기존 코드: transform.position = worldPosition + Vector3.up * 3f;
+        transform.position = worldPosition + Vector3.up * 3f + randomOffset; 
 
         // 이전에 생성된 숫자 이미지가 있다면 모두 제거합니다.
         foreach (Transform child in transform)

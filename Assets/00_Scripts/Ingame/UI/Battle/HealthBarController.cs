@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class HealthBarController : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    //[SerializeField] private Camera mainCamera;
     [SerializeField] private Image fillImage;
 
     [SerializeField] private Transform buffIconContainer;
@@ -15,50 +14,39 @@ public class HealthBarController : MonoBehaviour
     private float maxHealth;
     private float currentHealth;
 
-    //private RectTransform rectTransform;
-
     [SerializeField] private Vector3 offset = new Vector3(0, 10f, 0);
 
     private Dictionary<BuffGroup, GameObject> activeBuffIcons = new Dictionary<BuffGroup, GameObject>();
     private Dictionary<BuffGroup, Coroutine> flashingCoroutines = new Dictionary<BuffGroup, Coroutine>();
 
     private CharacterBase targetCharacter;
-    private BuffManager boundBuffManager; // 현재 구독 중인 BuffManager 참조
-
-    private void Awake()
-    {
-        //if (mainCamera == null)
-        //    mainCamera = Camera.main;
-
-        //rectTransform = GetComponent<RectTransform>();
-    }
+    private BuffManager boundBuffManager;
 
     public void Setup(CharacterBase character, float maxHp)
     {
         targetCharacter = character;
 
-        // CharacterBase로부터 상속받은 ObjectType 속성을 확인합니다.
+        // CharacterBase의 ObjectType 속성을 확인합니다.
         if (character.ObjectType == ObjectType.Playable)
         {
-            // 타입이 Playable이면 "Hatch" 오브젝트를 찾아서 타겟으로 설정합니다.
-            GameObject hatchObject = GameObject.Find("Hatch");
-            if (hatchObject != null)
+            // 이 캐릭터의 자식 오브젝트 중에서 "Hatch"를 찾습니다.
+            Transform hatchTransform = character.transform.Find("Hatch");
+            if (hatchTransform != null)
             {
-                target = hatchObject.transform;
+                target = hatchTransform;
             }
             else
             {
-                Debug.LogWarning("'Hatch' 오브젝트를 찾을 수 없습니다. 캐릭터 자신을 타겟으로 설정합니다.");
+                Debug.LogWarning($"'{character.name}'의 자식 중 'Hatch' 오브젝트를 찾을 수 없습니다. 캐릭터 자신을 타겟으로 설정합니다.");
                 target = character.transform;
             }
         }
         else
         {
-            // 타입이 Playable이 아니라면 (Enemy 등) 자기 자신을 타겟으로 설정합니다.
+            // Playable 타입이 아니면(Enemy 등) 자기 자신을 타겟으로 설정합니다.
             target = character.transform;
         }
 
-        // --- 이하 코드는 동일합니다 ---
         maxHealth = maxHp;
         currentHealth = maxHp;
         Debug.Log($"{character.name}의 HealthBar 생성됨. 타겟: {target.name}");
@@ -81,21 +69,6 @@ public class HealthBarController : MonoBehaviour
         }
 
         transform.position = target.position + offset;
-
-        //Vector3 worldPosition = target.position + offset;
-        //Vector3 screenPosition = mainCamera.WorldToScreenPoint(worldPosition);
-
-        //if (screenPosition.z > 0)
-        //{
-        //    rectTransform.position = screenPosition;
-        //    if (!gameObject.activeSelf)
-        //        gameObject.SetActive(true);
-        //}
-        ////else
-        ////{
-        ////    if (gameObject.activeSelf)
-        ////        gameObject.SetActive(false);
-        ////}
     }
 
     private void UpdateHealthBar()
@@ -109,7 +82,6 @@ public class HealthBarController : MonoBehaviour
     // BuffManager 이벤트 바인딩
     public void BindBuffManager(BuffManager buffManager)
     {
-        // 기존 구독 해제 (중복 방지)
         if (boundBuffManager != null)
         {
             boundBuffManager.OnBuffAdded -= OnBuffAddedHandler;
@@ -117,7 +89,7 @@ public class HealthBarController : MonoBehaviour
         }
 
         boundBuffManager = buffManager;
-        boundBuffManager.OnBuffAdded += OnBuffAddedHandler; // <-- 변경
+        boundBuffManager.OnBuffAdded += OnBuffAddedHandler;
         boundBuffManager.OnBuffRemoved += OnBuffRemovedHandler;
     }
 
@@ -126,33 +98,19 @@ public class HealthBarController : MonoBehaviour
     {
         if (buff.owner != targetCharacter)
         {
-            Debug.Log($"[HealthBarController] 다른 캐릭터 버프 무시: {buff.owner.name}");
             return;
         }
-
         AddBuffIcon(buff.group, buff.buffIcon, duration);
     }
 
     // 이벤트 핸들러: 버프 제거
     private void OnBuffRemovedHandler(Buff buff)
     {
-        Debug.Log($"[HealthBarController] 버프 제거 이벤트 감지: {buff.buffId} / 대상 캐릭터: {targetCharacter.name} / BuffGroup: {buff.group}");
-
         if (buff.owner != targetCharacter)
         {
-            Debug.Log($"[HealthBarController] 다른 캐릭터 버프 제거 무시: {buff.owner.name}");
             return;
         }
-
-        Debug.Log($"[HealthBarController] 아이콘 제거 시작: {buff.buffId}");
         RemoveBuffIcon(buff.group);
-        Debug.Log($"[HealthBarController] 아이콘 제거 완료: {buff.buffId}");
-
-        //if (buff.owner == targetCharacter)
-        //{
-        //    Debug.Log($"[HealthBarController] 이 캐릭터 버프 제거됨: {buff.buffId}");
-        //    RemoveBuffIcon(buff.group);
-        //}
     }
 
     public void AddBuffIcon(BuffGroup group, Sprite iconSprite, float duration)
@@ -172,7 +130,6 @@ public class HealthBarController : MonoBehaviour
             {
                 image.sprite = iconSprite;
             }
-            // 기존 아이콘이 있으면 깜박임 코루틴 갱신
             if (flashingCoroutines.ContainsKey(group) && flashingCoroutines[group] != null)
             {
                 StopCoroutine(flashingCoroutines[group]);
@@ -181,11 +138,6 @@ public class HealthBarController : MonoBehaviour
         else
         {
             icon = Instantiate(buffIconPrefab, buffIconContainer);
-            RectTransform rt = icon.GetComponent<RectTransform>();
-            rt.localScale = Vector3.one;
-            rt.localRotation = Quaternion.identity;
-            rt.anchoredPosition = Vector2.zero;
-
             var image = icon.GetComponent<Image>();
             if (image != null)
             {
@@ -194,57 +146,66 @@ public class HealthBarController : MonoBehaviour
             activeBuffIcons[group] = icon;
         }
 
-        Debug.Log("아이콘 생성 및 스프라이트 할당 성공: " + iconSprite.name);
-        // 깜박임 코루틴 시작
         Coroutine flashingCoroutine = StartCoroutine(FlashBuffIconRoutine(group, icon.GetComponent<Image>(), duration));
         flashingCoroutines[group] = flashingCoroutine;
     }
 
-    // 아이콘 깜박임 코루틴을 새로 추가
     private IEnumerator FlashBuffIconRoutine(BuffGroup group, Image iconImage, float duration)
     {
-        float flashStartTime = duration - 2.0f; // 종료 2초 전부터 깜박이기 시작
+        // duration이 2초보다 짧으면 깜빡이지 않도록 예외 처리
+        if (duration <= 2.0f)
+        {
+            yield break;
+        }
+
+        float flashStartTime = duration - 2.0f;
         float flashInterval = 0.2f;
 
         yield return new WaitForSeconds(flashStartTime);
 
-        while (true)
+        float passedTime = 0f;
+        while (passedTime < 2.0f) // 2초 동안만 깜빡이도록 수정
         {
-            iconImage.color = new Color(1, 1, 1, 0.2f); // 투명하게
+            iconImage.color = new Color(1, 1, 1, 0.2f);
             yield return new WaitForSeconds(flashInterval);
-            iconImage.color = new Color(1, 1, 1, 1f); // 원래 색상으로
+            passedTime += flashInterval;
+
+            // 코루틴이 도는 중 버프가 제거될 경우를 대비
+            if (iconImage == null) yield break;
+
+            iconImage.color = new Color(1, 1, 1, 1f);
             yield return new WaitForSeconds(flashInterval);
+            passedTime += flashInterval;
         }
     }
 
     public void RemoveBuffIcon(BuffGroup group)
     {
-        Debug.Log($"[HealthBarController] RemoveBuffIcon 호출: {group}");
-
         if (!activeBuffIcons.ContainsKey(group))
         {
-            Debug.LogWarning($"[HealthBarController] 제거할 아이콘이 없음: {group}");
             return;
         }
 
-        // 깜박임 코루틴 정지
         if (flashingCoroutines.ContainsKey(group) && flashingCoroutines[group] != null)
         {
             StopCoroutine(flashingCoroutines[group]);
             flashingCoroutines.Remove(group);
         }
 
-        Destroy(activeBuffIcons[group]);
-        activeBuffIcons.Remove(group);
-        Debug.Log($"[HealthBarController] 아이콘 제거 완료: {group}");
+        if (activeBuffIcons.ContainsKey(group) && activeBuffIcons[group] != null)
+        {
+            Destroy(activeBuffIcons[group]);
+            activeBuffIcons.Remove(group);
+        }
     }
+
     public Dictionary<BuffGroup, GameObject> GetActiveBuffIcons()
     {
         return activeBuffIcons;
     }
+
     private void OnDestroy()
     {
-        // 객체 파괴 시 구독 해제
         if (boundBuffManager != null)
         {
             boundBuffManager.OnBuffAdded -= OnBuffAddedHandler;

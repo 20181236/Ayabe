@@ -6,6 +6,8 @@ using TMPro;
 
 public class BossHpBar : MonoBehaviour
 {
+    public static BossHpBar instance;
+
     public GameObject hpBarContainer;
 
     public Image nextHPBar, currentHPBar, delayHPBar;
@@ -22,7 +24,18 @@ public class BossHpBar : MonoBehaviour
 
     private void Awake()
     {
-        Hide();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            // 만약 씬에 BossHpBar가 여러 개 있다면 하나만 남기고 파괴
+            Destroy(gameObject);
+            return;
+        }
+
+        Hide(); // UI 숨기기는 그대로 유지
     }
     private void Start()
     {
@@ -36,6 +49,7 @@ public class BossHpBar : MonoBehaviour
 
     public void Show()
     {
+        
         if (hpBarContainer != null)
         {
             hpBarContainer.SetActive(true);

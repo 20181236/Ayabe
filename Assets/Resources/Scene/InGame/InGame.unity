@@ -765,6 +765,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 283789135}
   m_CullTransparentMesh: 1
+--- !u!1 &301872758 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7005001629091229569, guid: 15fe0e97b87ab504c878b3b3e5e5e6eb, type: 3}
+  m_PrefabInstance: {fileID: 8383348194252550011}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &347439014
 GameObject:
   m_ObjectHideFlags: 0
@@ -2421,7 +2426,7 @@ MonoBehaviour:
   battleTimeText: {fileID: 1541379703}
   okButton: {fileID: 2010197249}
   healthBar: {fileID: 2087469634}
-  bossHealthBar: {fileID: 263209657}
+  bossHealthBar: {fileID: 301872758}
   uiHUD: {fileID: 689932301}
   skillUI: {fileID: 1428995421}
 --- !u!4 &913233565
@@ -5354,9 +5359,9 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680502876}
-  m_LocalRotation: {x: 0.15737922, y: 0.41619825, z: -0.07338698, w: 0.8925386}
-  m_LocalPosition: {x: 0, y: 0, z: 60.40228}
-  m_LocalScale: {x: 0.0925926, y: 0.0925926, z: 0.0925926}
+  m_LocalRotation: {x: 0.15738727, y: 0.4161977, z: -0.07339073, w: 0.8925371}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1086583548}
@@ -5364,8 +5369,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 71.984634, y: -34.20201}
-  m_SizeDelta: {x: 1920.0001, y: 1080}
+  m_AnchoredPosition: {x: 960, y: 540}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1680502881
 MonoBehaviour:
@@ -5678,7 +5683,7 @@ Transform:
   m_GameObject: {fileID: 1793903258}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4.976928, y: 0, z: 0.45834732}
   m_LocalScale: {x: 0.47987387, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

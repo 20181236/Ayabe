@@ -18,7 +18,7 @@ MonoBehaviour:
   prefab: {fileID: 6700842768440356415, guid: d4df8aab6df084b4c91c532bc3165062, type: 3}
   maxHealth: 5000
   attackPower: 100
-  attackRange: 150
+  attackRange: 100
   attackSpeed: 5
   HealPower: 100
   skillCoolTime: 0

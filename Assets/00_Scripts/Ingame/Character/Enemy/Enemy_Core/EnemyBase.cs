@@ -312,11 +312,14 @@ public class EnemyBase : CharacterBase
 
         if (isExplosion && explosionPos.HasValue)
         {
-            if (navMeshAgent != null) navMeshAgent.enabled = false;
-            Vector3 finalVec = HitByExplosion(explosionPos.Value) + Vector3.up * 3f;
+            if (navMeshAgent != null)
+                navMeshAgent.enabled = false;
+
+            Vector3 finalVector = HitByExplosion(explosionPos.Value) + Vector3.up * 3f;
+
             _rigidbody.freezeRotation = false;
-            _rigidbody.AddForce(finalVec * 5f, ForceMode.Impulse);
-            _rigidbody.AddTorque(finalVec * 15f, ForceMode.Impulse);
+            _rigidbody.AddForce(finalVector * 5f, ForceMode.Impulse);
+            _rigidbody.AddTorque(finalVector * 15f, ForceMode.Impulse);
         }
 
         yield return new WaitForSeconds(0.1f);
@@ -335,7 +338,8 @@ public class EnemyBase : CharacterBase
 
     protected override void OnDestroyed()
     {
-        if (EnemyManager.instance != null) EnemyManager.instance.UnregisterEnemy(this);
+        if (EnemyManager.instance != null) 
+            EnemyManager.instance.UnregisterEnemy(this);
         base.OnDestroyed();
     }
 
