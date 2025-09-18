@@ -36,6 +36,8 @@ public class IdleState : PlayableStateInterface
                 owner.TransitionToState(PlayableBase.PlayableState.Chasing);
             }
         }
+        var playable = (PlayableBase)owner;
+        playable.TryExecuteSkill(); // Idle 상태에서 주기적으로 스킬 시도
     }
 
     public void Exit() { }

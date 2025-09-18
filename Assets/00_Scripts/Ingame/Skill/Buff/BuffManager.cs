@@ -12,86 +12,89 @@ public class BuffManager : MonoBehaviour
 
     public void ApplyBuff(BuffData data, CharacterBase owner, CharacterBase caster)
     {
-
-        if (data == null)
-        {
-            Debug.Log($"BuffManager: ApplyBuff 호출 시 BuffData가 null입니다. owner={owner.name}");
-            return;
-        }
+        if (data == null) return;
 
         Buff existingBuff = activeBuffs.Find(b => b.buffId == data.buffId);
-
         if (existingBuff != null)
         {
-            // 기존 버프가 있으면 갱신
-            // (주의: BuffRoutine 내부에 갱신 로직이 없다면 효과가 중첩되지 않고 초기화됨)
             existingBuff.duration = data.duration;
             existingBuff.value = data.value;
-            Debug.Log($"버프 갱신: {existingBuff.buffId} on {owner.name}");
-
+            Debug.Log($"[갱신] {existingBuff.buffId} on {owner.name} (시전: {caster.name})");
             owner.RecalculateBuffedStats();
         }
         else
         {
-            // 새로운 버프 생성 및 적용
             Buff buff = BuffFactory.CreateBuffFromData(data);
             buff.SetOwner(owner);
             buff.caster = caster;
 
-            // activeBuffs에 추가
             activeBuffs.Add(buff);
-
             if (!owner.activeBuffs.Contains(buff))
                 owner.activeBuffs.Add(buff);
 
-            // 버프가 제대로 추가됐는지 로그
-            Debug.Log($"Buff Added: {buff.buffId} on {owner.name}, targetStat={buff.targetStat}, value={buff.value}, applyType={buff.applyType}");
+            Debug.Log($"[추가] 버프 {buff.buffId} 적용됨 -> {owner.name} (시전: {caster.name})");
 
-            // 이벤트 호출 및 스탯 재계산
-            OnBuffAdded?.Invoke(buff, buff.duration);
             owner.RecalculateBuffedStats();
-
-            // 버프 코루틴 시작
             StartCoroutine(BuffRoutine(buff));
         }
     }
     private IEnumerator BuffRoutine(Buff buff)
     {
+        buff.owner.RecalculateBuffedStats();
         float elapsed = 0f;
+        float interval = Mathf.Max(buff.tickInterval, 0.1f);
 
-        // 즉시 회복 (Burst)
-        if (buff.applyType == BuffApplyType.Burst || buff.applyType == BuffApplyType.Both)
+        while (elapsed < buff.duration)
         {
-            float burstHeal = buff.owner.baseHealPower * buff.value;
-            buff.owner.Heal(burstHeal);
-        }
-
-        // Tick 반복 회복
-        if (buff.applyType == BuffApplyType.Tick || buff.applyType == BuffApplyType.Both)
-        {
-            // Tick 시작 전 지연
-            yield return new WaitForSeconds(1f);
-
-            float interval = Mathf.Max(buff.tickInterval, 0.1f);
-            while (elapsed < buff.duration)
+            if (buff.applyType == BuffApplyType.Tick || buff.applyType == BuffApplyType.Both)
             {
-                // Tick 회복은 오직 tickValue만 적용
-                float tickHeal = buff.owner.baseHealPower * buff.tickValue;
-                buff.owner.Heal(tickHeal);
-
-                yield return new WaitForSeconds(interval);
-                elapsed += interval;
+                buff.owner.ExecuteOnBuffTick(buff);
             }
-        }
-        else
-        {
-            yield return new WaitForSeconds(buff.duration);
+            yield return new WaitForSeconds(interval);
+            elapsed += interval;
         }
 
-        // 버프 종료
+        buff.owner.activeBuffs.Remove(buff);
         activeBuffs.Remove(buff);
+        buff.owner.RecalculateBuffedStats();
+        Debug.Log($"[종료] 버프 {buff.buffId} 종료 -> {buff.owner.name}");
     }
+    //private IEnumerator BuffRoutine(Buff buff)
+    //{
+    //    float elapsed = 0f;
 
+    //    // 즉시 회복 (Burst)
+    //    if (buff.applyType == BuffApplyType.Burst || buff.applyType == BuffApplyType.Both)
+    //    {
+    //        float burstHeal = buff.owner.baseHealPower * buff.value;
+    //        buff.owner.Heal(burstHeal);
+    //    }
+
+    //    // Tick 반복 회복
+    //    if (buff.applyType == BuffApplyType.Tick || buff.applyType == BuffApplyType.Both)
+    //    {
+    //        // Tick 시작 전 지연
+    //        yield return new WaitForSeconds(1f);
+
+    //        float interval = Mathf.Max(buff.tickInterval, 0.1f);
+    //        while (elapsed < buff.duration)
+    //        {
+    //            // Tick 회복은 오직 tickValue만 적용
+    //            float tickHeal = buff.owner.baseHealPower * buff.tickValue;
+    //            buff.owner.Heal(tickHeal);
+
+    //            yield return new WaitForSeconds(interval);
+    //            elapsed += interval;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        yield return new WaitForSeconds(buff.duration);
+    //    }
+
+    //    // 버프 종료
+    //    activeBuffs.Remove(buff);
+    //}
 
 
 
@@ -99,19 +102,12 @@ public class BuffManager : MonoBehaviour
     {
         if (buff.targetStat == BuffStatType.HealPower)
         {
-            // Tick 회복
-            if (buff.applyType == BuffApplyType.Tick || buff.applyType == BuffApplyType.Both)
-            {
-                float healAmount = buff.owner.baseHealPower * buff.tickValue;
-                buff.owner.Heal(healAmount);
-            }
-
-            // 즉시 회복
-            if (buff.applyType == BuffApplyType.Burst || buff.applyType == BuffApplyType.Both)
-            {
-                float burstHeal = buff.owner.baseHealPower * buff.value;
-                buff.owner.Heal(burstHeal);
-            }
+            float healAmount = buff.owner.baseHealPower * buff.tickValue;
+            buff.owner.Heal(healAmount);
+        }
+        else if (buff.targetStat == BuffStatType.AttackPower)
+        {
+            buff.owner.RecalculateBuffedStats();
         }
     }
 

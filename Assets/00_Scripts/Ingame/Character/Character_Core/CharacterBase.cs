@@ -41,9 +41,14 @@ public abstract class CharacterBase : MonoBehaviour
     public float buffedHealPower;
     public float HealPower => baseHealPower + buffedHealPower;
 
+
     public float baseMoveSpeed;
     public float buffedMoveSpeed;
     public float MoveSpeed => baseMoveSpeed + buffedMoveSpeed;
+
+    [Header("Barrier")]
+    public float currentBarrier;
+    public float maxBarrier;
 
     [Header("Universal States")]
     public float distance; // 타겟과의 거리는 범용적으로 사용될 수 있습니다.
@@ -179,28 +184,22 @@ public abstract class CharacterBase : MonoBehaviour
         Destroy(gameObject, 1.8f);
     }
 
-    // ... Buff 관련 메서드들은 동일 ...
-    // BuffManager에게 버프 적용을 위임하는 메서드
     public void ApplyBuff(BuffData data, CharacterBase caster)
     {
-        Debug.Log($"Applying Buff {data.buffId} to {name}, AttackPower={AttackPower}");
-
         if (data == null)
         {
-            Debug.LogError($"[{name}] ApplyBuff 호출 시 BuffData가 null입니다.");
+            Debug.LogError($"[{name}] ApplyBuff 호출 시 BuffData가 null");
             return;
         }
 
-        if (this.buffManager != null)
+        if (buffManager == null)
         {
-            Debug.Log($"[{caster.name}]이(가) [{this.name}]에게 버프 적용: {data.buffId} / 값: {data.value} / 타입: {data.applyType}");
-            // 이제 CharacterBase는 BuffManager에게 버프를 적용해달라고 요청만 함
-            this.buffManager.ApplyBuff(data, this, caster);
+            Debug.LogError($"[{name}]에 BuffManager가 없음. ApplyBuff 실패");
+            return;
         }
-        else
-        {
-            Debug.LogWarning($"[{this.name}]의 BuffManager가 할당되지 않았습니다.");
-        }
+
+        Debug.Log($"[{caster.name}]이(가) [{name}]에게 버프 적용 시도: {data.buffId}");
+        buffManager.ApplyBuff(data, this, caster);
     }
 
     public void RecalculateBuffedStats()
@@ -253,8 +252,16 @@ public abstract class CharacterBase : MonoBehaviour
             case BuffStatType.HealPower:
                 Heal(baseHealPower * buff.value); // Tick마다 회복
                 break;
+            case BuffStatType.AttackPower:
+                RecalculateBuffedStats(); // 공격력 증가 적용
+                break;
         }
     }
+    public void ExecuteOnBuffTick(Buff buff)
+    {
+        OnBuffTick(buff);
+    }
+
     public void RemoveBuff(Buff buffToRemove)
     { 
         if (activeBuffs.Remove(buffToRemove))

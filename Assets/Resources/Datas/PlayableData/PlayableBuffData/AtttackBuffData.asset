@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 865260c2576098449b9793bf5fbdca25, type: 3}
   m_Name: AtttackBuffData
   m_EditorClassIdentifier: 
-  _buffId: 1
+  _buffId: 2
   _group: 0
   _category: 0
   _applyType: 3
   _targetStat: 1
   _buffIcon: {fileID: 21300000, guid: b64cc14337bbd45d294912dfd2dce7c0, type: 3}
   _value: 2
+  _tickValue: 0
   _duration: 5
   _tickInterval: 0

@@ -115,6 +115,7 @@ public enum BuffGroup
     Defense,       // 방어력/피해 감소 계열
     Crit,          // 치명타 계열
     Heal,          // 회복 계열
+    Barrier,
     MoveSpeed,     // 이동 속도 계열
     Range,         // 사거리 계열
     Special        // 특수 계열 (잡효과)
@@ -130,6 +131,7 @@ public enum BuffStatType
     CriticalRate,    // 치명타 확률
     CriticalDamage, //치명타 데미지 증가
     HealPower,       // 치유량
+    BarrierValue,
     MoveSpeed,
 }
 public enum BuffCategory
