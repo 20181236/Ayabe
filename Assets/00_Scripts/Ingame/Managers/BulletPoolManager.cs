@@ -46,7 +46,11 @@ public class BulletPoolManager : MonoBehaviour
     public Bullet GetBullet(PoolType type)
     {
         if (!bulletPoolDictionary.ContainsKey(type))
-        return null;
+        {
+            Debug.LogError($"[BulletPoolManager] {type} 풀을 찾을 수 없습니다. RegisterBulletPrefab 또는 CreatePooling을 먼저 호출하세요.");
+            return null;
+        }
+
         foreach (Bullet bullet in bulletPoolDictionary[type])
         {
             if (!bullet.gameObject.activeInHierarchy)
@@ -55,6 +59,8 @@ public class BulletPoolManager : MonoBehaviour
                 return bullet;
             }
         }
+
+        Debug.LogError($"[BulletPoolManager] {type} 풀에 사용 가능한 Bullet이 없습니다. 풀 크기를 늘리거나 ReturnBullet 호출이 누락되지 않았는지 확인하세요.");
         return null;
     }
 

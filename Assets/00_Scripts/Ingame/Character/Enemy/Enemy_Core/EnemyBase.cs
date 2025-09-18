@@ -76,7 +76,7 @@ public class EnemyBase : CharacterBase
         distance = 0f;
     }
 
-    private void BuildBehaviorTree()
+    protected virtual void BuildBehaviorTree()
     {
         var hasTargetNode = new BehaviorTreeConditionNode();
         hasTargetNode.Initialize(() => EnemyConditions.HasTarget(this));
@@ -186,7 +186,7 @@ public class EnemyBase : CharacterBase
         isAttacking = true; // 공격 실행 상태로 변경
 
         ShootBulletAtTarget();
-        Debug.Log("총알발싸까지옴");
+        //Debug.Log("총알발싸까지옴");
     }
 
     public void ExecuteBasicAttack()
@@ -200,7 +200,7 @@ public class EnemyBase : CharacterBase
     protected override void ShootBulletAtTarget()
     {
         // 1. 함수가 시작되었는지 확인
-        Debug.Log("--- ShootBulletAtTarget 함수 시작 ---");
+        //Debug.Log("--- ShootBulletAtTarget 함수 시작 ---");
 
         if (currentTarget == null || currentTarget.isDead)
         {
@@ -212,18 +212,18 @@ public class EnemyBase : CharacterBase
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
         // 2. BulletPoolManager에서 총알을 가져오기 직전인지 확인
-        Debug.Log("BulletPoolManager에서 총알을 가져옵니다...");
+        //Debug.Log("BulletPoolManager에서 총알을 가져옵니다...");
         Bullet bullet = BulletPoolManager.instance.GetBullet(BulletPoolManager.PoolType.EnemyBullet);
 
         // 3. GetBullet의 결과를 확인하는 것이 가장 중요합니다!
         if (bullet != null)
         {
             // 이 로그가 뜬다면, 총알 객체는 성공적으로 받아온 것입니다.
-            Debug.Log("<color=green>성공: 총알을 풀에서 가져왔습니다!</color> 이제 총알 위치를 설정합니다.");
+            //Debug.Log("<color=green>성공: 총알을 풀에서 가져왔습니다!</color> 이제 총알 위치를 설정합니다.");
 
             if (enemyBulletFirePoint == null)
             {
-                Debug.LogError("치명적 오류: 'enemyBulletFirePoint'가 Inspector에 할당되지 않았습니다!", this.gameObject);
+               // Debug.LogError("치명적 오류: 'enemyBulletFirePoint'가 Inspector에 할당되지 않았습니다!", this.gameObject);
                 return;
             }
 
@@ -232,12 +232,12 @@ public class EnemyBase : CharacterBase
             bullet.SetDamageFromStat(this.AttackPower);
             bullet.ShooterType = this.ObjectType;
 
-            Debug.Log("<color=cyan>총알 설정 완료!</color>");
+            //Debug.Log("<color=cyan>총알 설정 완료!</color>");
         }
         else
         {
             // 이 에러 로그가 뜬다면, 풀에서 총알을 가져오는 데 실패한 것입니다.
-            Debug.LogError("<color=red>실패: BulletPoolManager.GetBullet()이 null을 반환했습니다.</color> 풀이 비었거나 설정이 잘못되었을 수 있습니다.");
+            //Debug.LogError("<color=red>실패: BulletPoolManager.GetBullet()이 null을 반환했습니다.</color> 풀이 비었거나 설정이 잘못되었을 수 있습니다.");
         }
     }
 

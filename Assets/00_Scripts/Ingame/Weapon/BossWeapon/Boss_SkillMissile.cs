@@ -6,6 +6,9 @@ using UnityEngine.AI;
 public class BossSkillMissile : ProjectileBase
 {
     private Rigidbody rigidbodyMissile;
+    private bool initialized = false;
+    private Vector3 moveDirection;
+
     protected override void SetProjectileInfo()
     {
         base.SetProjectileInfo();
@@ -20,23 +23,43 @@ public class BossSkillMissile : ProjectileBase
     {
         SetTargetMask();
         rigidbodyMissile = GetComponent<Rigidbody>();
+        rigidbodyMissile.useGravity = false; // 중력은 끄기
+    }
+
+    public void Initialize(Transform targetTransform)
+    {
+        if (targetTransform == null) return;
+        moveDirection = (targetTransform.position - transform.position).normalized;
+        rigidbodyMissile.velocity = moveDirection * speed;
+        transform.rotation = Quaternion.LookRotation(moveDirection);
+        initialized = true;
     }
 
     private void FixedUpdate()
     {
-        if (target == null)
+        if (!initialized) return;
+
+        // 이동 방향에 맞게 회전 유지
+        if (rigidbodyMissile.velocity.sqrMagnitude > 0.01f)
+            rigidbodyMissile.rotation = Quaternion.LookRotation(rigidbodyMissile.velocity);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 캐릭터에 맞으면 데미지
+        CharacterBase hitCharacter = other.GetComponent<CharacterBase>();
+        if (hitCharacter != null)
+        {
+            hitCharacter.ApplyDamage(damage, isExplosion);
+            Debug.Log($"[BossExSubMissile] {hitCharacter.name}에게 데미지를 주었습니다! Damage={damage}");
+            Destroy(gameObject);
             return;
-        if (target != null)
-        {
-            Vector3 direction = (target.position - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.fixedDeltaTime);
-            rigidbodyMissile.MoveRotation(newRotation);
-            rigidbodyMissile.velocity = direction * speed;
         }
-        else
+
+        // 바닥과 충돌 시 제거
+        if (other.gameObject.CompareTag("Ground"))
         {
-            rigidbodyMissile.velocity = transform.forward * speed;
+            Destroy(gameObject);
         }
     }
 }

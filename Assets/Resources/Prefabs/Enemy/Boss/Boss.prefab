@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 373328723316199626}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.4, z: -7.68}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -594,7 +594,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_LocalScale: {x: 500, y: 500, z: 500}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2383275141800895827}
@@ -751,6 +751,7 @@ GameObject:
   - component: {fileID: 3101949999252343987}
   - component: {fileID: 2868136651991913489}
   - component: {fileID: -6565521804791775959}
+  - component: {fileID: 1898883231445154753}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Enemy
@@ -768,7 +769,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 298721279570059315}
@@ -879,7 +880,7 @@ MonoBehaviour:
   buffManager: {fileID: 0}
   enemyID: 3
   enemyType: 2
-  enemyBulletFirePoint: {fileID: 0}
+  enemyBulletFirePoint: {fileID: 4297665436268764774}
   currentState: 0
   skillDuration: 2
   missileSpawnDelay: 0.5
@@ -901,6 +902,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightColor: {r: 1, g: 0.043137252, b: 0.07276226, a: 1}
+--- !u!114 &1898883231445154753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8009809945130812139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d979ca5e5a9f4814b8997385a7cc35a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9104577798344888469
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,7 +957,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4297665436268764774}
   m_Layer: 7
-  m_Name: BulletBulletPosition
+  m_Name: EnemyBulletPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -959,7 +972,7 @@ Transform:
   m_GameObject: {fileID: 9134786876098658826}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 6.17}
+  m_LocalPosition: {x: 0, y: 5, z: 10}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children: []
