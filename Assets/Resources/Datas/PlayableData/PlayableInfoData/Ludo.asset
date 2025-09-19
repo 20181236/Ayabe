@@ -21,7 +21,7 @@ MonoBehaviour:
   attackRange: 100
   attackSpeed: 5
   HealPower: 0
-  skillCoolTime: 0
+  skillCoolTime: 10
   exSkillCoolTime: 0
   moveSpeed: 10
   exSkillData: {fileID: 11400000, guid: d5b3bc2587d55294bbf4f0dc29dfc4fa, type: 2}

@@ -37,7 +37,7 @@ public class IdleState : PlayableStateInterface
             }
         }
         var playable = (PlayableBase)owner;
-        playable.TryExecuteSkill(); // Idle 상태에서 주기적으로 스킬 시도
+        playable.ExecuteAttackAction(); // Idle 상태에서 주기적으로 스킬 시도
     }
 
     public void Exit() { }

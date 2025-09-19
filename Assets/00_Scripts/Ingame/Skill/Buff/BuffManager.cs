@@ -12,9 +12,11 @@ public class BuffManager : MonoBehaviour
 
     public void ApplyBuff(BuffData data, CharacterBase owner, CharacterBase caster)
     {
-        if (data == null) return;
+        if (data == null) 
+            return;
 
         Buff existingBuff = activeBuffs.Find(b => b.buffId == data.buffId);
+
         if (existingBuff != null)
         {
             existingBuff.duration = data.duration;
@@ -35,12 +37,17 @@ public class BuffManager : MonoBehaviour
             Debug.Log($"[추가] 버프 {buff.buffId} 적용됨 -> {owner.name} (시전: {caster.name})");
 
             owner.RecalculateBuffedStats();
+
+            //버프UI이벤트
+            OnBuffAdded?.Invoke(buff, buff.duration);
+
             StartCoroutine(BuffRoutine(buff));
         }
     }
     private IEnumerator BuffRoutine(Buff buff)
     {
         buff.owner.RecalculateBuffedStats();
+
         float elapsed = 0f;
         float interval = Mathf.Max(buff.tickInterval, 0.1f);
 
@@ -50,9 +57,13 @@ public class BuffManager : MonoBehaviour
             {
                 buff.owner.ExecuteOnBuffTick(buff);
             }
+
             yield return new WaitForSeconds(interval);
+
             elapsed += interval;
         }
+
+        OnBuffRemoved?.Invoke(buff);
 
         buff.owner.activeBuffs.Remove(buff);
         activeBuffs.Remove(buff);

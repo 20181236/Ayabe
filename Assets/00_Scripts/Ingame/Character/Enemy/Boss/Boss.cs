@@ -43,10 +43,10 @@ public class Boss : EnemyBase
     protected override void BuildBehaviorTree()
     {
         // BossBehaviorTree를 통해 트리를 설정
-        var bt = GetComponent<BossBehaviorTree>();
-        if (bt != null)
+        var bossBehaviorTree = GetComponent<BossBehaviorTree>();
+        if (bossBehaviorTree != null)
         {
-            bt.BuildBehaviorTree();
+            bossBehaviorTree.BuildBehaviorTree();
         }
         else
         {

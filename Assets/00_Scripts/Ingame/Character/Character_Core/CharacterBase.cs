@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -96,6 +97,7 @@ public abstract class CharacterBase : MonoBehaviour
     [Header("Buff System")]
     public List<Buff> activeBuffs = new List<Buff>();
     [HideInInspector] public BuffManager buffManager;
+
 
     protected virtual void Awake()
     {

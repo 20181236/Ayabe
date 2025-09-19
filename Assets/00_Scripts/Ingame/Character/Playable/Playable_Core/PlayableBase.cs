@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -28,6 +29,10 @@ public abstract class PlayableBase : CharacterBase
     protected Vector3 exSkillTargetPosition;
     public List<SkillId> ownedSkills;
     public SkillSlot exSkillSlot;
+
+    public event Action<Buff> OnBuffAdded;
+    public event Action<Buff> OnBuffRemoved;
+    public event Action<Buff> OnBuffUpdated;
 
     // 상태 패턴 관련 변수들 
     private Dictionary<PlayableState, PlayableStateInterface> states;
@@ -197,21 +202,25 @@ public abstract class PlayableBase : CharacterBase
 
     protected override void AttackThinking()
     {
-        if (isAttacking) return;
-        if (readyBasicAttack && !isUsingSkill && !isUsingExSkill)
-        {
-            BasicAttack();
+        if (isAttacking) 
             return;
+
+        if (readyExSkill && !isUsingSkill && !isUsingExSkill)
+        {
+            ExSkill();
         }
+
         if (readySkill && !isUsingSkill && !isUsingExSkill)
         {
             Skill();
             return;
         }
-        if (readyExSkill && !isUsingSkill && !isUsingExSkill)
+        if (readyBasicAttack && !isUsingSkill && !isUsingExSkill)
         {
-            ExSkill();
+            BasicAttack();
+            return;
         }
+
         //DoAttackLogic();
     }
     //사용법2
@@ -312,6 +321,7 @@ public abstract class PlayableBase : CharacterBase
         exSkillTimer = 0;
         readyExSkill = false;
     }
+
 
     void OnTriggerEnter(Collider other)
     {
